@@ -5,18 +5,25 @@
 
   @if (userData()) {
     <div class="flex items-center gap-4">
-      <div class="text-right hidden sm:block">
-        <!-- <p class="text-sm font-medium text-gray-900">{{ userData()?.name }}</p> -->
-        <p class="text-xs text-gray-500">@{{ userData()?.username }}</p>
+      <div class="hidden sm:flex flex-col items-end">
+        <p class="text-md text-gray-500 font-medium">@{{ userData()?.username }}</p>
       </div>
-      <p-button
-        icon="pi pi-sign-out"
-        label="Logout"
-        [text]="true"
-        severity="secondary"
-        (onClick)="onLogout()"
-        size="small"
-      ></p-button>
+
+      <div class="relative">
+        <p-avatar
+          [image]="profileImageUrl()"
+          shape="circle"
+          class="cursor-pointer border border-gray-100 shadow-sm hover:ring-2 hover:ring-primary-500/20 transition-all size-10 shrink-0 overflow-hidden"
+          (click)="menu.toggle($event)"
+        />
+        <p-menu
+          #menu
+          [model]="menuItems"
+          [popup]="true"
+          appendTo="body"
+          styleClass="profile-menu mt-1 min-w-[150px]"
+        />
+      </div>
     </div>
   }
 </header>
