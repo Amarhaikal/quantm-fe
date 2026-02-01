@@ -1,3 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* PrimeNG Toast Refinements */
+.p-toast {
+  @apply opacity-95;
+  z-index: 9999!important;
+}
+
+.p-toast-message {
+  @apply rounded-2xl shadow-2xl border-none! mb-3 overflow-hidden;
+  backdrop-filter: blur(8px);
+}
+
+.p-toast-message-content {
+  @apply p-4! flex items-start gap-3! relative;
+}
+
+.p-toast-message-icon {
+  @apply hidden!;
+}
+
+.p-toast-message-text {
+  @apply flex-1;
+}
+
+.p-toast-summary {
+  @apply font-bold text-lg block mb-1;
+}
+
+.p-toast-detail {
+  @apply text-sm font-medium opacity-80;
+}
+
+.p-toast-icon-close {
+  @apply absolute top-4 right-4 w-8 h-8 rounded-full transition-all flex items-center justify-center border-none! outline-none!;
+  background: transparent!important;
+}
+
+.p-toast-icon-close:hover {
+  background: rgba(0, 0, 0, 0.05)!important;
+}
+
+.p-toast-icon-close-icon {
+  @apply text-sm;
+}
+
+/* Severity Colors with sleek side border */
+.p-toast-message-error {
+  @apply bg-red-50/95! text-red-700! border-l-4 border-red-500!;
+}
+
+.p-toast-message-success {
+  @apply bg-green-50/95! text-green-700! border-l-4 border-green-500!;
+}
+
+.p-toast-message-warn {
+  @apply bg-amber-50/95! text-amber-700! border-l-4 border-amber-500!;
+}
+
+.p-toast-message-info {
+  @apply bg-blue-50/95! text-blue-700! border-l-4 border-blue-500!;
+}

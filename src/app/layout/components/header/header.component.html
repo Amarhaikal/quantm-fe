@@ -1,0 +1,22 @@
+<header
+  class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6"
+>
+  <h1 class="text-xl font-semibold text-gray-800">Quantm LMS</h1>
+
+  @if (userData()) {
+    <div class="flex items-center gap-4">
+      <div class="text-right hidden sm:block">
+        <!-- <p class="text-sm font-medium text-gray-900">{{ userData()?.name }}</p> -->
+        <p class="text-xs text-gray-500">@{{ userData()?.username }}</p>
+      </div>
+      <p-button
+        icon="pi pi-sign-out"
+        label="Logout"
+        [text]="true"
+        severity="secondary"
+        (onClick)="onLogout()"
+        size="small"
+      ></p-button>
+    </div>
+  }
+</header>

@@ -1,0 +1,8 @@
+<div class="min-h-screen bg-gray-50">
+  <app-header [userData]="userData()" (logout)="onLogout()"></app-header>
+
+  <!-- Main Content -->
+  <main class="p-6">
+    <router-outlet />
+  </main>
+</div>
