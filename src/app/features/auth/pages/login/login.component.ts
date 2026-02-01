@@ -16,8 +16,6 @@ import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +26,9 @@ import { ToastModule } from 'primeng/toast';
     Password,
     Button,
     FloatLabel,
-    ToastModule,
     NgOptimizedImage,
   ],
-  providers: [MessageService],
+  providers: [],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +37,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private messageService = inject(MessageService);
   private platformId = inject(PLATFORM_ID);
 
   loginForm: FormGroup = this.fb.group({
@@ -49,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   loading = signal(false);
+  errorMessage = signal<string | null>(null);
 
   slides = [
     {
@@ -103,6 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.loginForm.valid) {
       this.loading.set(true);
+      this.errorMessage.set(null);
       const { username, password } = this.loginForm.value;
 
       this.authService.login({ username, password }).subscribe({
@@ -112,11 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.loading.set(false);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Login Failed',
-            detail: err.error?.message || 'Invalid credentials',
-          });
+          this.errorMessage.set(err.error?.message || 'Invalid credentials. Please try again.');
         },
       });
     } else {
