@@ -62,3 +62,8 @@
 .p-toast-message-info {
   @apply bg-blue-50/95! text-blue-700! border-l-4 border-blue-500!;
 }
+
+/* Profile Menu Padding */
+.profile-menu .p-menu-item-link {
+  padding: 8px 12px !important;
+}

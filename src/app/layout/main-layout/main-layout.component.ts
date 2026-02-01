@@ -15,7 +15,7 @@ export class MainLayoutComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  userData = signal<{ name: string; username: string } | null>(null);
+  userData = signal<{ name: string; username: string; profile_image_url: string } | null>(null);
 
   ngOnInit() {
     this.userService.getMyProfile().subscribe({
