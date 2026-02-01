@@ -18,7 +18,7 @@ export class MainLayoutComponent implements OnInit {
   userData = signal<{ name: string; username: string } | null>(null);
 
   ngOnInit() {
-    this.userService.getMyUsername().subscribe({
+    this.userService.getMyProfile().subscribe({
       next: (response) => {
         if (response.status === 200) {
           this.userData.set(response.data);

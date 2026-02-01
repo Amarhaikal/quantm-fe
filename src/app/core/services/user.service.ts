@@ -9,7 +9,7 @@ import { UserResponse } from '../models/user.model';
 export class UserService {
   private api = inject(ApiService);
 
-  getMyUsername(): Observable<UserResponse> {
-    return this.api.get<UserResponse>('user/my-username');
+  getMyProfile(): Observable<UserResponse> {
+    return this.api.get<UserResponse>('user/mini-profile');
   }
 }
