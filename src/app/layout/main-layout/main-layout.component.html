@@ -1,8 +1,14 @@
-<div class="min-h-screen bg-gray-50">
-  <app-header [userData]="userData()" (logout)="onLogout()"></app-header>
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <app-sidemenu [userData]="userData()" />
 
-  <!-- Main Content -->
-  <main class="p-6">
-    <router-outlet />
-  </main>
+  <div
+    class="flex-1 flex flex-col transition-all duration-300 bg-[#eff2fc]"
+    [class.pl-80]="menuService.isSidebarVisible()"
+  >
+    <app-header [userData]="userData()" (logout)="onLogout()" />
+
+    <main class="p-6">
+      <router-outlet />
+    </main>
+  </div>
 </div>

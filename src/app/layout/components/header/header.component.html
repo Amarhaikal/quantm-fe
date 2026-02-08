@@ -1,7 +1,16 @@
 <header
   class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6"
 >
-  <h1 class="text-xl font-semibold text-gray-800">Quantm LMS</h1>
+  <div class="flex items-center gap-4">
+    <p-button
+      icon="pi pi-bars"
+      [rounded]="true"
+      [text]="true"
+      (click)="toggleSidebar()"
+      aria-label="Toggle Sidebar"
+    />
+    <h1 class="text-xl font-semibold text-gray-800">Quantm LMS</h1>
+  </div>
 
   @if (userData()) {
     <div class="flex items-center gap-4">
