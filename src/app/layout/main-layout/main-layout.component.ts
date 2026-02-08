@@ -1,21 +1,26 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { HeaderComponent } from '../components/header/header.component';
+import { MenuService } from '../../core/services/menu.service';
+import { Sidemenu } from '../components/sidemenu/sidemenu';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, Sidemenu],
   templateUrl: './main-layout.component.html',
   styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  public menuService = inject(MenuService);
   private router = inject(Router);
 
   userData = signal<{ name: string; username: string; profile_image_url: string } | null>(null);
+  menuData = signal<any | null>(null);
 
   ngOnInit() {
     this.userService.getMyProfile().subscribe({
@@ -26,6 +31,17 @@ export class MainLayoutComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to fetch user data:', err);
+      },
+    });
+
+    this.menuService.getMenu().subscribe({
+      next: (response) => {
+        if (response.status === 200) {
+          this.menuData.set(response.data);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch menu data:', err);
       },
     });
   }

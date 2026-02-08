@@ -1,12 +1,14 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Avatar } from 'primeng/avatar';
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MenuService } from '../../../core/services/menu.service';
 
 @Component({
   selector: 'app-header',
-  imports: [Avatar, Menu],
+  imports: [Avatar, Menu, ButtonModule],
   templateUrl: './header.component.html',
   styles: [
     `
@@ -22,10 +24,17 @@ import { MenuItem } from 'primeng/api';
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
+  private menuService = inject(MenuService);
+
   userData = input<{ name: string; username: string; profile_image_url: string } | null>(null);
   logout = output<void>();
+
+  toggleSidebar() {
+    this.menuService.toggleSidebar();
+  }
 
   menuItems: MenuItem[] = [
     {
