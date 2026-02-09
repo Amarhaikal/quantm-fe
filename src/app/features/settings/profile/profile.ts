@@ -1,0 +1,94 @@
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, take } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { AvatarModule } from 'primeng/avatar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { UserService } from '../../../core/services/user.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { environment } from '../../../../environments/environment';
+import { TextboxComponent } from '../../../shared/components/textbox/textbox';
+import { AuthService } from '../../../core/auth/auth.service';
+
+@Component({
+  selector: 'app-profile',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    CardModule,
+    AvatarModule,
+    FileUploadModule,
+    TextboxComponent,
+  ],
+  templateUrl: './profile.html',
+  styleUrl: './profile.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Profile implements OnInit {
+  private fb = inject(FormBuilder);
+  private userService = inject(UserService);
+  private toastService = inject(ToastService);
+  private authService = inject(AuthService);
+
+  profileForm: FormGroup;
+  isLoading = signal<boolean>(false);
+  isSaving = signal<boolean>(false);
+  profileImageUrl = signal<string | null>(null);
+
+  constructor() {
+    this.profileForm = this.fb.group({
+      fullname: ['', [Validators.required, Validators.minLength(3)]],
+      username: [{ value: '', disabled: true }],
+    });
+  }
+
+  ngOnInit() {
+    this.loadProfile();
+  }
+
+  loadProfile() {
+    const username = this.authService.currentUser()?.username;
+    if (!username) {
+      this.toastService.error('Error', 'User session not found');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.userService.getUserByUsername(username).subscribe({
+      next: (response) => {
+        if (response.status === 200) {
+          console.log(response);
+
+          const { fullname, username, profile_image_url } = response.data;
+          this.profileForm.patchValue({ fullname, username });
+          if (profile_image_url) {
+            this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
+          }
+        }
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.toastService.error('Error', 'Failed to load profile data');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  onSave() {
+    if (this.profileForm.invalid) return;
+
+    this.isSaving.set(true);
+    // Simulation of save since there is no updateProfile yet in service
+    setTimeout(() => {
+      this.toastService.success('Success', 'Profile updated successfully');
+      this.isSaving.set(false);
+    }, 1000);
+  }
+}

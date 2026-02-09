@@ -12,4 +12,8 @@ export class UserService {
   getMyProfile(): Observable<UserResponse> {
     return this.api.get<UserResponse>('user/mini-profile');
   }
+
+  getUserByUsername(username: string): Observable<UserResponse> {
+    return this.api.get<UserResponse>(`user/username/${username}`);
+  }
 }
