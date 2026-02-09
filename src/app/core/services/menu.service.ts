@@ -9,7 +9,7 @@ import { UserResponse } from '../models/user.model';
 export class MenuService {
   private api = inject(ApiService);
 
-  isSidebarVisible = signal<boolean>(false);
+  isSidebarVisible = signal<boolean>(true);
 
   toggleSidebar() {
     this.isSidebarVisible.update((v) => !v);

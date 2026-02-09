@@ -80,3 +80,18 @@ body {
 .profile-menu .p-menu-item-link {
   padding: 8px 12px !important;
 }
+
+/* Sidemenu Drawer Customization */
+.sidemenu-drawer {
+  background: #171A31 !important;
+  width: 270px !important;
+  border-right: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.sidemenu-drawer .p-drawer-content {
+  background: #171A31 !important;
+  padding: 0 !important;
+}
