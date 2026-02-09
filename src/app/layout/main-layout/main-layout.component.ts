@@ -20,8 +20,6 @@ export class MainLayoutComponent implements OnInit {
   private router = inject(Router);
 
   userData = signal<{ name: string; username: string; profile_image_url: string } | null>(null);
-  menuData = signal<any | null>(null);
-
   ngOnInit() {
     this.userService.getMyProfile().subscribe({
       next: (response) => {
@@ -31,17 +29,6 @@ export class MainLayoutComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to fetch user data:', err);
-      },
-    });
-
-    this.menuService.getMenu().subscribe({
-      next: (response) => {
-        if (response.status === 200) {
-          this.menuData.set(response.data);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch menu data:', err);
       },
     });
   }

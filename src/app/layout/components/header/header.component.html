@@ -8,8 +8,13 @@
       [text]="true"
       (click)="toggleSidebar()"
       aria-label="Toggle Sidebar"
-    />
-    <h1 class="text-xl font-semibold text-gray-800">Quantm LMS</h1>
+      styleClass="!h-12 !w-12"
+      [iconPos]="'left'"
+    >
+      <ng-template pTemplate="icon">
+        <i class="pi pi-bars text-2xl!"></i>
+      </ng-template>
+    </p-button>
   </div>
 
   @if (userData()) {

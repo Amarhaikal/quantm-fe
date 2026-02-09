@@ -1,3 +1,16 @@
-:host ::ng-deep .p-drawer {
+:host ::ng-deep .p-drawer,
+:host ::ng-deep [data-pc-section="root"] {
     border: none !important;
+    background: #171A31 !important;
+    width: 270px !important;
+}
+
+.submenu-hidden {
+    height: 0;
+    overflow: hidden;
+}
+
+.submenu-visible {
+    height: auto;
+    overflow: visible;
 }
