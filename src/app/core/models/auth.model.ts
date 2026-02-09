@@ -11,6 +11,7 @@ export interface User {
   username: string;
   email: string;
   role: Role;
+  profile_image_url?: string;
 }
 
 export interface AuthResponse {

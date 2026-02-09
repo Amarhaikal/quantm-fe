@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, computed } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -19,19 +19,17 @@ export class MainLayoutComponent implements OnInit {
   public menuService = inject(MenuService);
   private router = inject(Router);
 
-  userData = signal<{ name: string; username: string; profile_image_url: string } | null>(null);
-  ngOnInit() {
-    this.userService.getMyProfile().subscribe({
-      next: (response) => {
-        if (response.status === 200) {
-          this.userData.set(response.data);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch user data:', err);
-      },
-    });
-  }
+  userData = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) return null;
+    return {
+      name: user.fullname,
+      username: user.username,
+      profile_image_url: user.profile_image_url ?? '',
+    };
+  });
+
+  ngOnInit() {}
 
   onLogout() {
     this.authService.logout();
