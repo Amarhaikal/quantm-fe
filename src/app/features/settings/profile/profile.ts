@@ -1,9 +1,15 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+  computed,
+} from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filter, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
@@ -12,7 +18,10 @@ import { UserService } from '../../../core/services/user.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../../environments/environment';
 import { TextboxComponent } from '../../../shared/components/textbox/textbox';
+import { ButtonComponent } from '../../../shared/components/button/button';
+import { DropdownComponent, OptionDropdown } from '../../../shared/components/dropdown/dropdown';
 import { AuthService } from '../../../core/auth/auth.service';
+import { CodeTypeService } from '../../../core/services/code-type.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,12 +29,13 @@ import { AuthService } from '../../../core/auth/auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ButtonModule,
     InputTextModule,
     CardModule,
     AvatarModule,
     FileUploadModule,
     TextboxComponent,
+    ButtonComponent,
+    DropdownComponent,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -36,16 +46,24 @@ export class Profile implements OnInit {
   private userService = inject(UserService);
   private toastService = inject(ToastService);
   private authService = inject(AuthService);
+  private codeTypeService = inject(CodeTypeService);
 
   profileForm: FormGroup;
   isLoading = signal<boolean>(false);
   isSaving = signal<boolean>(false);
   profileImageUrl = signal<string | null>(null);
+  rolesOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes('USR_RL').map((role) => ({
+      value: role.code,
+      label: role.description,
+    }));
+  });
 
   constructor() {
     this.profileForm = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3)]],
       username: [{ value: '', disabled: true }],
+      role: [{ value: '', disabled: true }],
     });
   }
 
@@ -64,10 +82,13 @@ export class Profile implements OnInit {
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          console.log(response);
-
-          const { fullname, username, profile_image_url } = response.data;
-          this.profileForm.patchValue({ fullname, username });
+          const { fullname, username, role, profile_image_url } = response.data;
+          // Patch form with role code instead of object for the dropdown
+          this.profileForm.patchValue({
+            fullname,
+            username,
+            role: role.code,
+          });
           if (profile_image_url) {
             this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
           }

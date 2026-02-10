@@ -8,6 +8,12 @@ export interface SystemCode {
   updated_at: string | null;
 }
 
+export interface SystemCodeReference {
+  id: number;
+  code: string;
+  description: string;
+}
+
 export interface CodeType {
   id: number;
   code: string;
