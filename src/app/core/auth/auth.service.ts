@@ -23,10 +23,18 @@ export class AuthService {
   login(credentials: { username: string; password: string }): Observable<AuthResponse> {
     return this.api.post<AuthResponse>('auth/login', credentials).pipe(
       tap((response) => {
-        console.log('login response', response);
+        console.log('[AuthService] Login API response:', response);
 
-        if (response.status === 200 && response.data?.user) {
-          this.setUser(response.data.user);
+        const userData = response.data?.user || (response.data as any);
+
+        if (response.status === 200 && userData && (userData.username || userData.fullname)) {
+          console.log('[AuthService] Login success, setting user:', userData);
+          this.setUser(userData);
+        } else {
+          console.warn(
+            '[AuthService] Login response valid but userData missing or status not 200',
+            response,
+          );
         }
       }),
     );
