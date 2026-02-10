@@ -60,35 +60,29 @@
               label="Full Name"
               formControlName="fullname"
               placeholder="Enter your full name"
-              icon="pi pi-user"
             />
+            <!-- icon="pi pi-user" -->
 
             <!-- Username (Readonly) -->
             <lib-textbox
               label="Username"
               formControlName="username"
-              icon="pi pi-at"
               hint="Username cannot be changed. Contact admin for assistance."
+            />
+            <!-- icon="pi pi-at" -->
+
+            <!-- Role (Readonly) -->
+            <lib-dropdown
+              label="Role"
+              formControlName="role"
+              [options]="rolesOptions()"
+              hint="Your assigned system role."
             />
 
             <!-- Additional Placeholder Info -->
             <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4">
-              <p-button
-                label="Cancel"
-                [text]="true"
-                severity="secondary"
-                styleClass="rounded-xl! hover:bg-gray-100!"
-                (onClick)="loadProfile()"
-                [disabled]="isSaving()"
-              ></p-button>
-              <p-button
-                type="submit"
-                label="Save Changes"
-                icon="pi pi-check"
-                [loading]="isSaving()"
-                styleClass="bg-indigo-600! border-none! rounded-xl! px-6 shadow-md hover:bg-indigo-700!"
-                [disabled]="profileForm.invalid || profileForm.pristine"
-              ></p-button>
+              <lib-button type="CANCEL" (click)="loadProfile()" />
+              <lib-button type="SAVE_CHANGES" htmlType="submit" />
             </div>
           </div>
         </form>
