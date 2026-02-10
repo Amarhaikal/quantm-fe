@@ -23,6 +23,7 @@ import { DropdownComponent, OptionDropdown } from '../../../shared/components/dr
 import { AuthService } from '../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../core/services/code-type.service';
 import { CustomValidators } from '../../../core/utils/validators';
+import { ConfirmService } from '../../../core/services/confirm.service';
 
 @Component({
   selector: 'app-profile',
@@ -48,6 +49,7 @@ export class Profile implements OnInit {
   private toastService = inject(ToastService);
   private authService = inject(AuthService);
   private codeTypeService = inject(CodeTypeService);
+  private confirmService = inject(ConfirmService);
 
   profileForm: FormGroup;
   isLoading = signal<boolean>(false);
@@ -108,11 +110,13 @@ export class Profile implements OnInit {
   onSave() {
     if (this.profileForm.invalid) return;
 
-    this.isSaving.set(true);
-    // Simulation of save since there is no updateProfile yet in service
-    setTimeout(() => {
-      this.toastService.success('Success', 'Profile updated successfully');
-      this.isSaving.set(false);
-    }, 1000);
+    this.confirmService.confirmSave(() => {
+      this.isSaving.set(true);
+      // Simulation of save since there is no updateProfile yet in service
+      setTimeout(() => {
+        this.toastService.success('Success', 'Profile updated successfully');
+        this.isSaving.set(false);
+      }, 1000);
+    });
   }
 }
