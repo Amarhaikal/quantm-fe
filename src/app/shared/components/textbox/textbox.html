@@ -9,21 +9,38 @@
     @if (icon()) {
       <i [class]="icon()" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10"></i>
     }
-    <input
-      pInputText
-      [id]="id()"
-      [type]="type()"
-      [placeholder]="placeholder()"
-      [value]="value()"
-      [disabled]="disabled()"
-      (input)="handleInput($event)"
-      (blur)="handleBlur()"
-      class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
-      [class.pl-9]="icon()"
-      [class.bg-gray-50]="disabled()"
-      [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
-      [class.ng-dirty]="ngControl?.dirty"
-    />
+    @if (type() === 'IDNO') {
+      <p-inputMask
+        [id]="id()"
+        mask="999999-99-9999"
+        [ngModel]="value()"
+        (ngModelChange)="handleInput($event)"
+        (onBlur)="handleBlur()"
+        [placeholder]="placeholder() || '000000-00-0000'"
+        [disabled]="disabled()"
+        styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
+        [class.pl-9]="icon()"
+        [class.bg-gray-50]="disabled()"
+        [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
+        [class.ng-dirty]="ngControl?.dirty"
+      ></p-inputMask>
+    } @else {
+      <input
+        pInputText
+        [id]="id()"
+        [type]="type()"
+        [placeholder]="placeholder()"
+        [value]="value()"
+        [disabled]="disabled()"
+        (input)="handleInput($event)"
+        (blur)="handleBlur()"
+        class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
+        [class.pl-9]="icon()"
+        [class.bg-gray-50]="disabled()"
+        [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
+        [class.ng-dirty]="ngControl?.dirty"
+      />
+    }
   </span>
 
   @if (ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)) {
@@ -38,6 +55,9 @@
         <small class="text-red-500 text-xs ml-1">
           Minimum length is {{ ngControl?.errors?.['minlength'].requiredLength }} characters
         </small>
+      }
+      @if (ngControl?.errors?.['invalidIdNo']) {
+        <small class="text-red-500 text-xs ml-1">Invalid ID No.</small>
       }
     </div>
   } @else if (hint()) {
