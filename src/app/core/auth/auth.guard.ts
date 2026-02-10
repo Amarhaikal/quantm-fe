@@ -11,24 +11,19 @@ export const authGuard: CanActivateFn = () => {
   // If already hydrated, handle immediately
   if (authService.isHydrated()) {
     const user = authService.currentUser();
-    console.log('[AuthGuard] Check (Hydrated): User present?', !!user);
     if (user) {
       return true;
     }
-    console.warn('[AuthGuard] Access denied (Hydrated, no user). Redirecting to login.');
     router.navigate(['/auth/login']);
     return false;
   }
 
-  console.log('[AuthGuard] Not hydrated, triggering hydration...');
   // If not hydrated (e.g., page refresh), trigger hydration
   return authService.hydrate().pipe(
     map((user) => {
-      console.log('[AuthGuard] Hydration completed. User found?', !!user);
       if (user) {
         return true;
       }
-      console.warn('[AuthGuard] Access denied (Hydration failed). Redirecting to login.');
       router.navigate(['/auth/login']);
       return false;
     }),
