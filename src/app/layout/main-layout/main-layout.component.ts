@@ -4,6 +4,7 @@ import { UserService } from '../../core/services/user.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { HeaderComponent } from '../components/header/header.component';
 import { MenuService } from '../../core/services/menu.service';
+import { CodeTypeService } from '../../core/services/code-type.service';
 import { Sidemenu } from '../components/sidemenu/sidemenu';
 
 @Component({
@@ -17,6 +18,7 @@ export class MainLayoutComponent implements OnInit {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   public menuService = inject(MenuService);
+  private codeTypeService = inject(CodeTypeService);
   private router = inject(Router);
 
   userData = computed(() => {
@@ -29,7 +31,10 @@ export class MainLayoutComponent implements OnInit {
     };
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Load code types on initialization
+    this.codeTypeService.loadCodeTypes();
+  }
 
   onLogout() {
     this.authService.logout();
