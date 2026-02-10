@@ -1,12 +1,14 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 :root {
-  font-family: "Inter", sans-serif;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: 'Inter', sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 body {
@@ -18,7 +20,7 @@ body {
 /* PrimeNG Toast Refinements */
 .p-toast {
   @apply opacity-95;
-  z-index: 9999!important;
+  z-index: 9999 !important;
 }
 
 .p-toast-message {
@@ -48,11 +50,11 @@ body {
 
 .p-toast-icon-close {
   @apply absolute top-4 right-4 w-8 h-8 rounded-full transition-all flex items-center justify-center border-none! outline-none!;
-  background: transparent!important;
+  background: transparent !important;
 }
 
 .p-toast-icon-close:hover {
-  background: rgba(0, 0, 0, 0.05)!important;
+  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 .p-toast-icon-close-icon {
@@ -83,7 +85,7 @@ body {
 
 /* Sidemenu Drawer Customization */
 .sidemenu-drawer {
-  background: #171A31 !important;
+  background: #171a31 !important;
   width: 270px !important;
   border-right: none !important;
   border-top: none !important;
@@ -92,7 +94,7 @@ body {
 }
 
 .sidemenu-drawer .p-drawer-content {
-  background: #171A31 !important;
+  background: #171a31 !important;
   padding: 0 !important;
 }
 
@@ -126,3 +128,45 @@ body {
 .lib-dropdown-panel .p-select-filter {
   @apply w-full text-sm rounded-lg border-gray-200! px-3 py-2;
 }
+
+/* Global ConfirmDialog Styling */
+.p-confirmdialog.p-dialog {
+  @apply shadow-2xl rounded-2xl border-none! overflow-hidden bg-white!;
+  background-color: white !important;
+}
+
+.p-confirmdialog .p-dialog-header {
+  @apply p-6 pb-2 flex items-center justify-between border-none! bg-white!;
+}
+
+.p-confirmdialog .p-dialog-title {
+  @apply font-bold text-xl text-gray-800;
+}
+
+.p-confirmdialog .p-dialog-content {
+  @apply px-6 pb-6 pt-2 flex items-start gap-4! border-none! bg-white!;
+  color: #4b5563;
+}
+
+.p-confirmdialog .p-confirm-dialog-icon {
+  @apply text-3xl text-[#191c32] mt-1 shrink-0;
+}
+
+.p-confirmdialog .p-confirm-dialog-message {
+  @apply text-base leading-relaxed;
+}
+
+.p-confirmdialog .p-dialog-footer {
+  @apply p-6 pt-0 border-none! flex justify-end gap-3 bg-white! w-full;
+  display: flex !important;
+}
+
+.p-confirmdialog .p-dialog-header-actions {
+  @apply relative top-0 right-0; /* Reset absolute positioning */
+}
+
+.p-confirmdialog .p-dialog-header-close {
+  @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
+  background: transparent !important;
+}
+

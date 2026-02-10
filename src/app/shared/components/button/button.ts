@@ -2,7 +2,14 @@ import { Component, input, computed, ChangeDetectionStrategy } from '@angular/co
 import { CommonModule } from '@angular/common';
 
 export type ButtonType = 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES';
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost' | 'link';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'outline'
+  | 'danger'
+  | 'ghost'
+  | 'link'
+  | 'dark';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonHtmlType = 'button' | 'submit' | 'reset';
 export type IconPos = 'left' | 'right';
@@ -94,7 +101,7 @@ export class ButtonComponent {
 
   baseClass = computed(() => {
     const classes = [
-      'inline-flex items-center justify-center gap-2 rounded-xl transition-all font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed select-none',
+      'inline-flex items-center justify-center gap-2 rounded-xl transition-all font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed select-none',
       this.block() ? 'w-full' : '',
     ];
 
@@ -116,31 +123,36 @@ export class ButtonComponent {
     switch (v) {
       case 'primary':
         classes.push(
-          'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 border border-transparent shadow-sm',
+          'bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:ring-indigo-500 border border-transparent shadow-sm',
         );
         break;
       case 'secondary':
         classes.push(
-          'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 focus:ring-gray-200 shadow-sm',
+          'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 focus-visible:ring-gray-200 shadow-sm',
         );
         break;
       case 'outline':
         classes.push(
-          'bg-transparent text-indigo-600 border border-indigo-600 hover:bg-indigo-50 focus:ring-indigo-500',
+          'bg-transparent text-indigo-600 border border-indigo-600 hover:bg-indigo-50 focus-visible:ring-indigo-500',
         );
         break;
       case 'danger':
         classes.push(
-          'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 border border-transparent shadow-sm',
+          'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500 border border-transparent shadow-sm',
         );
         break;
       case 'ghost':
         classes.push(
-          'bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-transparent focus:ring-gray-200',
+          'bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-transparent focus-visible:ring-gray-200',
         );
         break;
       case 'link':
         classes.push('bg-transparent text-indigo-600 hover:underline border-none p-0! h-auto!');
+        break;
+      case 'dark':
+        classes.push(
+          'bg-[#191c32] text-white hover:bg-[#2a2e4d] focus-visible:ring-[#191c32] border border-transparent shadow-sm',
+        );
         break;
     }
 

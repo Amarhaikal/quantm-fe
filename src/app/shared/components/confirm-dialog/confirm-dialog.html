@@ -1,0 +1,25 @@
+<p-confirmdialog
+  #cd
+  [style]="{ width: '450px' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  draggable="false"
+  resizable="false"
+  appendTo="body"
+  [modal]="true"
+  maskStyleClass="bg-black/40 backdrop-blur-[2px]"
+>
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3 w-full">
+      <lib-button
+        variant="secondary"
+        [label]="cd.confirmation?.rejectLabel || 'Cancel'"
+        (click)="reject(cd)"
+      />
+      <lib-button
+        variant="dark"
+        [label]="cd.confirmation?.acceptLabel || 'Confirm'"
+        (click)="accept(cd)"
+      />
+    </div>
+  </ng-template>
+</p-confirmdialog>
