@@ -17,5 +17,6 @@ export interface UserResponse {
     username: string;
     profile_image_url: string;
     role: SystemCodeReference;
+    id_no?: string;
   };
 }

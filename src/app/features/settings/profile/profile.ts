@@ -22,6 +22,7 @@ import { ButtonComponent } from '../../../shared/components/button/button';
 import { DropdownComponent, OptionDropdown } from '../../../shared/components/dropdown/dropdown';
 import { AuthService } from '../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../core/services/code-type.service';
+import { CustomValidators } from '../../../core/utils/validators';
 
 @Component({
   selector: 'app-profile',
@@ -63,6 +64,7 @@ export class Profile implements OnInit {
     this.profileForm = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3)]],
       username: [{ value: '', disabled: true }],
+      id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       role: [{ value: '', disabled: true }],
     });
   }
@@ -82,11 +84,12 @@ export class Profile implements OnInit {
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          const { fullname, username, role, profile_image_url } = response.data;
+          const { fullname, username, role, profile_image_url, id_no } = response.data;
           // Patch form with role code instead of object for the dropdown
           this.profileForm.patchValue({
             fullname,
             username,
+            id_no,
             role: role.code,
           });
           if (profile_image_url) {
