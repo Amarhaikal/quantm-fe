@@ -11,16 +11,18 @@ import {
   NG_VALUE_ACCESSOR,
   NgControl,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
 
-export type TextboxType = 'text' | 'email';
+export type TextboxType = 'text' | 'email' | 'IDNO';
 
 @Component({
   selector: 'lib-textbox',
   standalone: true,
-  imports: [CommonModule, InputTextModule, ReactiveFormsModule],
+  imports: [CommonModule, InputTextModule, InputMaskModule, ReactiveFormsModule, FormsModule],
   templateUrl: './textbox.html',
   styleUrl: './textbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,8 +67,8 @@ export class TextboxComponent implements ControlValueAccessor {
     this.disabled.set(isDisabled);
   }
 
-  handleInput(event: Event): void {
-    const val = (event.target as HTMLInputElement).value;
+  handleInput(event: any): void {
+    const val = event.target ? event.target.value : event.value ? event.value : event;
     this.value.set(val);
     this.onChange(val);
   }
