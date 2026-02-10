@@ -2,6 +2,9 @@
   @if (label()) {
     <label [for]="id()" class="text-sm font-medium text-gray-600 select-none">
       {{ label() }}
+      @if (required()) {
+        <span class="text-red-500 ml-0.5">*</span>
+      }
     </label>
   }
 

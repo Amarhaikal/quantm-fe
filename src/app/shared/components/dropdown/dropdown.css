@@ -1,4 +1,8 @@
 @reference "../../../../styles.css";
+/* 
+:host {
+  display: block;
+} */
 
 /* PrimeNG Dropdown Refinements */
 :host ::ng-deep .p-select {

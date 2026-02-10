@@ -32,6 +32,7 @@ export interface OptionDropdown {
 })
 export class DropdownComponent implements ControlValueAccessor {
   label = input<string>('');
+  required = input<boolean>(false);
   options = input<OptionDropdown[]>([]);
   placeholder = input<string>('');
   hint = input<string>('');

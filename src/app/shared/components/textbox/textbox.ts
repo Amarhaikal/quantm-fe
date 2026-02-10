@@ -29,6 +29,7 @@ export type TextboxType = 'text' | 'email' | 'IDNO';
 })
 export class TextboxComponent implements ControlValueAccessor {
   label = input<string>('');
+  required = input<boolean>(false);
   placeholder = input<string>('');
   hint = input<string>('');
   type = input<TextboxType>('text');
