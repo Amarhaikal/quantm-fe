@@ -105,15 +105,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.authService.login({ username, password }).subscribe({
         next: (res) => {
-          console.log('[LoginComponent] Login subscription next:', res);
           this.loading.set(false);
-          console.log('[LoginComponent] Navigating to /');
-          this.router.navigate(['/']).then((success) => {
-            console.log('[LoginComponent] Navigation result:', success);
-          });
+          this.router.navigate(['/']);
         },
         error: (err) => {
-          console.error('[LoginComponent] Login error:', err);
           this.loading.set(false);
           this.errorMessage.set(err.error?.message || 'Invalid credentials. Please try again.');
         },
