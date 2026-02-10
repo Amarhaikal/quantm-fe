@@ -1,0 +1,18 @@
+@reference "../../../../styles.css";
+
+/* PrimeNG Dropdown Refinements */
+:host ::ng-deep .p-select {
+  @apply transition-all duration-200;
+}
+
+:host ::ng-deep .p-select:not(.p-disabled).p-focus {
+  @apply ring-2 ring-indigo-500/20 border-indigo-500!;
+}
+
+:host ::ng-deep .p-select .p-select-label {
+  @apply text-sm px-3 flex items-center h-full text-gray-700;
+}
+
+:host ::ng-deep .p-select .p-select-trigger {
+  @apply w-10 text-gray-400;
+}
