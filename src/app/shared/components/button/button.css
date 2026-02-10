@@ -1,0 +1,9 @@
+/* Styles handled by Tailwind mostly */
+:host {
+  display: inline-block;
+}
+
+:host([block='true']) {
+  display: block;
+  width: 100%;
+}
