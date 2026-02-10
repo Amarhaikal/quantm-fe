@@ -61,13 +61,31 @@ export class Profile implements OnInit {
       label: role.description,
     }));
   });
+  countriesOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes('CTRY').map((country) => ({
+      value: country.code,
+      label: country.description,
+    }));
+  });
+  statesOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes('STT').map((state) => ({
+      value: state.code,
+      label: state.description,
+    }));
+  });
 
   constructor() {
     this.profileForm = this.fb.group({
-      fullname: ['', [Validators.required, Validators.minLength(3)]],
+      fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
       username: [{ value: '', disabled: true }],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
-      role: [{ value: '', disabled: true }],
+      role: [{ value: '', validators: [Validators.required] }],
+      address1: ['', [Validators.required, Validators.maxLength(255)]],
+      address2: ['', [Validators.required, Validators.maxLength(255)]],
+      city: ['', [Validators.required, Validators.maxLength(120)]],
+      zip: ['', [Validators.required]],
+      state: [{ value: '', validators: [Validators.required] }],
+      country: [{ value: '', validators: [Validators.required] }],
     });
   }
 

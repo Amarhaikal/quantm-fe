@@ -1,4 +1,4 @@
-<div class="p-6 max-w-4xl mx-auto">
+<div class="mx-auto">
   <!-- Header Section -->
   <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
@@ -32,7 +32,7 @@
             </div>
           </div>
           <h2 class="mt-4 text-xl font-semibold text-gray-800">
-            {{ profileForm.get('name')?.value || 'New User' }}
+            {{ profileForm.get('fullname')?.value || 'New User' }}
           </h2>
           <span class="text-sm text-gray-500">@{{ profileForm.get('username')?.value }}</span>
         </div>
@@ -54,22 +54,20 @@
     <div class="lg:col-span-2">
       <p-card styleClass="border-none shadow-sm">
         <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-4">
-          <div class="grid grid-cols-1 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <!-- Full Name -->
             <lib-textbox
               label="Full Name"
               formControlName="fullname"
               placeholder="Enter your full name"
             />
-            <!-- icon="pi pi-user" -->
 
             <!-- Username (Readonly) -->
             <lib-textbox
               label="Username"
               formControlName="username"
-              hint="Username cannot be changed. Contact admin for assistance."
+              hint="Username cannot be changed."
             />
-            <!-- icon="pi pi-at" -->
 
             <!-- ID No. -->
             <lib-textbox
@@ -79,7 +77,7 @@
               placeholder="000000-00-0000"
             />
 
-            <!-- Role (Readonly) -->
+            <!-- Role -->
             <lib-dropdown
               label="Role"
               formControlName="role"
@@ -87,9 +85,46 @@
               hint="Your assigned system role."
             />
 
-            <!-- Additional Placeholder Info -->
-            <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4">
-              <lib-button type="CANCEL" (click)="loadProfile()" />
+            <!-- Address 1 -->
+            <lib-textbox
+              label="Address 1"
+              formControlName="address1"
+              placeholder="Enter your address"
+              class="md:col-span-2"
+            />
+
+            <!-- Address 2 -->
+            <lib-textbox
+              label="Address 2"
+              formControlName="address2"
+              placeholder="Enter your address"
+              class="md:col-span-2"
+            />
+
+            <!-- City -->
+            <lib-textbox label="City" formControlName="city" placeholder="Enter your city" />
+
+            <!-- State -->
+            <lib-dropdown
+              label="State"
+              formControlName="state"
+              placeholder="Select your state"
+              [options]="statesOptions()"
+            />
+
+            <!-- Zip Code -->
+            <lib-textbox label="Zip Code" formControlName="zip" placeholder="Enter your zip code" />
+
+            <!-- Country -->
+            <lib-dropdown
+              label="Country"
+              formControlName="country"
+              placeholder="Select your country"
+              [options]="countriesOptions()"
+            />
+
+            <!-- Action Buttons -->
+            <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
               <lib-button type="SAVE_CHANGES" htmlType="submit" />
             </div>
           </div>
