@@ -80,10 +80,10 @@ export class Profile implements OnInit {
       username: [{ value: '', disabled: true }],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       role: [{ value: '', validators: [Validators.required] }],
-      address1: ['', [Validators.required, Validators.maxLength(255)]],
-      address2: ['', [Validators.required, Validators.maxLength(255)]],
+      address_line_1: ['', [Validators.required, Validators.maxLength(255)]],
+      address_line_2: ['', [Validators.maxLength(255)]],
       city: ['', [Validators.required, Validators.maxLength(120)]],
-      zip: ['', [Validators.required]],
+      postcode: ['', [Validators.required, Validators.maxLength(6)]],
       state: [{ value: '', validators: [Validators.required] }],
       country: [{ value: '', validators: [Validators.required] }],
     });
@@ -104,13 +104,19 @@ export class Profile implements OnInit {
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          const { fullname, username, role, profile_image_url, id_no } = response.data;
+          const { fullname, username, role, profile_image_url, id_no, address } = response.data;
           // Patch form with role code instead of object for the dropdown
           this.profileForm.patchValue({
             fullname,
             username,
             id_no,
             role: role.code,
+            address_line_1: address.address_line_1,
+            address_line_2: address.address_line_2,
+            city: address.city,
+            postcode: address.postcode,
+            state: address.state.code,
+            country: address.country.code,
           });
           if (profile_image_url) {
             this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);

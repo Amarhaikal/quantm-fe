@@ -2,7 +2,7 @@
   <!-- Header Section -->
   <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
-    <p class="text-gray-500">Manage your account settings and personal information</p>
+    <!-- <p class="text-gray-500">Manage your account settings and personal information</p> -->
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -60,14 +60,11 @@
               label="Full Name"
               formControlName="fullname"
               placeholder="Enter your full name"
+              [required]="true"
             />
 
             <!-- Username (Readonly) -->
-            <lib-textbox
-              label="Username"
-              formControlName="username"
-              hint="Username cannot be changed."
-            />
+            <lib-textbox label="Username" formControlName="username" />
 
             <!-- ID No. -->
             <lib-textbox
@@ -75,6 +72,7 @@
               formControlName="id_no"
               type="IDNO"
               placeholder="000000-00-0000"
+              [required]="true"
             />
 
             <!-- Role -->
@@ -82,27 +80,33 @@
               label="Role"
               formControlName="role"
               [options]="rolesOptions()"
-              hint="Your assigned system role."
+              [required]="true"
             />
 
             <!-- Address 1 -->
             <lib-textbox
               label="Address 1"
-              formControlName="address1"
+              formControlName="address_line_1"
               placeholder="Enter your address"
               class="md:col-span-2"
+              [required]="true"
             />
 
             <!-- Address 2 -->
             <lib-textbox
               label="Address 2"
-              formControlName="address2"
+              formControlName="address_line_2"
               placeholder="Enter your address"
               class="md:col-span-2"
             />
 
             <!-- City -->
-            <lib-textbox label="City" formControlName="city" placeholder="Enter your city" />
+            <lib-textbox
+              label="City"
+              formControlName="city"
+              placeholder="Enter your city"
+              [required]="true"
+            />
 
             <!-- State -->
             <lib-dropdown
@@ -110,10 +114,16 @@
               formControlName="state"
               placeholder="Select your state"
               [options]="statesOptions()"
+              [required]="true"
             />
 
-            <!-- Zip Code -->
-            <lib-textbox label="Zip Code" formControlName="zip" placeholder="Enter your zip code" />
+            <!-- Postcode -->
+            <lib-textbox
+              label="Postcode"
+              formControlName="postcode"
+              placeholder="Enter your postcode"
+              [required]="true"
+            />
 
             <!-- Country -->
             <lib-dropdown
@@ -121,6 +131,7 @@
               formControlName="country"
               placeholder="Select your country"
               [options]="countriesOptions()"
+              [required]="true"
             />
 
             <!-- Action Buttons -->

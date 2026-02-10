@@ -18,5 +18,13 @@ export interface UserResponse {
     profile_image_url: string;
     role: SystemCodeReference;
     id_no?: string;
+    address: {
+      address_line_1: string;
+      address_line_2: string;
+      city: string;
+      postcode: string;
+      state: SystemCodeReference;
+      country: SystemCodeReference;
+    };
   };
 }
