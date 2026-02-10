@@ -1,0 +1,15 @@
+<button [type]="htmlType()" [class]="baseClass()" [disabled]="disabled() || loading()">
+  @if (finalIcon() && iconPos() === 'left') {
+    <i [class]="finalIcon()"></i>
+  }
+
+  @if (finalLabel()) {
+    <span>{{ finalLabel() }}</span>
+  } @else {
+    <ng-content></ng-content>
+  }
+
+  @if (finalIcon() && iconPos() === 'right') {
+    <i [class]="finalIcon()"></i>
+  }
+</button>
