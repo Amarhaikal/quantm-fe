@@ -18,7 +18,7 @@
       [disabled]="disabled()"
       (input)="handleInput($event)"
       (blur)="handleBlur()"
-      class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm"
+      class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
       [class.pl-9]="icon()"
       [class.bg-gray-50]="disabled()"
       [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"

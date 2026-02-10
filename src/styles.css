@@ -95,3 +95,34 @@ body {
   background: #171A31 !important;
   padding: 0 !important;
 }
+
+/* Custom Dropdown (Select) Portal Styles */
+.lib-dropdown-panel {
+  @apply rounded-xl shadow-xl border border-gray-100 mt-1 overflow-hidden bg-white;
+}
+
+.lib-dropdown-panel .p-select-list {
+  @apply p-1;
+}
+
+.lib-dropdown-panel .p-select-option {
+  @apply rounded-lg text-sm transition-all m-0.5!;
+  padding: 6px 10px !important;
+  color: #374151; /* text-gray-700 */
+}
+
+.lib-dropdown-panel .p-select-option.p-select-option-selected {
+  @apply bg-indigo-50 text-indigo-700 font-medium;
+}
+
+.lib-dropdown-panel .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
+  @apply bg-gray-50 text-gray-900;
+}
+
+.lib-dropdown-panel .p-select-filter-container {
+  @apply p-2 border-b border-gray-100;
+}
+
+.lib-dropdown-panel .p-select-filter {
+  @apply w-full text-sm rounded-lg border-gray-200! px-3 py-2;
+}
