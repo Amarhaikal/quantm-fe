@@ -25,7 +25,8 @@ export class MainLayoutComponent implements OnInit {
     const user = this.authService.currentUser();
     if (!user) return null;
     return {
-      name: user.fullname,
+      fullname: user.fullname,
+      shortname: user.shortname,
       username: user.username,
       profile_image_url: user.profile_image_url ?? '',
     };

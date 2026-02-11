@@ -44,6 +44,7 @@ export class AuthService {
           const user: User = {
             id: 0,
             fullname: apiUser.fullname,
+            shortname: apiUser.shortname,
             username: apiUser.username,
             email: '',
             id_no: '',

@@ -7,6 +7,7 @@ export interface Role {
 export interface User {
   id: number;
   fullname: string;
+  shortname: string;
   id_no: string;
   username: string;
   email: string;

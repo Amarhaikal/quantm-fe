@@ -29,7 +29,12 @@ import { MenuService } from '../../../core/services/menu.service';
 export class HeaderComponent {
   private menuService = inject(MenuService);
 
-  userData = input<{ name: string; username: string; profile_image_url: string } | null>(null);
+  userData = input<{
+    fullname: string;
+    shortname: string;
+    username: string;
+    profile_image_url: string;
+  } | null>(null);
   logout = output<void>();
 
   toggleSidebar() {

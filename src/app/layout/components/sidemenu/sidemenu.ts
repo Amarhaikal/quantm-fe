@@ -61,7 +61,12 @@ export class Sidemenu implements OnInit {
   menuService = inject(MenuService);
   drawerRef = viewChild<Drawer>('drawerRef');
 
-  userData = input<{ name: string; username: string; profile_image_url: string } | null>(null);
+  userData = input<{
+    fullname: string;
+    shortname: string;
+    username: string;
+    profile_image_url: string;
+  } | null>(null);
   menuData = signal<any[]>([]);
 
   // Track expanded menu items by ID using a Signal
