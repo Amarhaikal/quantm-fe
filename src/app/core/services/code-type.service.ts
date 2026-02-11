@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { ApiService } from './api.service';
 import { CodeType, CodeTypeResponse, SystemCode } from '../models/code-type.model';
+import { CODE_TYPES, CodeTypeValue } from '../constants/code-types.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -46,43 +47,21 @@ export class CodeTypeService {
     });
   }
 
-  /**
-   * Get a specific code type by its code (e.g., 'CTRY', 'STT', 'GNDR')
-   * @param code The code type code
-   * @returns The code type object or undefined
-   */
-  getCodeType(code: string): CodeType | undefined {
+  getCodeType(code: CodeTypeValue | string): CodeType | undefined {
     return this.codeTypesData().find((ct) => ct.code === code);
   }
 
-  /**
-   * Get system codes for a specific code type
-   * @param codeTypeCode The code type code (e.g., 'CTRY', 'STT')
-   * @returns Array of system codes or empty array
-   */
-  getSystemCodes(codeTypeCode: string): SystemCode[] {
+  getSystemCodes(codeTypeCode: CodeTypeValue | string): SystemCode[] {
     const codeType = this.getCodeType(codeTypeCode);
     return codeType?.system_codes ?? [];
   }
 
-  /**
-   * Get a specific system code by code type and system code
-   * @param codeTypeCode The code type code (e.g., 'CTRY')
-   * @param systemCode The system code (e.g., 'MY', 'ID')
-   * @returns The system code object or undefined
-   */
-  getSystemCode(codeTypeCode: string, systemCode: string): SystemCode | undefined {
+  getSystemCode(codeTypeCode: CodeTypeValue | string, systemCode: string): SystemCode | undefined {
     const systemCodes = this.getSystemCodes(codeTypeCode);
     return systemCodes.find((sc) => sc.code === systemCode);
   }
 
-  /**
-   * Get the description of a system code
-   * @param codeTypeCode The code type code (e.g., 'CTRY')
-   * @param systemCode The system code (e.g., 'MY')
-   * @returns The description or empty string
-   */
-  getSystemCodeDescription(codeTypeCode: string, systemCode: string): string {
+  getSystemCodeDescription(codeTypeCode: CodeTypeValue | string, systemCode: string): string {
     return this.getSystemCode(codeTypeCode, systemCode)?.description ?? '';
   }
 }

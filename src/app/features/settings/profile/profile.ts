@@ -24,6 +24,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../core/services/code-type.service';
 import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
+import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 
 @Component({
   selector: 'app-profile',
@@ -56,7 +57,7 @@ export class Profile implements OnInit {
   isSaving = signal<boolean>(false);
   profileImageUrl = signal<string | null>(null);
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes('USR_RL').map((role) => ({
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
       value: role.code,
       label: role.description,
     }));
@@ -68,7 +69,7 @@ export class Profile implements OnInit {
     }));
   });
   statesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes('STT').map((state) => ({
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.STATE).map((state) => ({
       value: state.code,
       label: state.description,
     }));
