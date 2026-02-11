@@ -16,6 +16,7 @@ export interface UserResponse {
     id: number;
     fullname: string;
     username: string;
+    shortname: string;
     profile_image_url: string;
     email: string;
     gender: SystemCodeReference;
@@ -30,6 +31,7 @@ export interface UserResponse {
       state: SystemCodeReference;
       country: SystemCodeReference;
     };
+    joined_dt: string;
   };
 }
 
@@ -40,6 +42,7 @@ export interface UserUpdateDto {
   status?: { code: string };
   id_no?: string;
   email?: string;
+  joined_dt?: string;
   address?: {
     address_line_1?: string;
     address_line_2?: string;

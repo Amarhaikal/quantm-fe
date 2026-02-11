@@ -32,9 +32,9 @@
             </div>
           </div>
           <h2 class="mt-4 text-xl font-semibold text-gray-800">
-            {{ profileForm.get('fullname')?.value || 'New User' }}
+            {{ originalData?.shortname || 'New User' }}
           </h2>
-          <span class="text-sm text-gray-500">@{{ profileForm.get('username')?.value }}</span>
+          <span class="text-sm text-gray-500">@{{ originalData?.username }}</span>
         </div>
 
         <div class="p-4 border-t border-gray-100">
@@ -61,6 +61,15 @@
               formControlName="fullname"
               placeholder="Enter your full name"
               [required]="true"
+              [maxLength]="80"
+            />
+
+            <!-- Short Name -->
+            <lib-textbox
+              label="Short Name"
+              formControlName="shortname"
+              placeholder="Enter your short name"
+              [maxLength]="20"
             />
 
             <!-- Username (Readonly) -->
@@ -107,12 +116,20 @@
               [required]="true"
             />
 
+            <!-- Joined Date -->
+            <lib-datepicker
+              label="Joined Date"
+              formControlName="joined_dt"
+              placeholder="Select joined date"
+            />
+
             <!-- Address 1 -->
             <lib-textbox
               label="Address 1"
               formControlName="address_line_1"
               placeholder="Enter your address"
               class="md:col-span-2"
+              [maxLength]="255"
             />
 
             <!-- Address 2 -->
@@ -121,10 +138,16 @@
               formControlName="address_line_2"
               placeholder="Enter your address"
               class="md:col-span-2"
+              [maxLength]="255"
             />
 
             <!-- City -->
-            <lib-textbox label="City" formControlName="city" placeholder="Enter your city" />
+            <lib-textbox
+              label="City"
+              formControlName="city"
+              placeholder="Enter your city"
+              [maxLength]="120"
+            />
 
             <!-- State -->
             <lib-dropdown
@@ -139,6 +162,7 @@
               label="Postcode"
               formControlName="postcode"
               placeholder="Enter your postcode"
+              [maxLength]="6"
             />
 
             <!-- Country -->

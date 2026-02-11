@@ -25,6 +25,7 @@ import { CodeTypeService } from '../../../core/services/code-type.service';
 import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
+import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +40,7 @@ import { CODE_TYPES } from '../../../core/constants/code-types.constants';
     TextboxComponent,
     ButtonComponent,
     DropdownComponent,
+    DatePickerComponent,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -93,7 +95,8 @@ export class Profile implements OnInit {
 
   constructor() {
     this.profileForm = this.fb.group({
-      fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
+      fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+      shortname: ['', [Validators.maxLength(20)]],
       username: [{ value: '', disabled: true }],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: [{ value: '', validators: [Validators.required] }],
@@ -106,6 +109,7 @@ export class Profile implements OnInit {
       postcode: ['', [Validators.maxLength(6)]],
       state: [{ value: '' }],
       country: [{ value: '' }],
+      joined_dt: [''],
     });
   }
 
@@ -139,6 +143,7 @@ export class Profile implements OnInit {
     const {
       id,
       fullname,
+      shortname,
       username,
       role,
       profile_image_url,
@@ -147,17 +152,20 @@ export class Profile implements OnInit {
       email,
       status,
       gender,
+      joined_dt,
     } = data;
 
     this.userId = id;
     const formData = {
       fullname,
+      shortname,
       username,
       id_no,
       email,
       gender: gender?.code || '',
       role: role.code,
       status: status.code,
+      joined_dt,
       address_line_1: address.address_line_1,
       address_line_2: address.address_line_2,
       city: address.city,
