@@ -63,7 +63,7 @@ export class Profile implements OnInit {
     }));
   });
   countriesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes('CTRY').map((country) => ({
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.COUNTRY).map((country) => ({
       value: country.code,
       label: country.description,
     }));
@@ -74,19 +74,38 @@ export class Profile implements OnInit {
       label: state.description,
     }));
   });
+  genderOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.GENDER).map((gender) => ({
+      value: gender.code,
+      label: gender.description,
+    }));
+  });
+
+  statusOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_STATUS).map((status) => ({
+      value: status.code,
+      label: status.description,
+    }));
+  });
+
+  userId: number | null = null;
+  originalData: any = null;
 
   constructor() {
     this.profileForm = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
       username: [{ value: '', disabled: true }],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
+      gender: [{ value: '', validators: [Validators.required] }],
       role: [{ value: '', validators: [Validators.required] }],
-      address_line_1: ['', [Validators.required, Validators.maxLength(255)]],
+      status: [{ value: '', validators: [Validators.required] }],
+      email: ['', [Validators.required, Validators.email]],
+      address_line_1: ['', [Validators.maxLength(255)]],
       address_line_2: ['', [Validators.maxLength(255)]],
-      city: ['', [Validators.required, Validators.maxLength(120)]],
-      postcode: ['', [Validators.required, Validators.maxLength(6)]],
-      state: [{ value: '', validators: [Validators.required] }],
-      country: [{ value: '', validators: [Validators.required] }],
+      city: ['', [Validators.maxLength(120)]],
+      postcode: ['', [Validators.maxLength(6)]],
+      state: [{ value: '' }],
+      country: [{ value: '' }],
     });
   }
 
@@ -105,23 +124,7 @@ export class Profile implements OnInit {
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          const { fullname, username, role, profile_image_url, id_no, address } = response.data;
-          // Patch form with role code instead of object for the dropdown
-          this.profileForm.patchValue({
-            fullname,
-            username,
-            id_no,
-            role: role.code,
-            address_line_1: address.address_line_1,
-            address_line_2: address.address_line_2,
-            city: address.city,
-            postcode: address.postcode,
-            state: address.state.code,
-            country: address.country.code,
-          });
-          if (profile_image_url) {
-            this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
-          }
+          this.handleUserDataResponse(response.data);
         }
         this.isLoading.set(false);
       },
@@ -132,16 +135,100 @@ export class Profile implements OnInit {
     });
   }
 
+  private handleUserDataResponse(data: any) {
+    const {
+      id,
+      fullname,
+      username,
+      role,
+      profile_image_url,
+      id_no,
+      address,
+      email,
+      status,
+      gender,
+    } = data;
+
+    this.userId = id;
+    const formData = {
+      fullname,
+      username,
+      id_no,
+      email,
+      gender: gender?.code || '',
+      role: role.code,
+      status: status.code,
+      address_line_1: address.address_line_1,
+      address_line_2: address.address_line_2,
+      city: address.city,
+      postcode: address.postcode,
+      state: address.state.code,
+      country: address.country.code,
+    };
+
+    this.profileForm.patchValue(formData);
+    this.originalData = { ...formData }; // Store a copy
+
+    if (profile_image_url) {
+      this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
+    }
+  }
+
   onSave() {
-    if (this.profileForm.invalid) return;
+    if (this.profileForm.invalid || !this.userId) return;
+
+    // Identify changed fields
+    const currentValues = this.profileForm.getRawValue();
+    const updateData: any = {};
+    const addressFields = [
+      'address_line_1',
+      'address_line_2',
+      'city',
+      'postcode',
+      'state',
+      'country',
+    ];
+    let addressUpdated = false;
+
+    Object.keys(currentValues).forEach((key) => {
+      if (currentValues[key] !== this.originalData[key]) {
+        if (addressFields.includes(key)) {
+          if (!updateData.address) updateData.address = {};
+
+          if (key === 'state' || key === 'country') {
+            updateData.address[key] = { code: currentValues[key] };
+          } else {
+            updateData.address[key] = currentValues[key];
+          }
+          addressUpdated = true;
+        } else if (['gender', 'role', 'status'].includes(key)) {
+          updateData[key] = { code: currentValues[key] };
+        } else {
+          updateData[key] = currentValues[key];
+        }
+      }
+    });
+
+    if (Object.keys(updateData).length === 0) {
+      this.toastService.info('No changes', 'No modifications were detected.');
+      return;
+    }
 
     this.confirmService.confirmSave(() => {
       this.isSaving.set(true);
-      // Simulation of save since there is no updateProfile yet in service
-      setTimeout(() => {
-        this.toastService.success('Success', 'Profile updated successfully');
-        this.isSaving.set(false);
-      }, 1000);
+      this.userService.updateUser(this.userId!, updateData).subscribe({
+        next: (response) => {
+          if (response.status === 200) {
+            this.toastService.success('Success', 'Profile updated successfully');
+            this.handleUserDataResponse(response.data); // Use the response data directly
+          }
+          this.isSaving.set(false);
+        },
+        error: (err) => {
+          this.toastService.error('Error', 'Failed to update profile');
+          this.isSaving.set(false);
+        },
+      });
     });
   }
 }

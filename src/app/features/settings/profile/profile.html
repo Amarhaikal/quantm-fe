@@ -75,11 +75,35 @@
               [required]="true"
             />
 
+            <!-- Gender -->
+            <lib-dropdown
+              label="Gender"
+              formControlName="gender"
+              [options]="genderOptions()"
+              [required]="true"
+            />
+
             <!-- Role -->
             <lib-dropdown
               label="Role"
               formControlName="role"
               [options]="rolesOptions()"
+              [required]="true"
+            />
+
+            <!-- Status -->
+            <lib-dropdown
+              label="Status"
+              formControlName="status"
+              [options]="statusOptions()"
+              [required]="true"
+            />
+
+            <!-- Email -->
+            <lib-textbox
+              label="Email"
+              formControlName="email"
+              placeholder="Enter your email"
               [required]="true"
             />
 
@@ -89,7 +113,6 @@
               formControlName="address_line_1"
               placeholder="Enter your address"
               class="md:col-span-2"
-              [required]="true"
             />
 
             <!-- Address 2 -->
@@ -101,12 +124,7 @@
             />
 
             <!-- City -->
-            <lib-textbox
-              label="City"
-              formControlName="city"
-              placeholder="Enter your city"
-              [required]="true"
-            />
+            <lib-textbox label="City" formControlName="city" placeholder="Enter your city" />
 
             <!-- State -->
             <lib-dropdown
@@ -114,7 +132,6 @@
               formControlName="state"
               placeholder="Select your state"
               [options]="statesOptions()"
-              [required]="true"
             />
 
             <!-- Postcode -->
@@ -122,7 +139,6 @@
               label="Postcode"
               formControlName="postcode"
               placeholder="Enter your postcode"
-              [required]="true"
             />
 
             <!-- Country -->
@@ -131,11 +147,11 @@
               formControlName="country"
               placeholder="Select your country"
               [options]="countriesOptions()"
-              [required]="true"
             />
 
             <!-- Action Buttons -->
             <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
+              <lib-button type="RESET" (click)="loadProfile()" />
               <lib-button type="SAVE_CHANGES" htmlType="submit" />
             </div>
           </div>
