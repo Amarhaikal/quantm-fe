@@ -35,6 +35,7 @@ export class TextboxComponent implements ControlValueAccessor {
   type = input<TextboxType>('text');
   id = input<string>(`txt-${Math.random().toString(36).substring(2, 11)}`);
   icon = input<string>('');
+  maxLength = input<number | undefined>(undefined);
 
   value = signal<string>('');
   disabled = signal<boolean>(false);
@@ -69,12 +70,38 @@ export class TextboxComponent implements ControlValueAccessor {
   }
 
   handleInput(event: any): void {
-    const val = event.target ? event.target.value : event.value ? event.value : event;
+    let val = event.target ? event.target.value : event.value ? event.value : event;
+    const max = this.maxLength();
+
+    // Logic: allow up to max + 1 characters
+    if (max !== undefined && val.length > max + 1) {
+      val = val.substring(0, max + 1);
+      if (event.target) {
+        event.target.value = val;
+      }
+    }
+
     this.value.set(val);
     this.onChange(val);
   }
 
   handleBlur(): void {
     this.onTouched();
+    this.trimValueIfExceeds();
+  }
+
+  handleFocus(): void {
+    this.trimValueIfExceeds();
+  }
+
+  private trimValueIfExceeds(): void {
+    const max = this.maxLength();
+    const currentVal = this.value();
+
+    if (max !== undefined && currentVal.length > max) {
+      const trimmed = currentVal.substring(0, max);
+      this.value.set(trimmed);
+      this.onChange(trimmed);
+    }
   }
 }

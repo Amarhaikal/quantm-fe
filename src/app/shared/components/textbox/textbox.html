@@ -19,6 +19,7 @@
         [ngModel]="value()"
         (ngModelChange)="handleInput($event)"
         (onBlur)="handleBlur()"
+        (onFocus)="handleFocus()"
         [placeholder]="placeholder() || '000000-00-0000'"
         [disabled]="disabled()"
         styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
@@ -37,6 +38,7 @@
         [disabled]="disabled()"
         (input)="handleInput($event)"
         (blur)="handleBlur()"
+        (focus)="handleFocus()"
         class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
         [class.pl-9]="icon()"
         [class.bg-gray-50]="disabled()"
@@ -57,6 +59,11 @@
       @if (ngControl?.errors?.['minlength']) {
         <small class="text-red-500 text-xs ml-1">
           Minimum length is {{ ngControl?.errors?.['minlength'].requiredLength }} characters
+        </small>
+      }
+      @if (ngControl?.errors?.['maxlength']) {
+        <small class="text-red-500 text-xs ml-1">
+          Maximum length is {{ ngControl?.errors?.['maxlength'].requiredLength }} characters
         </small>
       }
       @if (ngControl?.errors?.['invalidIdNo']) {

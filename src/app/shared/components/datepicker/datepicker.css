@@ -1,0 +1,30 @@
+@reference "../../../../styles.css";
+
+/* PrimeNG DatePicker Refinements */
+:host ::ng-deep .p-datepicker {
+  @apply shadow-none! transition-all duration-200;
+  width: 100%;
+}
+
+:host ::ng-deep .p-datepicker:not(.p-disabled).p-focus {
+  @apply ring-2! ring-indigo-500 border-indigo-500!;
+}
+
+:host ::ng-deep .p-datepicker-input {
+  @apply border-none! bg-transparent! shadow-none! h-full text-sm py-0! px-3! w-full;
+  outline: none !important;
+}
+
+:host ::ng-deep .p-datepicker-trigger {
+  @apply text-gray-400 h-full w-9 flex items-center justify-center border-l border-gray-100!;
+  background: transparent !important;
+}
+
+:host ::ng-deep .p-datepicker-panel {
+  @apply shadow-xl rounded-xl border border-gray-100 duration-200 mt-1;
+}
+
+/* Invalid state style */
+:host .ng-invalid ::ng-deep .p-datepicker {
+  @apply border-red-500! ring-red-500!;
+}
