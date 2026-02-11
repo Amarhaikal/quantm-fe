@@ -1,7 +1,7 @@
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type ButtonType = 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES';
+export type ButtonType = 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
@@ -48,6 +48,8 @@ export class ButtonComponent {
         return 'Update';
       case 'SAVE_CHANGES':
         return 'Save Changes';
+      case 'RESET':
+        return 'Reset';
       default:
         return '';
     }
@@ -66,6 +68,8 @@ export class ButtonComponent {
         return 'pi pi-refresh';
       case 'SAVE_CHANGES':
         return 'pi pi-check';
+      case 'RESET':
+        return 'pi pi-undo';
       default:
         return '';
     }
@@ -94,7 +98,7 @@ export class ButtonComponent {
     // Maybe we just say: type sets the defaults for label/icon, but variant is independent?
     // The implementation plan said: "CANCEL: variant='secondary'".
 
-    if (t === 'CANCEL') return 'secondary';
+    if (t === 'CANCEL' || t === 'RESET') return 'secondary';
 
     return this.variant();
   });
