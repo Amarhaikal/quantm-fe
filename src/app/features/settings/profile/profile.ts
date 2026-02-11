@@ -16,6 +16,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { UserService } from '../../../core/services/user.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ApiResponse } from '../../../core/models/api.model';
+import { UserDetailed } from '../../../core/models/user.model';
 import { environment } from '../../../../environments/environment';
 import { TextboxComponent } from '../../../shared/components/textbox/textbox';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -126,13 +128,13 @@ export class Profile implements OnInit {
 
     this.isLoading.set(true);
     this.userService.getUserByUsername(username).subscribe({
-      next: (response) => {
+      next: (response: ApiResponse<UserDetailed>) => {
         if (response.status === 200) {
           this.handleUserDataResponse(response.data);
         }
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.toastService.error('Error', 'Failed to load profile data');
         this.isLoading.set(false);
       },
@@ -175,7 +177,12 @@ export class Profile implements OnInit {
     };
 
     this.profileForm.patchValue(formData);
-    this.originalData = { ...formData }; // Store a copy
+    this.originalData = {
+      ...formData,
+      role_label: role.description,
+      status_label: status.description,
+      gender_label: gender?.description || '',
+    }; // Store a copy with labels for display
 
     if (profile_image_url) {
       this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
@@ -225,14 +232,14 @@ export class Profile implements OnInit {
     this.confirmService.confirmSave(() => {
       this.isSaving.set(true);
       this.userService.updateUser(this.userId!, updateData).subscribe({
-        next: (response) => {
+        next: (response: ApiResponse<UserDetailed>) => {
           if (response.status === 200) {
             this.toastService.success('Success', 'Profile updated successfully');
             this.handleUserDataResponse(response.data); // Use the response data directly
           }
           this.isSaving.set(false);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.toastService.error('Error', 'Failed to update profile');
           this.isSaving.set(false);
         },
