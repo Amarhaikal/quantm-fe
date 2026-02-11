@@ -9,7 +9,6 @@ export interface SystemCode {
 }
 
 export interface SystemCodeReference {
-  id: number;
   code: string;
   description: string;
 }
