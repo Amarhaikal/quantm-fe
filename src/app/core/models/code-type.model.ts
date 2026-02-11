@@ -1,3 +1,5 @@
+import { ApiResponse } from './api.model';
+
 export interface SystemCode {
   id: number;
   code: string;
@@ -24,8 +26,4 @@ export interface CodeType {
   updated_at: string | null;
 }
 
-export interface CodeTypeResponse {
-  status: number;
-  message: string;
-  data: CodeType[];
-}
+export type CodeTypeResponse = ApiResponse<CodeType[]>;

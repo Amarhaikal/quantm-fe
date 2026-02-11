@@ -1,9 +1,10 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { catchError, map, Observable, tap } from 'rxjs';
-import { AuthResponse, User } from '../models/auth.model';
+import { AuthResponse } from '../models/auth.model';
 import { ApiService } from '../services/api.service';
 
 import { UserService } from '../services/user.service';
+import { UserDetailed } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AuthService {
   private userService = inject(UserService);
 
   // Signals for managing state
-  private currentUserSig = signal<User | null>(null);
+  private currentUserSig = signal<UserDetailed | null>(null);
   private isHydratedSig = signal<boolean>(false);
 
   // Publicly exposed signals/state
@@ -36,20 +37,31 @@ export class AuthService {
    * Hydrates the user state from the server.
    * This is typically called by the AuthGuard or on app init.
    */
-  hydrate(): Observable<User | null> {
+  hydrate(): Observable<UserDetailed | null> {
     return this.userService.getMyProfile().pipe(
       map((response) => {
         if (response.status === 200) {
           const apiUser = response.data;
-          const user: User = {
+          const user: UserDetailed = {
             id: 0,
             fullname: apiUser.fullname,
             shortname: apiUser.shortname,
             username: apiUser.username,
             email: '',
             id_no: '',
-            role: { id: 0, code: '', description: '' },
+            role: { code: '', description: '' },
             profile_image_url: apiUser.profile_image_url,
+            gender: { code: '', description: '' },
+            status: { code: '', description: '' },
+            joined_dt: '',
+            address: {
+              address_line_1: '',
+              address_line_2: '',
+              city: '',
+              postcode: '',
+              state: { code: '', description: '' },
+              country: { code: '', description: '' },
+            },
           };
           this.setUser(user);
           return user;
@@ -64,7 +76,7 @@ export class AuthService {
     );
   }
 
-  setUser(user: User | null) {
+  setUser(user: UserDetailed | null) {
     this.currentUserSig.set(user);
     this.isHydratedSig.set(true);
   }

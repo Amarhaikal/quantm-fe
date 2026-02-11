@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { UserResponse, UserUpdateDto } from '../models/user.model';
+import { ApiResponse } from '../models/api.model';
+import { UserDetailed, UserMiniProfile, UserUpdateDto } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,15 +10,15 @@ import { UserResponse, UserUpdateDto } from '../models/user.model';
 export class UserService {
   private api = inject(ApiService);
 
-  getMyProfile(): Observable<UserResponse> {
-    return this.api.get<UserResponse>('user/mini-profile');
+  getMyProfile(): Observable<ApiResponse<UserMiniProfile>> {
+    return this.api.get<ApiResponse<UserMiniProfile>>('user/mini-profile');
   }
 
-  getUserByUsername(username: string): Observable<UserResponse> {
-    return this.api.get<UserResponse>(`user/username/${username}`);
+  getUserByUsername(username: string): Observable<ApiResponse<UserDetailed>> {
+    return this.api.get<ApiResponse<UserDetailed>>(`user/username/${username}`);
   }
 
-  updateUser(id: number, data: UserUpdateDto): Observable<UserResponse> {
-    return this.api.put<UserResponse>(`user/${id}`, data);
+  updateUser(id: number, data: UserUpdateDto): Observable<ApiResponse<UserDetailed>> {
+    return this.api.put<ApiResponse<UserDetailed>>(`user/${id}`, data);
   }
 }
