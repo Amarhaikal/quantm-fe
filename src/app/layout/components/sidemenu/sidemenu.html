@@ -8,14 +8,14 @@
 >
   <ng-template #headless>
     <div class="flex flex-col h-full w-full bg-[#191c32] text-white">
-      <div class="flex items-center justify-center pt-8 px-8 w-full shrink-0 overflow-hidden">
+      <div class="flex items-center justify-center pt-8 w-full shrink-0 overflow-hidden">
         <img
           ngSrc="assets/images/logo-4.png"
           width="80"
           height="23"
           alt="Logo"
           priority
-          class="w-44 max-w-full pr-[10px]"
+          class="w-44 max-w-full"
         />
       </div>
       <div class="overflow-y-auto px-4 py-4 mt-4">
@@ -100,7 +100,7 @@
           />
           <div class="flex flex-col">
             <span class="font-bold text-white">
-              {{ userData()?.name || userData()?.username }}
+              {{ userData()?.shortname || userData()?.fullname }}
             </span>
             <span class="text-xs text-white/60">@{{ userData()?.username }}</span>
           </div>

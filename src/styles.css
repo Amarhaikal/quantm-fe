@@ -86,7 +86,7 @@ body {
 /* Sidemenu Drawer Customization */
 .sidemenu-drawer {
   background: #171a31 !important;
-  width: 270px !important;
+  width: 300px !important;
   border-right: none !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -169,4 +169,3 @@ body {
   @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
   background: transparent !important;
 }
-

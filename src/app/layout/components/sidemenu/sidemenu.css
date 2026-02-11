@@ -2,7 +2,7 @@
 :host ::ng-deep [data-pc-section="root"] {
     border: none !important;
     background: #171A31 !important;
-    width: 270px !important;
+    width: 300px !important;
 }
 
 .submenu-hidden {
