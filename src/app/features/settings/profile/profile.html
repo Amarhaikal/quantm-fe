@@ -5,9 +5,9 @@
     <!-- <p class="text-gray-500">Manage your account settings and personal information</p> -->
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <div class="grid grid-cols-1 lg:grid-cols-7 gap-6">
     <!-- Left Column: Profile Card -->
-    <div class="lg:col-span-1">
+    <div class="lg:col-span-2">
       <p-card styleClass="h-full border-none shadow-sm overflow-hidden">
         <!-- Avatar Header -->
         <div class="flex flex-col items-center p-8 bg-linear-to-br from-indigo-50 to-white">
@@ -124,7 +124,7 @@
     </div>
 
     <!-- Right Column: Form -->
-    <div class="lg:col-span-2">
+    <div class="lg:col-span-5">
       <p-card styleClass="border-none shadow-sm">
         <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
