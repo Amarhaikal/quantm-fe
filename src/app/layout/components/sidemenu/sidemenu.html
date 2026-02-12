@@ -9,14 +9,16 @@
   <ng-template #headless>
     <div class="flex flex-col h-full w-full bg-[#191c32] text-white">
       <div class="flex items-center justify-center pt-8 w-full shrink-0 overflow-hidden">
-        <img
-          ngSrc="assets/images/logo-4.png"
-          width="80"
-          height="23"
-          alt="Logo"
-          priority
-          class="w-44 max-w-full"
-        />
+        <a routerLink="/" class="cursor-pointer">
+          <img
+            ngSrc="assets/images/logo-4.png"
+            width="80"
+            height="23"
+            alt="Logo"
+            priority
+            class="w-44 max-w-full"
+          />
+        </a>
       </div>
       <div class="overflow-y-auto px-4 py-4 mt-4">
         <ul class="list-none p-0 m-0">
@@ -57,7 +59,7 @@
                       <a
                         pRipple
                         [routerLink]="child.url"
-                        routerLinkActive="!bg-white/10 !text-white"
+                        routerLinkActive="!bg-white/10 !text-indigo-400"
                         class="flex items-center cursor-pointer p-2 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
                       >
                         <i
@@ -83,7 +85,7 @@
                 <a
                   pRipple
                   [routerLink]="item.url"
-                  routerLinkActive="!bg-white/10 !text-white"
+                  routerLinkActive="!bg-white/10 !text-indigo-700"
                   class="flex items-center cursor-pointer p-4 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
                 >
                   <i [class]="'pi pi-' + item.icon"></i>
