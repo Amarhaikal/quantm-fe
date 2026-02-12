@@ -6,6 +6,9 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { unauthorizedInterceptor } from './core/auth/unauthorized.interceptor';
+import { provideTransloco } from '@ngneat/transloco';
+import { isDevMode } from '@angular/core';
+import { translocoLoader } from './core/i18n/transloco-loader';
 
 import { routes } from './app.routes';
 
@@ -15,6 +18,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([unauthorizedInterceptor])),
     provideAnimationsAsync(),
+    provideTransloco({
+      config: {
+        availableLangs: ['en', 'my'],
+        defaultLang: 'en',
+        // Remove this option if your application doesn't support changing language in runtime.
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: translocoLoader.useClass,
+    }),
     providePrimeNG({
       theme: {
         preset: Aura,

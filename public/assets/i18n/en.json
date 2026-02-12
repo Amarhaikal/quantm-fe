@@ -1,0 +1,83 @@
+{
+    "login": {
+        "title": "Login to Quantm-LMS",
+        "welcome": "Welcome Back! Enter your credentials to access your dashboard",
+        "username": "Username or Email",
+        "password": "Password",
+        "submit": "Login",
+        "copyright": "© 2026 Loan Management System. All rights reserved.",
+        "slides": {
+            "slide1": {
+                "title": "Empowering Your Financial Growth",
+                "description": "Manage your loans with ease and precision using our advanced digital platform."
+            },
+            "slide2": {
+                "title": "Secure & Reliable",
+                "description": "Your financial data is protected with industry-leading security standards."
+            },
+            "slide3": {
+                "title": "Smart Analytics",
+                "description": "Gain insights into your portfolio with our powerful reporting tools."
+            },
+            "slide4": {
+                "title": "Fast & Efficient",
+                "description": "Streamline your workflow with our automated loan processing system."
+            }
+        }
+    },
+    "sidemenu": {
+        "dashboard": "Dashboard",
+        "settings": "Settings",
+        "profile": "Profile",
+        "administrator": "Administrator",
+        "users": "Users",
+        "roles": "Roles",
+        "system codes": "System Code",
+        "logs": "Logs",
+        "logout": "Logout"
+    },
+    "profile": {
+        "title": "My Profile",
+        "subtitle": "Manage your account settings and personal information",
+        "change": "Change",
+        "role": "Role",
+        "email": "Email address",
+        "gender": "Gender",
+        "joined_date": "Joined Date",
+        "full_name": "Full Name",
+        "short_name": "Short Name",
+        "username": "Username",
+        "id_no": "ID No.",
+        "status": "Status",
+        "address_1": "Address 1",
+        "address_2": "Address 2",
+        "city": "City",
+        "state": "State",
+        "postcode": "Postcode",
+        "country": "Country",
+        "reset": "Reset",
+        "save_changes": "Save Changes",
+        "placeholders": {
+            "full_name": "Enter your full name",
+            "short_name": "Enter your short name",
+            "id_no": "000000-00-0000",
+            "email": "Enter your email",
+            "joined_date": "Select joined date",
+            "address": "Enter your address",
+            "city": "Enter your city",
+            "state": "Select your state",
+            "postcode": "Enter your postcode",
+            "country": "Select your country"
+        }
+    },
+    "common": {
+        "new_user": "New User",
+        "buttons": {
+            "cancel": "Cancel",
+            "save": "Save",
+            "update": "Update",
+            "save_changes": "Save Changes",
+            "reset": "Reset"
+        }
+    }
+}

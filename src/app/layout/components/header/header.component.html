@@ -18,7 +18,20 @@
   </div>
 
   @if (userData()) {
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-6">
+      <!-- Language Toggle -->
+      <p-toggleswitch
+        [ngModel]="isMalay()"
+        (ngModelChange)="onLanguageChange($event)"
+        styleClass="lang-toggle-switch"
+      >
+        <ng-template #handle let-checked="checked">
+          <span class="text-[9px]! font-bold leading-none select-none text-gray-700">
+            {{ checked ? 'MY' : 'EN' }}
+          </span>
+        </ng-template>
+      </p-toggleswitch>
+
       <div class="hidden sm:flex flex-col items-end">
         <p class="text-md text-gray-500 font-medium">@{{ userData()?.username }}</p>
       </div>

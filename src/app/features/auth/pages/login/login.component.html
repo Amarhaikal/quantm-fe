@@ -18,9 +18,9 @@
                 class="max-w-full h-auto drop-shadow-xl mb-8 object-contain"
                 priority
               />
-              <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ slide.title }}</h1>
+              <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ slide.title | transloco }}</h1>
               <p class="text-gray-600 text-lg">
-                {{ slide.description }}
+                {{ slide.description | transloco }}
               </p>
             </div>
           }
@@ -47,8 +47,8 @@
           class="h-10 mb-6 mx-auto md:mx-0"
           onerror="this.style.display = 'none'"
         /> -->
-        <h2 class="text-3xl font-bold text-gray-900 mb-2">Login to Quantm-LMS</h2>
-        <p class="text-gray-500">Welcome Back! Enter your credentials to access your dashboard</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ 'login.title' | transloco }}</h2>
+        <p class="text-gray-500">{{ 'login.welcome' | transloco }}</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-8">
@@ -60,7 +60,7 @@
               formControlName="username"
               class="w-full h-12 p-2 rounded-xl border border-solid border-gray-200! focus:border-primary-500! transition-colors"
             />
-            <label for="username">Username or Email</label>
+            <label for="username">{{ 'login.username' | transloco }}</label>
           </p-floatLabel>
         </div>
 
@@ -74,7 +74,7 @@
               styleClass="w-full"
               inputStyleClass="w-full h-12 p-2 rounded-xl border border-solid border-gray-200! focus:border-primary-500! transition-colors"
             ></p-password>
-            <label for="password">Password</label>
+            <label for="password">{{ 'login.password' | transloco }}</label>
           </p-floatLabel>
         </div>
 
@@ -88,7 +88,7 @@
         }
 
         <p-button
-          label="Login"
+          [label]="'login.submit' | transloco"
           type="submit"
           [fluid]="true"
           size="large"
@@ -98,7 +98,7 @@
       </form>
 
       <div class="mt-12 text-center">
-        <p class="text-sm text-gray-500">© 2026 Loan Management System. All rights reserved.</p>
+        <p class="text-sm text-gray-500">{{ 'login.copyright' | transloco }}</p>
       </div>
     </div>
   </div>

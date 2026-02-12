@@ -1,5 +1,6 @@
 import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 export type ButtonType = 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET';
 export type ButtonVariant =
@@ -17,7 +18,7 @@ export type IconPos = 'left' | 'right';
 @Component({
   selector: 'lib-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoPipe],
   templateUrl: './button.html',
   styleUrl: './button.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,15 +42,15 @@ export class ButtonComponent {
 
     switch (this.type()) {
       case 'CANCEL':
-        return 'Cancel';
+        return 'common.buttons.cancel';
       case 'SAVE':
-        return 'Save';
+        return 'common.buttons.save';
       case 'UPDATE':
-        return 'Update';
+        return 'common.buttons.update';
       case 'SAVE_CHANGES':
-        return 'Save Changes';
+        return 'common.buttons.save_changes';
       case 'RESET':
-        return 'Reset';
+        return 'common.buttons.reset';
       default:
         return '';
     }
