@@ -79,5 +79,25 @@
             "save_changes": "Simpan Perubahan",
             "reset": "Set Semula"
         }
+    },
+    "confirm": {
+        "unsaved_changes": {
+            "header": "Perubahan Belum Disimpan",
+            "message": "Anda mempunyai perubahan yang belum disimpan. Adakah anda pasti mahu membuang perubahan dan meninggalkan halaman ini?",
+            "accept": "Buang & Tinggalkan",
+            "reject": "Batal"
+        },
+        "save": {
+            "header": "Sahkan Simpan",
+            "message": "Adakah anda pasti mahu menyimpan perubahan ini?",
+            "accept": "Sahkan",
+            "reject": "Batal"
+        },
+        "delete": {
+            "header": "Sahkan Padam",
+            "message": "Adakah anda pasti mahu memadam rekod ini?",
+            "accept": "Padam",
+            "reject": "Batal"
+        }
     }
 }

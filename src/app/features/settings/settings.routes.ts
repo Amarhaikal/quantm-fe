@@ -1,5 +1,5 @@
-// src/app/features/settings/settings.routes.ts
 import { Routes } from '@angular/router';
+import { pendingChangesGuard } from '../../core/guards/pending-changes.guard';
 
 export const SETTINGS_ROUTES: Routes = [
   {
@@ -10,5 +10,6 @@ export const SETTINGS_ROUTES: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./profile/profile').then((m) => m.Profile),
+    canDeactivate: [pendingChangesGuard],
   },
 ];

@@ -29,6 +29,7 @@ import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { BaseFormComponent } from '../../../core/base/base-form.component';
 
 @Component({
   selector: 'app-profile',
@@ -50,7 +51,7 @@ import { TranslocoPipe } from '@ngneat/transloco';
   styleUrl: './profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Profile implements OnInit {
+export class Profile extends BaseFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   private toastService = inject(ToastService);
@@ -98,6 +99,7 @@ export class Profile implements OnInit {
   originalData: any = null;
 
   constructor() {
+    super();
     this.profileForm = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
       shortname: ['', [Validators.maxLength(20)]],
@@ -115,6 +117,10 @@ export class Profile implements OnInit {
       country: [{ value: '' }],
       joined_dt: [''],
     });
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.profileForm.dirty;
   }
 
   ngOnInit() {

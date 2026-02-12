@@ -1,27 +1,30 @@
 import { inject, Injectable } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
+import { Observable, Subject } from 'rxjs';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfirmService {
   private confirmationService = inject(ConfirmationService);
+  private translocoService = inject(TranslocoService);
 
   confirmSave(callback: () => void) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to save these changes?',
-      header: 'Confirm Save',
+      message: this.translocoService.translate('confirm.save.message'),
+      header: this.translocoService.translate('confirm.save.header'),
       icon: 'pi pi-exclamation-triangle',
-      rejectLabel: 'Cancel',
-      acceptLabel: 'Confirm',
+      rejectLabel: this.translocoService.translate('confirm.save.reject'),
+      acceptLabel: this.translocoService.translate('confirm.save.accept'),
       rejectButtonProps: {
-        label: 'Cancel',
+        label: this.translocoService.translate('confirm.save.reject'),
         severity: 'secondary',
         outlined: true,
         size: 'small',
       },
       acceptButtonProps: {
-        label: 'Confirm',
+        label: this.translocoService.translate('confirm.save.accept'),
         severity: 'primary',
         size: 'small',
       },
@@ -33,19 +36,19 @@ export class ConfirmService {
 
   confirmDelete(callback: () => void) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this record?',
-      header: 'Confirm Delete',
+      message: this.translocoService.translate('confirm.delete.message'),
+      header: this.translocoService.translate('confirm.delete.header'),
       icon: 'pi pi-exclamation-triangle',
-      rejectLabel: 'Cancel',
-      acceptLabel: 'Delete',
+      rejectLabel: this.translocoService.translate('confirm.delete.reject'),
+      acceptLabel: this.translocoService.translate('confirm.delete.accept'),
       rejectButtonProps: {
-        label: 'Cancel',
+        label: this.translocoService.translate('confirm.delete.reject'),
         severity: 'secondary',
         outlined: true,
         size: 'small',
       },
       acceptButtonProps: {
-        label: 'Delete',
+        label: this.translocoService.translate('confirm.delete.accept'),
         severity: 'danger',
         size: 'small',
       },
@@ -57,5 +60,38 @@ export class ConfirmService {
 
   confirm(options: any) {
     this.confirmationService.confirm(options);
+  }
+
+  confirmDiscardChanges(): Observable<boolean> {
+    const confirmation$ = new Subject<boolean>();
+
+    this.confirmationService.confirm({
+      message: this.translocoService.translate('confirm.unsaved_changes.message'),
+      header: this.translocoService.translate('confirm.unsaved_changes.header'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.translocoService.translate('confirm.unsaved_changes.reject'),
+      acceptLabel: this.translocoService.translate('confirm.unsaved_changes.accept'),
+      rejectButtonProps: {
+        label: this.translocoService.translate('confirm.unsaved_changes.reject'),
+        severity: 'secondary',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: this.translocoService.translate('confirm.unsaved_changes.accept'),
+        severity: 'danger',
+        size: 'small',
+      },
+      accept: () => {
+        confirmation$.next(true);
+        confirmation$.complete();
+      },
+      reject: () => {
+        confirmation$.next(false);
+        confirmation$.complete();
+      },
+    });
+
+    return confirmation$.asObservable();
   }
 }

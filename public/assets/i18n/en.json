@@ -79,5 +79,25 @@
             "save_changes": "Save Changes",
             "reset": "Reset"
         }
+    },
+    "confirm": {
+        "unsaved_changes": {
+            "header": "Unsaved Changes",
+            "message": "You have unsaved changes. Are you sure you want to discard them and leave this page?",
+            "accept": "Discard & Leave",
+            "reject": "Cancel"
+        },
+        "save": {
+            "header": "Confirm Save",
+            "message": "Are you sure you want to save these changes?",
+            "accept": "Confirm",
+            "reject": "Cancel"
+        },
+        "delete": {
+            "header": "Confirm Delete",
+            "message": "Are you sure you want to delete this record?",
+            "accept": "Delete",
+            "reject": "Cancel"
+        }
     }
 }
