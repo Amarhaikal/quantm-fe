@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslocoService } from '@ngneat/transloco';
 import { CommonModule } from '@angular/common';
 import { MenuService } from '../../../core/services/menu.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -66,6 +67,7 @@ import { MenuService } from '../../../core/services/menu.service';
 export class HeaderComponent {
   private menuService = inject(MenuService);
   private translocoService = inject(TranslocoService);
+  private router = inject(Router);
 
   isMalay = computed(() => this.translocoService.getActiveLang() === 'my');
 
@@ -87,6 +89,7 @@ export class HeaderComponent {
       icon: 'pi pi-user',
       command: () => {
         // Navigate to profile if needed
+        this.router.navigate(['/settings/profile']);
       },
     },
     {
