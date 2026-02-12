@@ -205,6 +205,7 @@ export class Profile extends BaseFormComponent implements OnInit {
     };
 
     this.profileForm.patchValue(formData);
+    this.profileForm.markAsPristine();
     console.log('profileForm Raw Value', this.profileForm.getRawValue());
     this.originalData = {
       ...formData,

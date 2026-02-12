@@ -34,6 +34,13 @@ export class MyFormComponent extends BaseFormComponent implements OnInit {
   hasUnsavedChanges(): boolean {
     return this.form.dirty;
   }
+
+  // After a successful save, remember to mark the form as pristine!
+  onSave() {
+    this.service.update(data).subscribe(() => {
+      this.form.markAsPristine();
+    });
+  }
 }
 ```
 
