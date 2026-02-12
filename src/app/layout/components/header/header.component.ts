@@ -10,6 +10,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { CommonModule } from '@angular/common';
 import { MenuService } from '../../../core/services/menu.service';
 import { Router } from '@angular/router';
+import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
 
 @Component({
   selector: 'app-header',
@@ -117,5 +118,6 @@ export class HeaderComponent {
   onLanguageChange(checked: boolean) {
     const lang = checked ? 'my' : 'en';
     this.translocoService.setActiveLang(lang);
+    localStorage.setItem(STORAGE_KEYS.LANGUAGE, lang);
   }
 }

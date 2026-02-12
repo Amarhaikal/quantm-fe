@@ -9,6 +9,7 @@ import { unauthorizedInterceptor } from './core/auth/unauthorized.interceptor';
 import { provideTransloco } from '@ngneat/transloco';
 import { isDevMode } from '@angular/core';
 import { translocoLoader } from './core/i18n/transloco-loader';
+import { STORAGE_KEYS } from './core/constants/storage.constants';
 
 import { routes } from './app.routes';
 
@@ -21,7 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideTransloco({
       config: {
         availableLangs: ['en', 'my'],
-        defaultLang: 'en',
+        defaultLang: localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'en',
         // Remove this option if your application doesn't support changing language in runtime.
         reRenderOnLangChange: true,
         prodMode: !isDevMode(),
