@@ -28,6 +28,10 @@ export interface UserDetailed {
     country: SystemCodeReference;
   };
   joined_dt: string;
+  created_at: string;
+  created_by: string;
+  updated_at: string | null;
+  updated_by: string | null;
 }
 
 export type UserMiniProfileResponse = ApiResponse<UserMiniProfile>;

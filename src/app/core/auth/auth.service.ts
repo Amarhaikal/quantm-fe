@@ -62,6 +62,10 @@ export class AuthService {
               state: { code: '', description: '' },
               country: { code: '', description: '' },
             },
+            created_at: '',
+            created_by: '',
+            updated_at: null,
+            updated_by: null,
           };
           this.setUser(user);
           return user;

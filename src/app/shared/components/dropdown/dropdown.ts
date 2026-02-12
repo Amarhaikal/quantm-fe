@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 export interface OptionDropdown {
   value: string;
@@ -25,7 +26,7 @@ export interface OptionDropdown {
 @Component({
   selector: 'lib-dropdown',
   standalone: true,
-  imports: [CommonModule, SelectModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, SelectModule, ReactiveFormsModule, FormsModule, TranslocoPipe],
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

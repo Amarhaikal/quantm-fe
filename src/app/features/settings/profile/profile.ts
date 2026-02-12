@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
+import { SkeletonModule } from 'primeng/skeleton';
+import { DateService } from '../../../core/services/date.service';
 import { UserService } from '../../../core/services/user.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ApiResponse } from '../../../core/models/api.model';
@@ -46,6 +48,7 @@ import { BaseFormComponent } from '../../../core/base/base-form.component';
     DropdownComponent,
     DatePickerComponent,
     TranslocoPipe,
+    SkeletonModule,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -58,9 +61,10 @@ export class Profile extends BaseFormComponent implements OnInit {
   private authService = inject(AuthService);
   private codeTypeService = inject(CodeTypeService);
   private confirmService = inject(ConfirmService);
+  private dateService = inject(DateService);
 
   profileForm: FormGroup;
-  isLoading = signal<boolean>(false);
+  isLoading = signal<boolean>(true);
   isSaving = signal<boolean>(false);
   profileImageUrl = signal<string | null>(null);
   rolesOptions = computed<OptionDropdown[]>(() => {
@@ -116,6 +120,10 @@ export class Profile extends BaseFormComponent implements OnInit {
       state: [{ value: '' }],
       country: [{ value: '' }],
       joined_dt: [''],
+      created_by: [{ value: '', disabled: true }],
+      created_at: [{ value: '', disabled: true }],
+      updated_by: [{ value: '', disabled: true }],
+      updated_at: [{ value: '', disabled: true }],
     });
   }
 
@@ -150,6 +158,9 @@ export class Profile extends BaseFormComponent implements OnInit {
   }
 
   private handleUserDataResponse(data: any) {
+    console.log('handleUserDataResponse data.created_by', data.created_by);
+    console.log('handleUserDataResponse data.updated_by', data.updated_by);
+
     const {
       id,
       fullname,
@@ -160,12 +171,17 @@ export class Profile extends BaseFormComponent implements OnInit {
       id_no,
       address,
       email,
-      status,
+      status: userStatus,
       gender,
       joined_dt,
+      created_by,
+      created_at,
+      updated_by,
+      updated_at,
     } = data;
 
     this.userId = id;
+
     const formData = {
       fullname,
       shortname,
@@ -174,7 +190,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       email,
       gender: gender?.code || '',
       role: role.code,
-      status: status.code,
+      status: userStatus.code,
       joined_dt,
       address_line_1: address.address_line_1,
       address_line_2: address.address_line_2,
@@ -182,15 +198,21 @@ export class Profile extends BaseFormComponent implements OnInit {
       postcode: address.postcode,
       state: address.state.code,
       country: address.country.code,
+      created_by: created_by,
+      created_at: this.dateService.formatAuditDate(created_at),
+      updated_by: updated_by,
+      updated_at: this.dateService.formatAuditDate(updated_at),
     };
 
     this.profileForm.patchValue(formData);
+    console.log('profileForm Raw Value', this.profileForm.getRawValue());
     this.originalData = {
       ...formData,
       role_label: role.description,
-      status_label: status.description,
+      status_label: userStatus.description,
       gender_label: gender?.description || '',
     }; // Store a copy with labels for display
+    console.log('originalData', this.originalData);
 
     if (profile_image_url) {
       this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);

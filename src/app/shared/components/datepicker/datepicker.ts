@@ -9,11 +9,12 @@ import {
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'lib-datepicker',
   standalone: true,
-  imports: [CommonModule, DatePickerModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, DatePickerModule, ReactiveFormsModule, FormsModule, TranslocoPipe],
   templateUrl: './datepicker.html',
   styleUrl: './datepicker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

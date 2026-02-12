@@ -10,116 +10,143 @@
     <div class="lg:col-span-2">
       <p-card styleClass="h-full border-none shadow-sm overflow-hidden">
         <!-- Avatar Header -->
-        <div class="flex flex-col items-center p-8 bg-linear-to-br from-indigo-50 to-white">
-          <div class="relative group cursor-pointer mb-4">
-            @if (profileImageUrl()) {
-              <img
-                [src]="profileImageUrl()"
-                alt="Profile photo"
-                class="w-36 h-36 rounded-full object-cover border-4 border-white shadow-xl transition-all duration-300 group-hover:scale-105"
-              />
-            } @else {
-              <p-avatar
-                icon="pi pi-user"
-                size="xlarge"
-                shape="circle"
-                styleClass="w-36! h-36! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
-              ></p-avatar>
-            }
-            <div
-              class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]"
-            >
-              <div class="flex flex-col items-center gap-1">
-                <i class="pi pi-camera text-white text-2xl"></i>
-                <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
-                  'profile.change' | transloco
-                }}</span>
-              </div>
+        @if (isLoading()) {
+          <div class="flex flex-col items-center p-8 bg-linear-to-br from-indigo-50 to-white">
+            <p-skeleton shape="circle" size="9rem" class="mb-4" />
+            <div class="text-center w-full flex flex-col items-center">
+              <p-skeleton width="140px" height="2rem" class="mb-2" />
+              <p-skeleton width="100px" height="1rem" />
             </div>
           </div>
+        } @else {
+          <!-- Avatar Header -->
+          <div class="flex flex-col items-center p-8 bg-linear-to-br from-indigo-50 to-white">
+            <div class="relative group cursor-pointer mb-4">
+              @if (profileImageUrl()) {
+                <img
+                  [src]="profileImageUrl()"
+                  alt="Profile photo"
+                  class="w-36 h-36 rounded-full object-cover border-4 border-white shadow-xl transition-all duration-300 group-hover:scale-105"
+                />
+              } @else {
+                <p-avatar
+                  icon="pi pi-user"
+                  size="xlarge"
+                  shape="circle"
+                  styleClass="w-36! h-36! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
+                ></p-avatar>
+              }
+              <div
+                class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]"
+              >
+                <div class="flex flex-col items-center gap-1">
+                  <i class="pi pi-camera text-white text-2xl"></i>
+                  <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
+                    'profile.change' | transloco
+                  }}</span>
+                </div>
+              </div>
+            </div>
 
-          <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-900 leading-tight">
-              {{
-                originalData?.shortname || originalData?.fullname || ('common.new_user' | transloco)
-              }}
-            </h2>
-            <p class="text-gray-500 font-medium text-sm mt-1">@{{ originalData?.username }}</p>
+            <div class="text-center">
+              <h2 class="text-2xl font-bold text-gray-900 leading-tight">
+                {{
+                  originalData?.shortname ||
+                    originalData?.fullname ||
+                    ('common.new_user' | transloco)
+                }}
+              </h2>
+              <p class="text-gray-500 font-medium text-sm mt-1">@{{ originalData?.username }}</p>
+            </div>
           </div>
-        </div>
+        }
 
         <!-- Account Details List -->
-        <div class="p-4 space-y-5">
-          <div class="flex items-center justify-between group">
+        @if (isLoading()) {
+          <div class="p-4 space-y-6">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="flex items-center gap-3">
+                <p-skeleton size="2.5rem" borderRadius="8px" />
+                <div class="flex-1">
+                  <p-skeleton width="30%" class="mb-2" />
+                  <p-skeleton width="70%" height="1.25rem" />
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="p-4 space-y-5">
+            <div class="flex items-center justify-between group">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
+                >
+                  <i class="pi pi-shield text-md"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
+                    {{ 'label.role' | transloco }}
+                  </p>
+                  <p class="text-sm font-semibold text-gray-700 truncate">
+                    {{ originalData?.role_label }}
+                  </p>
+                </div>
+              </div>
+              <span
+                class="px-2 py-1 rounded text-[11px] font-bold bg-green-50 text-green-600 uppercase"
+                >{{ originalData?.status_label }}</span
+              >
+            </div>
+
             <div class="flex items-center gap-3">
               <div
                 class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
               >
-                <i class="pi pi-shield text-md"></i>
+                <i class="pi pi-envelope text-md"></i>
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                  {{ 'profile.role' | transloco }}
+                  {{ 'label.email' | transloco }}
                 </p>
                 <p class="text-sm font-semibold text-gray-700 truncate">
-                  {{ originalData?.role_label }}
+                  {{ originalData?.email }}
                 </p>
               </div>
             </div>
-            <span
-              class="px-2 py-1 rounded text-[11px] font-bold bg-green-50 text-green-600 uppercase"
-              >{{ originalData?.status_label }}</span
-            >
-          </div>
 
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
-            >
-              <i class="pi pi-envelope text-md"></i>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
+              >
+                <i class="pi pi-users text-md"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
+                  {{ 'label.gender' | transloco }}
+                </p>
+                <p class="text-sm font-semibold text-gray-700 truncate">
+                  {{ originalData?.gender_label }}
+                </p>
+              </div>
             </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                {{ 'profile.email' | transloco }}
-              </p>
-              <p class="text-sm font-semibold text-gray-700 truncate">
-                {{ originalData?.email }}
-              </p>
-            </div>
-          </div>
 
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
-            >
-              <i class="pi pi-users text-md"></i>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                {{ 'profile.gender' | transloco }}
-              </p>
-              <p class="text-sm font-semibold text-gray-700 truncate">
-                {{ originalData?.gender_label }}
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
-            >
-              <i class="pi pi-calendar text-md"></i>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                {{ 'profile.joined_date' | transloco }}
-              </p>
-              <p class="text-sm font-semibold text-gray-700 truncate">
-                {{ originalData?.joined_dt | date: 'd MMMM y' }}
-              </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600"
+              >
+                <i class="pi pi-calendar text-md"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
+                  {{ 'label.joined_date' | transloco }}
+                </p>
+                <p class="text-sm font-semibold text-gray-700 truncate">
+                  {{ originalData?.joined_dt | date: 'd MMMM y' }}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </p-card>
     </div>
 
@@ -127,131 +154,166 @@
     <div class="lg:col-span-5">
       <p-card styleClass="border-none shadow-sm">
         <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-            <!-- Full Name -->
-            <lib-textbox
-              [label]="'profile.full_name' | transloco"
-              formControlName="fullname"
-              [placeholder]="'profile.placeholders.full_name' | transloco"
-              [required]="true"
-              [maxLength]="80"
-            />
-
-            <!-- Short Name -->
-            <lib-textbox
-              [label]="'profile.short_name' | transloco"
-              formControlName="shortname"
-              [placeholder]="'profile.placeholders.short_name' | transloco"
-              [maxLength]="20"
-            />
-
-            <!-- Username (Readonly) -->
-            <lib-textbox [label]="'profile.username' | transloco" formControlName="username" />
-
-            <!-- ID No. -->
-            <lib-textbox
-              [label]="'profile.id_no' | transloco"
-              formControlName="id_no"
-              type="IDNO"
-              [placeholder]="'profile.placeholders.id_no' | transloco"
-              [required]="true"
-            />
-
-            <!-- Gender -->
-            <lib-dropdown
-              [label]="'profile.gender' | transloco"
-              formControlName="gender"
-              [options]="genderOptions()"
-              [required]="true"
-            />
-
-            <!-- Role -->
-            <lib-dropdown
-              [label]="'profile.role' | transloco"
-              formControlName="role"
-              [options]="rolesOptions()"
-              [required]="true"
-            />
-
-            <!-- Status -->
-            <lib-dropdown
-              [label]="'profile.status' | transloco"
-              formControlName="status"
-              [options]="statusOptions()"
-              [required]="true"
-            />
-
-            <!-- Email -->
-            <lib-textbox
-              [label]="'profile.email' | transloco"
-              formControlName="email"
-              [placeholder]="'profile.placeholders.email' | transloco"
-              [required]="true"
-            />
-
-            <!-- Joined Date -->
-            <lib-datepicker
-              [label]="'profile.joined_date' | transloco"
-              formControlName="joined_dt"
-              [placeholder]="'profile.placeholders.joined_date' | transloco"
-            />
-
-            <!-- Address 1 -->
-            <lib-textbox
-              [label]="'profile.address_1' | transloco"
-              formControlName="address_line_1"
-              [placeholder]="'profile.placeholders.address' | transloco"
-              class="md:col-span-2"
-              [maxLength]="255"
-            />
-
-            <!-- Address 2 -->
-            <lib-textbox
-              [label]="'profile.address_2' | transloco"
-              formControlName="address_line_2"
-              [placeholder]="'profile.placeholders.address' | transloco"
-              class="md:col-span-2"
-              [maxLength]="255"
-            />
-
-            <!-- City -->
-            <lib-textbox
-              [label]="'profile.city' | transloco"
-              formControlName="city"
-              [placeholder]="'profile.placeholders.city' | transloco"
-              [maxLength]="120"
-            />
-
-            <!-- State -->
-            <lib-dropdown
-              [label]="'profile.state' | transloco"
-              formControlName="state"
-              [placeholder]="'profile.placeholders.state' | transloco"
-              [options]="statesOptions()"
-            />
-
-            <!-- Postcode -->
-            <lib-textbox
-              [label]="'profile.postcode' | transloco"
-              formControlName="postcode"
-              [placeholder]="'profile.placeholders.postcode' | transloco"
-              [maxLength]="6"
-            />
-
-            <!-- Country -->
-            <lib-dropdown
-              [label]="'profile.country' | transloco"
-              formControlName="country"
-              [placeholder]="'profile.placeholders.country' | transloco"
-              [options]="countriesOptions()"
-            />
-
-            <!-- Action Buttons -->
-            <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
-              <lib-button type="RESET" (click)="loadProfile()" />
-              <lib-button type="SAVE_CHANGES" htmlType="submit" />
+          @if (isLoading()) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+                <div>
+                  <p-skeleton width="40%" class="mb-2" />
+                  <p-skeleton height="2.5rem" borderRadius="6px" />
+                </div>
+              }
+              <div class="md:col-span-2">
+                <p-skeleton width="20%" class="mb-2" />
+                <p-skeleton height="2.5rem" borderRadius="6px" />
+              </div>
+              <div class="md:col-span-2">
+                <p-skeleton width="20%" class="mb-2" />
+                <p-skeleton height="2.5rem" borderRadius="6px" />
+              </div>
+              <div class="md:col-span-2 flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
+                <p-skeleton width="100px" height="2.5rem" borderRadius="6px" />
+                <p-skeleton width="130px" height="2.5rem" borderRadius="6px" />
+              </div>
             </div>
-          </div>
+          } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              <!-- Full Name -->
+              <lib-textbox
+                label="label.full_name"
+                formControlName="fullname"
+                placeholder="label.placeholders.full_name"
+                [required]="true"
+                [maxLength]="80"
+              />
+
+              <!-- Short Name -->
+              <lib-textbox
+                label="label.short_name"
+                formControlName="shortname"
+                placeholder="label.placeholders.short_name"
+                [maxLength]="20"
+              />
+
+              <!-- Username (Readonly) -->
+              <lib-textbox label="label.username" formControlName="username" />
+
+              <!-- ID No. -->
+              <lib-textbox
+                label="label.id_no"
+                formControlName="id_no"
+                type="IDNO"
+                placeholder="label.placeholders.id_no"
+                [required]="true"
+              />
+
+              <!-- Gender -->
+              <lib-dropdown
+                label="label.gender"
+                formControlName="gender"
+                [options]="genderOptions()"
+                [required]="true"
+              />
+
+              <!-- Role -->
+              <lib-dropdown
+                label="label.role"
+                formControlName="role"
+                [options]="rolesOptions()"
+                [required]="true"
+              />
+
+              <!-- Status -->
+              <lib-dropdown
+                label="label.status"
+                formControlName="status"
+                [options]="statusOptions()"
+                [required]="true"
+              />
+
+              <!-- Email -->
+              <lib-textbox
+                label="label.email"
+                formControlName="email"
+                placeholder="label.placeholders.email"
+                [required]="true"
+              />
+
+              <!-- Joined Date -->
+              <lib-datepicker
+                label="label.joined_date"
+                formControlName="joined_dt"
+                placeholder="label.placeholders.joined_date"
+              />
+
+              <!-- Address 1 -->
+              <lib-textbox
+                label="label.address_1"
+                formControlName="address_line_1"
+                placeholder="label.placeholders.address"
+                class="md:col-span-2"
+                [maxLength]="255"
+              />
+
+              <!-- Address 2 -->
+              <lib-textbox
+                label="label.address_2"
+                formControlName="address_line_2"
+                placeholder="label.placeholders.address"
+                class="md:col-span-2"
+                [maxLength]="255"
+              />
+
+              <!-- City -->
+              <lib-textbox
+                label="label.city"
+                formControlName="city"
+                placeholder="label.placeholders.city"
+                [maxLength]="120"
+              />
+
+              <!-- State -->
+              <lib-dropdown
+                label="label.state"
+                formControlName="state"
+                placeholder="label.placeholders.state"
+                [options]="statesOptions()"
+              />
+
+              <!-- Postcode -->
+              <lib-textbox
+                label="label.postcode"
+                formControlName="postcode"
+                placeholder="label.placeholders.postcode"
+                [maxLength]="6"
+              />
+
+              <!-- Country -->
+              <lib-dropdown
+                label="label.country"
+                formControlName="country"
+                placeholder="label.placeholders.country"
+                [options]="countriesOptions()"
+              />
+
+              <div class="md:col-span-2 mt-4">
+                <!-- <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Audit Information
+                </h3> -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-50">
+                  <lib-textbox label="label.created_by" formControlName="created_by" />
+                  <lib-textbox label="label.created_at" formControlName="created_at" />
+                  <lib-textbox label="label.updated_by" formControlName="updated_by" />
+                  <lib-textbox label="label.updated_at" formControlName="updated_at" />
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
+                <lib-button type="RESET" (click)="loadProfile()" />
+                <lib-button type="SAVE_CHANGES" htmlType="submit" />
+              </div>
+            </div>
+          }
         </form>
       </p-card>
     </div>

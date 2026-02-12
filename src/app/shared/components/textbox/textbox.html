@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-2 w-full">
   @if (label()) {
     <label [for]="id()" class="text-sm font-medium text-gray-600 select-none">
-      {{ label() }}
+      {{ label() | transloco }}
       @if (required()) {
         <span class="text-red-500 ml-0.5">*</span>
       }
@@ -20,7 +20,7 @@
         (ngModelChange)="handleInput($event)"
         (onBlur)="handleBlur()"
         (onFocus)="handleFocus()"
-        [placeholder]="placeholder() || '000000-00-0000'"
+        [placeholder]="(placeholder() | transloco) || '000000-00-0000'"
         [disabled]="disabled()"
         styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
         [class.pl-9]="icon()"
@@ -33,7 +33,7 @@
         pInputText
         [id]="id()"
         [type]="type()"
-        [placeholder]="placeholder()"
+        [placeholder]="placeholder() | transloco"
         [value]="value()"
         [disabled]="disabled()"
         (input)="handleInput($event)"

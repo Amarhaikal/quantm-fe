@@ -9,6 +9,7 @@ import { unauthorizedInterceptor } from './core/auth/unauthorized.interceptor';
 import { provideTransloco } from '@ngneat/transloco';
 import { isDevMode } from '@angular/core';
 import { translocoLoader } from './core/i18n/transloco-loader';
+import { DatePipe } from '@angular/common';
 import { STORAGE_KEYS } from './core/constants/storage.constants';
 
 import { routes } from './app.routes';
@@ -43,5 +44,6 @@ export const appConfig: ApplicationConfig = {
     }),
     MessageService,
     ConfirmationService,
+    DatePipe,
   ],
 };

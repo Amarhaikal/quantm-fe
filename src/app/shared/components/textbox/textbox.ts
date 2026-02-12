@@ -16,13 +16,21 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 export type TextboxType = 'text' | 'email' | 'IDNO';
 
 @Component({
   selector: 'lib-textbox',
   standalone: true,
-  imports: [CommonModule, InputTextModule, InputMaskModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    InputTextModule,
+    InputMaskModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslocoPipe,
+  ],
   templateUrl: './textbox.html',
   styleUrl: './textbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
