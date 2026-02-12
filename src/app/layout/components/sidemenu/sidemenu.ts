@@ -15,6 +15,7 @@ import { Drawer, DrawerModule } from 'primeng/drawer';
 import { RippleModule } from 'primeng/ripple';
 import { NgOptimizedImage, CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslocoPipe } from '@ngneat/transloco';
 import { MenuService } from '../../../core/services/menu.service';
 import { environment } from '../../../../environments/environment';
 
@@ -30,6 +31,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    TranslocoPipe,
   ],
   templateUrl: './sidemenu.html',
   styleUrl: './sidemenu.css',

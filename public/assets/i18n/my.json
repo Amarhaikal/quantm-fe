@@ -1,0 +1,83 @@
+{
+    "login": {
+        "title": "Log Masuk ke Quantm-LMS",
+        "welcome": "Selamat Kembali! Masukkan kredibiliti anda untuk mengakses papan pemuka anda",
+        "username": "Nama Pengguna atau Emel",
+        "password": "Kata Laluan",
+        "submit": "Log Masuk",
+        "copyright": "© 2026 Sistem Pengurusan Pinjaman. Semua hak terpelihara.",
+        "slides": {
+            "slide1": {
+                "title": "Memperkasakan Pertumbuhan Kewangan Anda",
+                "description": "Urus pinjaman anda dengan mudah dan tepat menggunakan platform digital canggih kami."
+            },
+            "slide2": {
+                "title": "Selamat & Dipercayai",
+                "description": "Data kewangan anda dilindungi dengan piawaian keselamatan industri terkemuka."
+            },
+            "slide3": {
+                "title": "Analitik Pintar",
+                "description": "Dapatkan pandangan tentang portfolio anda dengan alat pelaporan kami yang berkuasa."
+            },
+            "slide4": {
+                "title": "Pantas & Cekap",
+                "description": "Permudah aliran kerja anda dengan sistem pemprosesan pinjaman automatik kami."
+            }
+        }
+    },
+    "sidemenu": {
+        "dashboard": "Papan Pemuka",
+        "settings": "Tetapan",
+        "profile": "Profil",
+        "administrator": "Pentadbir",
+        "users": "Pengguna",
+        "roles": "Peranan",
+        "system codes": "Kod Sistem",
+        "logs": "Log",
+        "logout": "Log Keluar"
+    },
+    "profile": {
+        "title": "Profil Saya",
+        "subtitle": "Urus tetapan akaun dan maklumat peribadi anda",
+        "change": "Tukar",
+        "role": "Peranan",
+        "email": "Alamat Emel",
+        "gender": "Jantina",
+        "joined_date": "Tarikh Menyertai",
+        "full_name": "Nama Penuh",
+        "short_name": "Nama Pendek",
+        "username": "Nama Pengguna",
+        "id_no": "No. ID",
+        "status": "Status",
+        "address_1": "Alamat 1",
+        "address_2": "Alamat 2",
+        "city": "Bandar",
+        "state": "Negeri",
+        "postcode": "Poskod",
+        "country": "Negara",
+        "reset": "Set Semula",
+        "save_changes": "Simpan Perubahan",
+        "placeholders": {
+            "full_name": "Masukkan nama penuh anda",
+            "short_name": "Masukkan nama pendek anda",
+            "id_no": "000000-00-0000",
+            "email": "Masukkan emel anda",
+            "joined_date": "Pilih tarikh menyertai",
+            "address": "Masukkan alamat anda",
+            "city": "Masukkan bandar anda",
+            "state": "Pilih negeri anda",
+            "postcode": "Masukkan poskod anda",
+            "country": "Pilih negara anda"
+        }
+    },
+    "common": {
+        "new_user": "Pengguna Baru",
+        "buttons": {
+            "cancel": "Batal",
+            "save": "Simpan",
+            "update": "Kemaskini",
+            "save_changes": "Simpan Perubahan",
+            "reset": "Set Semula"
+        }
+    }
+}

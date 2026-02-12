@@ -1,7 +1,7 @@
 <div class="mx-auto">
   <!-- Header Section -->
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ 'profile.title' | transloco }}</h1>
     <!-- <p class="text-gray-500">Manage your account settings and personal information</p> -->
   </div>
 
@@ -31,16 +31,18 @@
             >
               <div class="flex flex-col items-center gap-1">
                 <i class="pi pi-camera text-white text-2xl"></i>
-                <span class="text-white text-[10px] font-medium uppercase tracking-wider"
-                  >Change</span
-                >
+                <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
+                  'profile.change' | transloco
+                }}</span>
               </div>
             </div>
           </div>
 
           <div class="text-center">
             <h2 class="text-2xl font-bold text-gray-900 leading-tight">
-              {{ originalData?.shortname || originalData?.fullname || 'New User' }}
+              {{
+                originalData?.shortname || originalData?.fullname || ('common.new_user' | transloco)
+              }}
             </h2>
             <p class="text-gray-500 font-medium text-sm mt-1">@{{ originalData?.username }}</p>
           </div>
@@ -56,7 +58,9 @@
                 <i class="pi pi-shield text-md"></i>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">Role</p>
+                <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
+                  {{ 'profile.role' | transloco }}
+                </p>
                 <p class="text-sm font-semibold text-gray-700 truncate">
                   {{ originalData?.role_label }}
                 </p>
@@ -76,7 +80,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                Email address
+                {{ 'profile.email' | transloco }}
               </p>
               <p class="text-sm font-semibold text-gray-700 truncate">
                 {{ originalData?.email }}
@@ -91,7 +95,9 @@
               <i class="pi pi-users text-md"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">Gender</p>
+              <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
+                {{ 'profile.gender' | transloco }}
+              </p>
               <p class="text-sm font-semibold text-gray-700 truncate">
                 {{ originalData?.gender_label }}
               </p>
@@ -106,7 +112,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-[11px] text-gray-400 uppercase font-semibold tracking-wider">
-                Joined Date
+                {{ 'profile.joined_date' | transloco }}
               </p>
               <p class="text-sm font-semibold text-gray-700 truncate">
                 {{ originalData?.joined_dt | date: 'd MMMM y' }}
@@ -124,36 +130,36 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <!-- Full Name -->
             <lib-textbox
-              label="Full Name"
+              [label]="'profile.full_name' | transloco"
               formControlName="fullname"
-              placeholder="Enter your full name"
+              [placeholder]="'profile.placeholders.full_name' | transloco"
               [required]="true"
               [maxLength]="80"
             />
 
             <!-- Short Name -->
             <lib-textbox
-              label="Short Name"
+              [label]="'profile.short_name' | transloco"
               formControlName="shortname"
-              placeholder="Enter your short name"
+              [placeholder]="'profile.placeholders.short_name' | transloco"
               [maxLength]="20"
             />
 
             <!-- Username (Readonly) -->
-            <lib-textbox label="Username" formControlName="username" />
+            <lib-textbox [label]="'profile.username' | transloco" formControlName="username" />
 
             <!-- ID No. -->
             <lib-textbox
-              label="ID No."
+              [label]="'profile.id_no' | transloco"
               formControlName="id_no"
               type="IDNO"
-              placeholder="000000-00-0000"
+              [placeholder]="'profile.placeholders.id_no' | transloco"
               [required]="true"
             />
 
             <!-- Gender -->
             <lib-dropdown
-              label="Gender"
+              [label]="'profile.gender' | transloco"
               formControlName="gender"
               [options]="genderOptions()"
               [required]="true"
@@ -161,7 +167,7 @@
 
             <!-- Role -->
             <lib-dropdown
-              label="Role"
+              [label]="'profile.role' | transloco"
               formControlName="role"
               [options]="rolesOptions()"
               [required]="true"
@@ -169,7 +175,7 @@
 
             <!-- Status -->
             <lib-dropdown
-              label="Status"
+              [label]="'profile.status' | transloco"
               formControlName="status"
               [options]="statusOptions()"
               [required]="true"
@@ -177,66 +183,66 @@
 
             <!-- Email -->
             <lib-textbox
-              label="Email"
+              [label]="'profile.email' | transloco"
               formControlName="email"
-              placeholder="Enter your email"
+              [placeholder]="'profile.placeholders.email' | transloco"
               [required]="true"
             />
 
             <!-- Joined Date -->
             <lib-datepicker
-              label="Joined Date"
+              [label]="'profile.joined_date' | transloco"
               formControlName="joined_dt"
-              placeholder="Select joined date"
+              [placeholder]="'profile.placeholders.joined_date' | transloco"
             />
 
             <!-- Address 1 -->
             <lib-textbox
-              label="Address 1"
+              [label]="'profile.address_1' | transloco"
               formControlName="address_line_1"
-              placeholder="Enter your address"
+              [placeholder]="'profile.placeholders.address' | transloco"
               class="md:col-span-2"
               [maxLength]="255"
             />
 
             <!-- Address 2 -->
             <lib-textbox
-              label="Address 2"
+              [label]="'profile.address_2' | transloco"
               formControlName="address_line_2"
-              placeholder="Enter your address"
+              [placeholder]="'profile.placeholders.address' | transloco"
               class="md:col-span-2"
               [maxLength]="255"
             />
 
             <!-- City -->
             <lib-textbox
-              label="City"
+              [label]="'profile.city' | transloco"
               formControlName="city"
-              placeholder="Enter your city"
+              [placeholder]="'profile.placeholders.city' | transloco"
               [maxLength]="120"
             />
 
             <!-- State -->
             <lib-dropdown
-              label="State"
+              [label]="'profile.state' | transloco"
               formControlName="state"
-              placeholder="Select your state"
+              [placeholder]="'profile.placeholders.state' | transloco"
               [options]="statesOptions()"
             />
 
             <!-- Postcode -->
             <lib-textbox
-              label="Postcode"
+              [label]="'profile.postcode' | transloco"
               formControlName="postcode"
-              placeholder="Enter your postcode"
+              [placeholder]="'profile.placeholders.postcode' | transloco"
               [maxLength]="6"
             />
 
             <!-- Country -->
             <lib-dropdown
-              label="Country"
+              [label]="'profile.country' | transloco"
               formControlName="country"
-              placeholder="Select your country"
+              [placeholder]="'profile.placeholders.country' | transloco"
               [options]="countriesOptions()"
             />
 

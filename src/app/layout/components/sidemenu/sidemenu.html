@@ -39,7 +39,9 @@
                             : item.icon)
                       "
                     ></i>
-                    <span class="font-medium">{{ item.name }}</span>
+                    <span class="font-medium">{{
+                      'sidemenu.' + item.name.toLowerCase() | transloco
+                    }}</span>
                   </div>
                   <i
                     class="pi pi-chevron-down text-xs transition-transform duration-300"
@@ -70,7 +72,9 @@
                                   : child.icon)
                           "
                         ></i>
-                        <span class="font-medium">{{ child.name }}</span>
+                        <span class="font-medium">{{
+                          'sidemenu.' + child.name.toLowerCase() | transloco
+                        }}</span>
                       </a>
                     </li>
                   }
@@ -83,7 +87,9 @@
                   class="flex items-center cursor-pointer p-4 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
                 >
                   <i [class]="'pi pi-' + item.icon"></i>
-                  <span class="font-medium">{{ item.name }}</span>
+                  <span class="font-medium">{{
+                    'sidemenu.' + item.name.toLowerCase() | transloco
+                  }}</span>
                 </a>
               }
             </li>

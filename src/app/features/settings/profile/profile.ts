@@ -28,6 +28,7 @@ import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-profile',
@@ -43,6 +44,7 @@ import { DatePickerComponent } from '../../../shared/components/datepicker/datep
     ButtonComponent,
     DropdownComponent,
     DatePickerComponent,
+    TranslocoPipe,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',

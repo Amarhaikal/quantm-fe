@@ -14,6 +14,7 @@ import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
+import { TranslocoPipe } from '@ngneat/transloco';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 
@@ -27,6 +28,7 @@ import { Router } from '@angular/router';
     Button,
     FloatLabel,
     NgOptimizedImage,
+    TranslocoPipe,
   ],
   providers: [],
   templateUrl: './login.component.html',
@@ -50,23 +52,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   slides = [
     {
       image: '/assets/images/login-slide-1.png',
-      title: 'Empowering Your Financial Growth',
-      description: 'Manage your loans with ease and precision using our advanced digital platform.',
+      title: 'login.slides.slide1.title',
+      description: 'login.slides.slide1.description',
     },
     {
       image: '/assets/images/login-slide-2.png',
-      title: 'Secure & Reliable',
-      description: 'Your financial data is protected with industry-leading security standards.',
+      title: 'login.slides.slide2.title',
+      description: 'login.slides.slide2.description',
     },
     {
       image: '/assets/images/login-slide-3.png',
-      title: 'Smart Analytics',
-      description: 'Gain insights into your portfolio with our powerful reporting tools.',
+      title: 'login.slides.slide3.title',
+      description: 'login.slides.slide3.description',
     },
     {
       image: '/assets/images/login-slide-4.png',
-      title: 'Fast & Efficient',
-      description: 'Streamline your workflow with our automated loan processing system.',
+      title: 'login.slides.slide4.title',
+      description: 'login.slides.slide4.description',
     },
   ];
 
