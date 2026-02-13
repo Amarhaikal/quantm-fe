@@ -18,7 +18,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
 
-export type TextboxType = 'text' | 'email' | 'IDNO';
+export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO';
 
 @Component({
   selector: 'lib-textbox',

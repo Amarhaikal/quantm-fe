@@ -28,6 +28,24 @@
         [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
         [class.ng-dirty]="ngControl?.dirty"
       ></p-inputMask>
+    } @else if (type() === 'PHONENO') {
+      <p-inputMask
+        [id]="id()"
+        mask="999-999 9999?9"
+        [unmask]="true"
+        [autoClear]="false"
+        [ngModel]="value()"
+        (ngModelChange)="handleInput($event)"
+        (onBlur)="handleBlur()"
+        (onFocus)="handleFocus()"
+        [placeholder]="(placeholder() | transloco) || '01x-xxxx xxxx'"
+        [disabled]="disabled()"
+        styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
+        [class.pl-9]="icon()"
+        [class.bg-gray-50]="disabled()"
+        [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
+        [class.ng-dirty]="ngControl?.dirty"
+      ></p-inputMask>
     } @else {
       <input
         pInputText
