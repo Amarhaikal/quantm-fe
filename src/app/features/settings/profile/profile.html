@@ -306,17 +306,8 @@
                 [options]="countriesOptions()"
               />
 
-              <div class="md:col-span-2 mt-4">
-                <!-- <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                  Audit Information
-                </h3> -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-50">
-                  <lib-textbox label="label.created_by" formControlName="created_by" />
-                  <lib-textbox label="label.created_at" formControlName="created_at" />
-                  <lib-textbox label="label.updated_by" formControlName="updated_by" />
-                  <lib-textbox label="label.updated_at" formControlName="updated_at" />
-                </div>
-              </div>
+              <!-- Audit Information Component -->
+              <lib-audit-info [data]="originalData" class="md:col-span-2" />
 
               <!-- Action Buttons -->
               <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">

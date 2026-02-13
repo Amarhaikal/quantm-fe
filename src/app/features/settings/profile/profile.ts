@@ -31,6 +31,7 @@ import { DatePickerComponent } from '../../../shared/components/datepicker/datep
 import { RadioButtonComponent } from '../../../shared/components/radiobutton/radiobutton';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { BaseFormComponent } from '../../../core/base/base-form.component';
+import { AuditInfoComponent } from '../../../shared/components/audit-info/audit-info';
 
 @Component({
   selector: 'app-profile',
@@ -49,6 +50,7 @@ import { BaseFormComponent } from '../../../core/base/base-form.component';
     RadioButtonComponent,
     TranslocoPipe,
     SkeletonModule,
+    AuditInfoComponent,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',

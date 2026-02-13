@@ -1,18 +1,5 @@
-import {
-  Component,
-  forwardRef,
-  input,
-  signal,
-  inject,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-  FormsModule,
-} from '@angular/forms';
+import { Component, input, signal, inject, ChangeDetectionStrategy, computed } from '@angular/core';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
@@ -45,8 +32,20 @@ export class TextboxComponent implements ControlValueAccessor {
   icon = input<string>('');
   maxLength = input<number | undefined>(undefined);
 
-  value = signal<string>('');
-  disabled = signal<boolean>(false);
+  // Support for non-form usage (read-only/one-way binding)
+  externalValue = input<string | null | undefined>(undefined, { alias: 'value' });
+  externalDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
+
+  private _value = signal<string>('');
+  private _disabled = signal<boolean>(false);
+
+  // Use external input if provided, otherwise fallback to internal signal (from ControlValueAccessor)
+  protected displayValue = computed(
+    () => (this.externalValue() !== undefined ? this.externalValue() : this._value()) || '',
+  );
+  protected displayDisabled = computed(
+    () => !!(this.externalDisabled() !== undefined ? this.externalDisabled() : this._disabled()),
+  );
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
@@ -62,7 +61,7 @@ export class TextboxComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   writeValue(value: any): void {
-    this.value.set(value || '');
+    this._value.set(value || '');
   }
 
   registerOnChange(fn: any): void {
@@ -74,7 +73,7 @@ export class TextboxComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this._disabled.set(isDisabled);
   }
 
   handleInput(event: any): void {
@@ -89,7 +88,7 @@ export class TextboxComponent implements ControlValueAccessor {
       }
     }
 
-    this.value.set(val);
+    this._value.set(val);
     this.onChange(val);
   }
 
@@ -104,11 +103,11 @@ export class TextboxComponent implements ControlValueAccessor {
 
   private trimValueIfExceeds(): void {
     const max = this.maxLength();
-    const currentVal = this.value();
+    const currentVal = this._value();
 
     if (max !== undefined && currentVal.length > max) {
       const trimmed = currentVal.substring(0, max);
-      this.value.set(trimmed);
+      this._value.set(trimmed);
       this.onChange(trimmed);
     }
   }
