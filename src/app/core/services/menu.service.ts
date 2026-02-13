@@ -11,6 +11,20 @@ export class MenuService {
 
   isSidebarVisible = signal<boolean>(true);
 
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(max-width: 1300px)');
+
+      // Set initial state based on current window width
+      this.isSidebarVisible.set(!mediaQuery.matches);
+
+      // Add listener for changes
+      mediaQuery.addEventListener('change', (e) => {
+        this.isSidebarVisible.set(!e.matches);
+      });
+    }
+  }
+
   toggleSidebar() {
     this.isSidebarVisible.update((v) => !v);
   }
