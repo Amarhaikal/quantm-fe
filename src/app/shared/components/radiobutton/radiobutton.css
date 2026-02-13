@@ -1,0 +1,33 @@
+@reference "../../../../styles.css";
+
+/* PrimeNG RadioButton Refinements */
+:host ::ng-deep .p-radiobutton {
+  @apply transition-all duration-200;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box {
+  @apply w-5 h-5 border border-gray-300 transition-all duration-200;
+}
+
+/* Force active state colors */
+:host ::ng-deep .p-radiobutton.p-radiobutton-checked .p-radiobutton-box {
+  @apply border-indigo-700! bg-indigo-600!;
+}
+
+:host ::ng-deep .p-radiobutton.p-radiobutton-checked:not(.p-disabled):hover .p-radiobutton-box {
+  @apply border-indigo-800! bg-indigo-700!;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box.p-focus {
+  @apply ring-2 ring-indigo-500/20 border-indigo-600!;
+}
+
+:host ::ng-deep .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
+  @apply bg-white rounded-full w-1.5 h-1.5;
+}
+
+/* Invalid state */
+:host .ng-invalid ::ng-deep .p-radiobutton .p-radiobutton-box {
+  @apply border-red-500!;
+}
+

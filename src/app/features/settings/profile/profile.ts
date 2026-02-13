@@ -28,6 +28,7 @@ import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
+import { RadioButtonComponent } from '../../../shared/components/radiobutton/radiobutton';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { BaseFormComponent } from '../../../core/base/base-form.component';
 
@@ -45,6 +46,7 @@ import { BaseFormComponent } from '../../../core/base/base-form.component';
     ButtonComponent,
     DropdownComponent,
     DatePickerComponent,
+    RadioButtonComponent,
     TranslocoPipe,
     SkeletonModule,
   ],
