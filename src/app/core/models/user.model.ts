@@ -45,8 +45,8 @@ export interface UserUpdateDto {
   role?: { code: string };
   status?: { code: string };
   id_no?: string;
-  email?: string;
   phone_no?: string;
+  email?: string;
   joined_dt?: string;
   address?: {
     address_line_1?: string;

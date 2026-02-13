@@ -192,7 +192,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       username,
       id_no,
       email,
-      phone_no,
+      phone_no: phone_no || '',
       gender: gender?.code || '',
       role: role.code,
       status: userStatus.code,
