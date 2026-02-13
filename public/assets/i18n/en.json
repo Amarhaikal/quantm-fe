@@ -65,11 +65,13 @@
         "updated_by": "Updated By",
         "updated_date": "Updated Date",
         "updated_at": "Updated At",
+        "phone_no": "Phone Number",
         "placeholders": {
             "full_name": "Enter your full name",
             "short_name": "Enter your short name",
             "id_no": "000000-00-0000",
             "email": "Enter your email",
+            "phone_no": "Enter your phone number",
             "joined_date": "Select joined date",
             "address": "Enter your address",
             "city": "Enter your city",

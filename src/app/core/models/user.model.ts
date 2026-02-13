@@ -15,6 +15,7 @@ export interface UserDetailed {
   shortname: string;
   profile_image_url: string;
   email: string;
+  phone_no: string;
   gender: SystemCodeReference;
   role: SystemCodeReference;
   status: SystemCodeReference;
@@ -45,6 +46,7 @@ export interface UserUpdateDto {
   status?: { code: string };
   id_no?: string;
   email?: string;
+  phone_no?: string;
   joined_dt?: string;
   address?: {
     address_line_1?: string;

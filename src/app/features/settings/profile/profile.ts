@@ -113,6 +113,10 @@ export class Profile extends BaseFormComponent implements OnInit {
       role: [{ value: '', validators: [Validators.required] }],
       status: [{ value: '', validators: [Validators.required] }],
       email: ['', [Validators.required, Validators.email]],
+      phone_no: [
+        '',
+        [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(15)],
+      ],
       address_line_1: ['', [Validators.maxLength(255)]],
       address_line_2: ['', [Validators.maxLength(255)]],
       city: ['', [Validators.maxLength(120)]],
@@ -158,8 +162,7 @@ export class Profile extends BaseFormComponent implements OnInit {
   }
 
   private handleUserDataResponse(data: any) {
-    console.log('handleUserDataResponse data.created_by', data.created_by);
-    console.log('handleUserDataResponse data.updated_by', data.updated_by);
+    console.log('handleUserDataResponse data.phone_no', data.phone_no);
 
     const {
       id,
@@ -171,6 +174,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       id_no,
       address,
       email,
+      phone_no,
       status: userStatus,
       gender,
       joined_dt,
@@ -188,6 +192,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       username,
       id_no,
       email,
+      phone_no,
       gender: gender?.code || '',
       role: role.code,
       status: userStatus.code,

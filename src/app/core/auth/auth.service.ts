@@ -49,6 +49,7 @@ export class AuthService {
             username: apiUser.username,
             email: '',
             id_no: '',
+            phone_no: '',
             role: { code: '', description: '' },
             profile_image_url: apiUser.profile_image_url,
             gender: { code: '', description: '' },
