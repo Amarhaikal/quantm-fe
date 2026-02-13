@@ -197,6 +197,9 @@
               <!-- Username (Readonly) -->
               <lib-textbox label="label.username" formControlName="username" />
 
+              <!-- Staff ID -->
+              <lib-textbox label="label.staff_id" formControlName="staff_id" [maxLength]="10" />
+
               <!-- ID No. -->
               <lib-textbox
                 label="label.id_no"
@@ -204,6 +207,22 @@
                 type="IDNO"
                 placeholder="label.placeholders.id_no"
                 [required]="true"
+              />
+
+              <!-- Email -->
+              <lib-textbox
+                label="label.email"
+                formControlName="email"
+                placeholder="label.placeholders.email"
+                [required]="true"
+              />
+
+              <!-- Phone No -->
+              <lib-textbox
+                label="label.phone_no"
+                formControlName="phone_no"
+                type="PHONENO"
+                placeholder="label.placeholders.phone_no"
               />
 
               <!-- Gender -->
@@ -228,22 +247,6 @@
                 formControlName="status"
                 [options]="statusOptions()"
                 [required]="true"
-              />
-
-              <!-- Email -->
-              <lib-textbox
-                label="label.email"
-                formControlName="email"
-                placeholder="label.placeholders.email"
-                [required]="true"
-              />
-
-              <!-- Phone No -->
-              <lib-textbox
-                label="label.phone_no"
-                formControlName="phone_no"
-                type="PHONENO"
-                placeholder="label.placeholders.phone_no"
               />
 
               <!-- Joined Date -->
@@ -317,7 +320,7 @@
 
               <!-- Action Buttons -->
               <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
-                <lib-button type="RESET" (click)="loadProfile()" />
+                <lib-button type="RESET" (click)="resetForm()" />
                 <lib-button type="SAVE_CHANGES" htmlType="submit" />
               </div>
             </div>

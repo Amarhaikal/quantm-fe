@@ -47,6 +47,7 @@ export class AuthService {
             fullname: apiUser.fullname,
             shortname: apiUser.shortname,
             username: apiUser.username,
+            staff_id: '',
             email: '',
             id_no: '',
             phone_no: '',

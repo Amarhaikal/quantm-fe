@@ -47,6 +47,7 @@
         "full_name": "Full Name",
         "short_name": "Short Name",
         "username": "Username",
+        "staff_id": "Staff ID",
         "id_no": "ID No.",
         "email": "Email address",
         "gender": "Gender",
@@ -69,6 +70,7 @@
         "placeholders": {
             "full_name": "Enter your full name",
             "short_name": "Enter your short name",
+            "staff_id": "Enter your staff ID",
             "id_no": "000000-00-0000",
             "email": "Enter your email",
             "phone_no": "Enter your phone number",

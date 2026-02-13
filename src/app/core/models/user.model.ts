@@ -12,6 +12,7 @@ export interface UserDetailed {
   id: number;
   fullname: string;
   username: string;
+  staff_id: string;
   shortname: string;
   profile_image_url: string;
   email: string;
@@ -41,6 +42,7 @@ export type UserResponse = ApiResponse<UserDetailed>;
 export interface UserUpdateDto {
   fullname?: string;
   shortname?: string;
+  staff_id?: string;
   gender?: { code: string };
   role?: { code: string };
   status?: { code: string };

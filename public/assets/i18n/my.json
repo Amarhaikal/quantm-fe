@@ -47,6 +47,7 @@
         "full_name": "Nama Penuh",
         "short_name": "Nama Pendek",
         "username": "Nama Pengguna",
+        "staff_id": "No. Staf",
         "id_no": "No. ID",
         "email": "Alamat Emel",
         "gender": "Jantina",
@@ -69,6 +70,7 @@
         "placeholders": {
             "full_name": "Masukkan nama penuh anda",
             "short_name": "Masukkan nama pendek anda",
+            "staff_id": "Masukkan no. staf anda",
             "id_no": "000000-00-0000",
             "email": "Masukkan emel anda",
             "phone_no": "Masukkan nombor telefon anda",

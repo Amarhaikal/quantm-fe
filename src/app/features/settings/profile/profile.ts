@@ -6,8 +6,6 @@ import {
   OnInit,
   computed,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { filter, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -108,6 +106,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
       shortname: ['', [Validators.maxLength(20)]],
       username: [{ value: '', disabled: true }],
+      staff_id: ['', [Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: [{ value: '', validators: [Validators.required] }],
       role: [{ value: '', validators: [Validators.required] }],
@@ -169,6 +168,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
+      staff_id,
       role,
       profile_image_url,
       id_no,
@@ -190,6 +190,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
+      staff_id,
       id_no,
       email,
       phone_no: phone_no || '',
@@ -223,6 +224,12 @@ export class Profile extends BaseFormComponent implements OnInit {
     if (profile_image_url) {
       this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
     }
+  }
+
+  resetForm() {
+    this.profileForm.reset();
+    this.profileForm.patchValue(this.originalData);
+    this.profileForm.markAsPristine();
   }
 
   onSave() {
