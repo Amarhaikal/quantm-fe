@@ -1,0 +1,17 @@
+.crop-container {
+  position: relative;
+  width: 100%;
+  max-height: 70vh;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+image-cropper {
+  display: block;
+  width: 100%;
+}
+

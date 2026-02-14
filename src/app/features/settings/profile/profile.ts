@@ -6,8 +6,10 @@ import {
   OnInit,
   computed,
   DestroyRef,
+  viewChild,
+  ElementRef,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -29,11 +31,16 @@ import { CodeTypeService } from '../../../core/services/code-type.service';
 import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
+import { catchError, map, Observable, tap, filter, startWith } from 'rxjs';
 import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
 import { RadioButtonComponent } from '../../../shared/components/radiobutton/radiobutton';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { BaseFormComponent } from '../../../core/base/base-form.component';
 import { AuditInfoComponent } from '../../../shared/components/audit-info/audit-info';
+import { ImageCropDialog } from '../../../shared/components/image-crop-dialog/image-crop-dialog';
+import { AvatarSelectionDialog } from '../../../shared/components/avatar-selection-dialog/avatar-selection-dialog';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 
 const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
@@ -57,6 +64,9 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     TranslocoPipe,
     SkeletonModule,
     AuditInfoComponent,
+    ImageCropDialog,
+    AvatarSelectionDialog,
+    MenuModule,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -71,11 +81,47 @@ export class Profile extends BaseFormComponent implements OnInit {
   private codeTypeService = inject(CodeTypeService);
   private confirmService = inject(ConfirmService);
   private dateService = inject(DateService);
+  private translocoService = inject(TranslocoService);
 
   profileForm: FormGroup;
   isLoading = signal<boolean>(true);
   isSaving = signal<boolean>(false);
-  profileImageUrl = signal<string | null>(null);
+  isUploadingPhoto = signal<boolean>(false);
+  profileImageUrl = this.authService.profileImageUrl;
+  fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+  cropDialog = viewChild<ImageCropDialog>('cropDialog');
+  avatarDialog = viewChild<AvatarSelectionDialog>('avatarDialog');
+
+  // This signal updates only when the translation dictionary is actually loaded
+  private translationLoaded = toSignal(this.translocoService.selectTranslation());
+
+  menuItems = computed<MenuItem[]>(() => {
+    this.translationLoaded(); // Depend on translation being loaded
+    return [
+      {
+        label: this.getTranslation('profile.upload_photo'),
+        icon: 'pi pi-upload',
+        command: () => this.fileInput()?.nativeElement.click(),
+      },
+      {
+        label: this.getTranslation('profile.choose_avatar'),
+        icon: 'pi pi-user',
+        command: () => this.avatarDialog()?.open(),
+      },
+      {
+        separator: true,
+        visible: !!this.profileImageUrl(),
+      },
+      {
+        label: this.getTranslation('profile.remove_photo'),
+        icon: 'pi pi-trash',
+        styleClass: 'text-red-600',
+        visible: !!this.profileImageUrl(),
+        command: () => this.removeProfilePhoto(),
+      },
+    ];
+  });
+
   rolesOptions = computed<OptionDropdown[]>(() => {
     return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
       value: role.code,
@@ -156,6 +202,7 @@ export class Profile extends BaseFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.triggerRefresh();
     this.setupFormListeners();
     this.loadProfile();
   }
@@ -265,10 +312,6 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.profileForm.markAsPristine();
 
     this.originalData = this.prepareDisplayData(formData, data);
-
-    if (data.profile_image_url) {
-      this.profileImageUrl.set(`${environment.apiUrl}${data.profile_image_url}`);
-    }
   }
 
   resetForm() {
@@ -325,5 +368,121 @@ export class Profile extends BaseFormComponent implements OnInit {
         },
       });
     });
+  }
+
+  onProfilePictureClick() {
+    const input = this.fileInput()?.nativeElement;
+    if (input) {
+      input.click();
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      this.toastService.error('Error', this.getTranslation('profile.photo_size_error'));
+      input.value = ''; // Reset input
+      return;
+    }
+
+    // Open crop dialog
+    const dialog = this.cropDialog();
+    if (dialog) {
+      dialog.open(event);
+    }
+  }
+
+  onImageCropped(blob: Blob) {
+    if (!this.userId) return;
+
+    this.isUploadingPhoto.set(true);
+    const formData = new FormData();
+    formData.append('file', blob, 'profile.png');
+
+    this.userService.updateProfilePhoto(this.userId, formData).subscribe({
+      next: (response: ApiResponse<any>) => {
+        if (response.status === 201 || response.status === 200) {
+          this.toastService.success('Success', this.getTranslation('profile.photo_upload_success'));
+
+          // Try multiple keys for the file path in case of backend naming variations
+          const d = response.data || {};
+          const path = d.FilePath || d.filePath || d.FileUrl || d.fileUrl || d.Path || d.path;
+
+          if (path) {
+            this.authService.updateProfileImage(path);
+          } else {
+            // Fallback: wait a bit for DB to settle then hydrate
+            setTimeout(() => {
+              this.authService.hydrate().subscribe();
+            }, 500);
+          }
+        }
+        this.isUploadingPhoto.set(false);
+        // Reset file input
+        const input = this.fileInput()?.nativeElement;
+        if (input) input.value = '';
+      },
+      error: (err: any) => {
+        this.toastService.error('Error', this.getTranslation('profile.photo_upload_error'));
+        this.isUploadingPhoto.set(false);
+        // Reset file input
+        const input = this.fileInput()?.nativeElement;
+        if (input) input.value = '';
+      },
+    });
+  }
+
+  removeProfilePhoto() {
+    if (!this.userId) return;
+
+    this.confirmService.confirm({
+      message: this.getTranslation('confirm.remove_photo.message'),
+      header: this.getTranslation('confirm.remove_photo.header'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.getTranslation('confirm.remove_photo.reject'),
+      acceptLabel: this.getTranslation('confirm.remove_photo.accept'),
+      rejectButtonProps: {
+        label: this.getTranslation('confirm.remove_photo.reject'),
+        severity: 'secondary',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: this.getTranslation('confirm.remove_photo.accept'),
+        severity: 'danger',
+        size: 'small',
+      },
+      accept: () => {
+        this.isUploadingPhoto.set(true);
+
+        this.userService.deleteProfilePhoto(this.userId!).subscribe({
+          next: (response: ApiResponse<any>) => {
+            if (response.status === 200) {
+              this.toastService.success(
+                'Success',
+                this.getTranslation('profile.photo_remove_success'),
+              );
+              // Sync with AuthService immediately - this will also trigger a refresh
+              this.authService.updateProfileImage(null);
+            }
+            this.isUploadingPhoto.set(false);
+          },
+          error: (err: any) => {
+            this.toastService.error('Error', this.getTranslation('profile.photo_remove_error'));
+            this.isUploadingPhoto.set(false);
+          },
+        });
+      },
+    });
+  }
+
+  private getTranslation(key: string): string {
+    return this.translocoService.translate(key);
   }
 }

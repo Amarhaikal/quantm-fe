@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../environments/environment';
 import { Avatar } from 'primeng/avatar';
 import { Menu } from 'primeng/menu';
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MenuService } from '../../../core/services/menu.service';
 import { Router } from '@angular/router';
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -69,14 +71,19 @@ export class HeaderComponent {
   private menuService = inject(MenuService);
   private translocoService = inject(TranslocoService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
-  isMalay = computed(() => this.translocoService.getActiveLang() === 'my');
+  private activeLang = toSignal(this.translocoService.langChanges$, {
+    initialValue: this.translocoService.getActiveLang(),
+  });
+
+  isMalay = computed(() => this.activeLang() === 'my');
 
   userData = input<{
     fullname: string;
     shortname: string;
     username: string;
-    profile_image_url: string;
+    profile_image_url: string | null;
   } | null>(null);
   logout = output<void>();
 
@@ -84,32 +91,33 @@ export class HeaderComponent {
     this.menuService.toggleSidebar();
   }
 
-  menuItems: MenuItem[] = [
-    {
-      label: 'Profile',
-      icon: 'pi pi-user',
-      command: () => {
-        // Navigate to profile if needed
-        this.router.navigate(['/settings/profile']);
-      },
-    },
-    {
-      separator: true,
-    },
-    {
-      label: 'Logout',
-      icon: 'pi pi-sign-out',
-      command: () => {
-        this.onLogout();
-      },
-    },
-  ];
+  // Reactive signal that triggers when the translation file is fully loaded
+  private translationLoaded = toSignal(this.translocoService.selectTranslation());
 
-  profileImageUrl = computed(() => {
-    const user = this.userData();
-    if (!user?.profile_image_url) return undefined;
-    return `${environment.apiUrl}${user.profile_image_url}`;
+  menuItems = computed<MenuItem[]>(() => {
+    this.translationLoaded(); // Depend on translations being ready
+    return [
+      {
+        label: this.translocoService.translate('sidemenu.profile'),
+        icon: 'pi pi-user',
+        command: () => {
+          this.router.navigate(['/settings/profile']);
+        },
+      },
+      {
+        separator: true,
+      },
+      {
+        label: this.translocoService.translate('sidemenu.logout'),
+        icon: 'pi pi-sign-out',
+        command: () => {
+          this.onLogout();
+        },
+      },
+    ];
   });
+
+  profileImageUrl = this.authService.profileImageUrl;
 
   onLogout() {
     this.logout.emit();

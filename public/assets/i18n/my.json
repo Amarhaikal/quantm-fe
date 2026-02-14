@@ -40,8 +40,18 @@
         "title": "Profil Saya",
         "subtitle": "Urus tetapan akaun dan maklumat peribadi anda",
         "change": "Tukar",
+        "edit": "Kemaskini",
+        "choose_avatar": "Pilih Avatar",
         "reset": "Set Semula",
-        "save_changes": "Simpan Perubahan"
+        "save_changes": "Simpan Perubahan",
+        "crop_image": "Potong Imej",
+        "upload_photo": "Muat Naik Foto",
+        "remove_photo": "Buang Foto",
+        "photo_size_error": "Saiz imej tidak boleh melebihi 5MB",
+        "photo_upload_success": "Foto profil berjaya dikemaskini",
+        "photo_remove_success": "Foto profil berjaya dibuang",
+        "photo_upload_error": "Gagal memuat naik foto profil",
+        "photo_remove_error": "Gagal membuang foto profil"
     },
     "label": {
         "full_name": "Nama Penuh",
@@ -94,6 +104,8 @@
     },
     "common": {
         "new_user": "Pengguna Baru",
+        "cancel": "Batal",
+        "save": "Simpan",
         "buttons": {
             "cancel": "Batal",
             "save": "Simpan",
@@ -119,6 +131,12 @@
             "header": "Sahkan Padam",
             "message": "Adakah anda pasti mahu memadam rekod ini?",
             "accept": "Padam",
+            "reject": "Batal"
+        },
+        "remove_photo": {
+            "header": "Buang Foto Profil",
+            "message": "Adakah anda pasti mahu membuang foto profil anda?",
+            "accept": "Buang",
             "reject": "Batal"
         }
     }

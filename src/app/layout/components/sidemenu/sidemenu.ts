@@ -17,6 +17,8 @@ import { NgOptimizedImage, CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MenuService } from '../../../core/services/menu.service';
+import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
+import { AuthService } from '../../../core/auth/auth.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -61,24 +63,21 @@ import { environment } from '../../../../environments/environment';
 })
 export class Sidemenu implements OnInit {
   menuService = inject(MenuService);
+  private authService = inject(AuthService);
   drawerRef = viewChild<Drawer>('drawerRef');
 
   userData = input<{
     fullname: string;
     shortname: string;
     username: string;
-    profile_image_url: string;
+    profile_image_url: string | null;
   } | null>(null);
   menuData = signal<any[]>([]);
 
   // Track expanded menu items by ID using a Signal
   expandedItems = signal<Set<number>>(new Set());
 
-  profileImageUrl = computed(() => {
-    const user = this.userData();
-    if (!user?.profile_image_url) return undefined;
-    return `${environment.apiUrl}${user.profile_image_url}`;
-  });
+  profileImageUrl = this.authService.profileImageUrl;
 
   ngOnInit() {
     this.menuService.getMenu().subscribe({

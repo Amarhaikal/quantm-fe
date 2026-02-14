@@ -1,7 +1,8 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, computed } from '@angular/core';
 import { catchError, map, Observable, tap } from 'rxjs';
 import { AuthResponse } from '../models/auth.model';
 import { ApiService } from '../services/api.service';
+import { environment } from '../../../environments/environment';
 
 import { UserService } from '../services/user.service';
 import { UserDetailed } from '../models/user.model';
@@ -20,6 +21,25 @@ export class AuthService {
   // Publicly exposed signals/state
   currentUser = this.currentUserSig.asReadonly();
   isHydrated = this.isHydratedSig.asReadonly();
+  private refreshSig = signal<number>(0);
+  refreshCounter = this.refreshSig.asReadonly();
+
+  profileImageUrl = computed(() => {
+    // Depend on refreshCounter to force re-evaluation
+    this.refreshCounter();
+    const user = this.currentUser();
+    if (!user?.profile_image_url) return undefined;
+
+    const baseUrl = environment.apiUrl.endsWith('/')
+      ? environment.apiUrl.slice(0, -1)
+      : environment.apiUrl;
+    const path = user.profile_image_url.startsWith('/')
+      ? user.profile_image_url
+      : `/${user.profile_image_url}`;
+
+    // Add timestamp to force browser to reload image if path is same
+    return `${baseUrl}${path}?t=${new Date().getTime()}`;
+  });
 
   login(credentials: { username: string; password: string }): Observable<AuthResponse> {
     return this.api.post<AuthResponse>('auth/login', credentials).pipe(
@@ -43,23 +63,23 @@ export class AuthService {
         if (response.status === 200) {
           const apiUser = response.data;
           const user: UserDetailed = {
-            id: 0,
-            fullname: apiUser.fullname,
-            shortname: apiUser.shortname,
-            username: apiUser.username,
-            staff_id: '',
-            email: '',
-            id_no: '',
-            phone_no: '',
-            role: { code: '', description: '' },
+            id: (apiUser as any).id || 0,
+            fullname: apiUser.fullname || '',
+            shortname: apiUser.shortname || '',
+            username: apiUser.username || '',
+            staff_id: (apiUser as any).staff_id || '',
+            email: (apiUser as any).email || '',
+            id_no: (apiUser as any).id_no || '',
+            phone_no: (apiUser as any).phone_no || '',
+            role: (apiUser as any).role || { code: '', description: '' },
             profile_image_url: apiUser.profile_image_url,
-            gender: { code: '', description: '' },
-            status: { code: '', description: '' },
-            joined_dt: '',
-            department: { code: '', description: '' },
-            designation: '',
-            remarks: '',
-            address: {
+            gender: (apiUser as any).gender || { code: '', description: '' },
+            status: (apiUser as any).status || { code: '', description: '' },
+            joined_dt: (apiUser as any).joined_dt || '',
+            department: (apiUser as any).department || { code: '', description: '' },
+            designation: (apiUser as any).designation || '',
+            remarks: (apiUser as any).remarks || '',
+            address: (apiUser as any).address || {
               address_line_1: '',
               address_line_2: '',
               city: '',
@@ -67,10 +87,10 @@ export class AuthService {
               state: { code: '', description: '' },
               country: { code: '', description: '' },
             },
-            created_at: '',
-            created_by: '',
-            updated_at: null,
-            updated_by: null,
+            created_at: (apiUser as any).created_at || '',
+            created_by: (apiUser as any).created_by || '',
+            updated_at: (apiUser as any).updated_at || null,
+            updated_by: (apiUser as any).updated_by || null,
           };
           this.setUser(user);
           return user;
@@ -88,6 +108,23 @@ export class AuthService {
   setUser(user: UserDetailed | null) {
     this.currentUserSig.set(user);
     this.isHydratedSig.set(true);
+    this.triggerRefresh();
+  }
+
+  updateProfileImage(photoUrl: string | null) {
+    this.currentUserSig.update((user) => {
+      if (!user) return null;
+      // Ensure we return a new object reference to trigger signals
+      return {
+        ...user,
+        profile_image_url: photoUrl,
+      };
+    });
+    this.triggerRefresh();
+  }
+
+  triggerRefresh() {
+    this.refreshSig.update((n) => n + 1);
   }
 
   logout() {

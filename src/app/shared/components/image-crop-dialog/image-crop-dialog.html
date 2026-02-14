@@ -1,0 +1,51 @@
+<p-dialog
+  [header]="'profile.crop_image' | transloco"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '600px' }"
+  styleClass="lib-dialog"
+  (onHide)="close()"
+>
+  <div class="crop-container">
+    @if (isLoading()) {
+      <div class="loading-overlay">
+        <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+      </div>
+    }
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent()"
+      [maintainAspectRatio]="true"
+      [containWithinAspectRatio]="false"
+      [aspectRatio]="1"
+      [resizeToWidth]="1000"
+      [cropperMinWidth]="0"
+      [onlyScaleDown]="true"
+      [roundCropper]="false"
+      [canvasRotation]="0"
+      [transform]="{}"
+      [alignImage]="'center'"
+      [backgroundColor]="'transparent'"
+      [autoCrop]="true"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded($event)"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <lib-button variant="secondary" [label]="'common.cancel' | transloco" (click)="close()" />
+      <lib-button
+        variant="dark"
+        [label]="'common.save' | transloco"
+        (click)="save()"
+        [disabled]="!croppedBlob()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

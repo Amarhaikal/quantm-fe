@@ -78,9 +78,38 @@ body {
   @apply bg-blue-50/95! text-blue-700! border-l-4 border-blue-500!;
 }
 
-/* Profile Menu Padding */
+/* Profile Menu Styling */
 .profile-menu .p-menu-item-link {
   padding: 8px 12px !important;
+}
+
+.lib-profile-menu {
+  @apply rounded-xl shadow-xl border border-gray-100 overflow-hidden bg-white;
+}
+
+.lib-profile-menu .p-menu-item-link {
+  @apply px-4 py-3 text-sm transition-all flex items-center gap-3!;
+  color: #374151; /* text-gray-700 */
+}
+
+.lib-profile-menu .p-menu-item-link:hover {
+  @apply bg-gray-50 text-gray-900;
+}
+
+.lib-profile-menu .p-menu-item-icon {
+  @apply text-gray-500;
+}
+
+.lib-profile-menu .text-red-600 .p-menu-item-link {
+  @apply text-red-600;
+}
+
+.lib-profile-menu .text-red-600 .p-menu-item-link:hover {
+  @apply bg-red-50 text-red-700;
+}
+
+.lib-profile-menu .text-red-600 .p-menu-item-icon {
+  @apply text-red-500;
 }
 
 /* Sidemenu Drawer Customization */
@@ -166,6 +195,68 @@ body {
 }
 
 .p-confirmdialog .p-dialog-header-close {
+  @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
+  background: transparent !important;
+}
+
+/* Image Crop Dialog Styling */
+.lib-crop-dialog {
+  @apply shadow-2xl rounded-2xl border-none! overflow-hidden bg-white!;
+  background-color: white !important;
+}
+
+.lib-crop-dialog .p-dialog-header {
+  @apply px-3 py-3 flex items-center justify-between border-b border-gray-50! bg-white!;
+  background-color: white !important;
+}
+
+.lib-crop-dialog .p-dialog-title {
+  @apply font-bold text-xl text-gray-800;
+}
+
+.lib-crop-dialog .p-dialog-content {
+  @apply p-6 border-none! bg-white!;
+  background-color: white !important;
+}
+
+.lib-crop-dialog .p-dialog-footer {
+  @apply px-3 py-3 border-t border-gray-50! flex justify-end gap-3 bg-white! w-full;
+  display: flex !important;
+  background-color: white !important;
+}
+
+.lib-crop-dialog .p-dialog-header-close {
+  @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
+  background: transparent !important;
+}
+
+/* Generic Library Dialog Styling */
+.lib-dialog {
+  @apply shadow-2xl rounded-2xl border-none! overflow-hidden bg-white!;
+  background-color: white !important;
+}
+
+.lib-dialog .p-dialog-header {
+  @apply px-3 py-3 flex items-center justify-between border-b border-gray-50! bg-white!;
+  background-color: white !important;
+}
+
+.lib-dialog .p-dialog-title {
+  @apply font-bold text-xl text-gray-800;
+}
+
+.lib-dialog .p-dialog-content {
+  @apply p-6 border-none! bg-white!;
+  background-color: white !important;
+}
+
+.lib-dialog .p-dialog-footer {
+  @apply px-3 py-3 border-t border-gray-50! flex justify-end gap-3 bg-white! w-full;
+  display: flex !important;
+  background-color: white !important;
+}
+
+.lib-dialog .p-dialog-header-close {
   @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
   background: transparent !important;
 }

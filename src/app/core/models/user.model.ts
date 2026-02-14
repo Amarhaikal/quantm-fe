@@ -5,7 +5,7 @@ export interface UserMiniProfile {
   fullname: string;
   username: string;
   shortname: string;
-  profile_image_url: string;
+  profile_image_url: string | null;
 }
 
 export interface UserDetailed {
@@ -14,7 +14,7 @@ export interface UserDetailed {
   username: string;
   staff_id: string;
   shortname: string;
-  profile_image_url: string;
+  profile_image_url: string | null;
   email: string;
   phone_no: string;
   gender: SystemCodeReference;

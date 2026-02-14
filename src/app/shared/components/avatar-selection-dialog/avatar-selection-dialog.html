@@ -1,0 +1,41 @@
+<p-dialog
+  [header]="'profile.choose_avatar' | transloco"
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '500px' }"
+  styleClass="lib-dialog"
+  (onHide)="close()"
+>
+  <div class="flex flex-col gap-6">
+    <div class="grid grid-cols-4 gap-4 p-2">
+      @for (avatar of avatars; track avatar) {
+        <div
+          class="aspect-square rounded-full overflow-hidden cursor-pointer border-4 transition-all duration-200 hover:scale-105"
+          [class.border-primary]="selectedAvatar() === avatar"
+          [class.border-transparent]="selectedAvatar() !== avatar"
+          [class.ring-4]="selectedAvatar() === avatar"
+          [class.ring-primary-100]="selectedAvatar() === avatar"
+          (click)="selectAvatar(avatar)"
+        >
+          <img [src]="avatar" alt="Avatar" class="w-full h-full object-cover" />
+        </div>
+      }
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <lib-button variant="secondary" [label]="'common.cancel' | transloco" (click)="close()" />
+      <lib-button
+        variant="dark"
+        [label]="'common.save' | transloco"
+        (click)="save()"
+        [loading]="isLoading()"
+        [disabled]="!selectedAvatar()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

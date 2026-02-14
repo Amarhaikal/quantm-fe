@@ -39,32 +39,58 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <!-- Profile Photo (Row 1) -->
               <div class="md:col-span-2 flex flex-col items-center justify-center mb-6 py-4">
-                <div class="relative group cursor-pointer">
-                  @if (profileImageUrl()) {
-                    <img
-                      [src]="profileImageUrl()"
-                      alt="Profile photo"
-                      class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl transition-all duration-300 group-hover:scale-105"
-                    />
-                  } @else {
-                    <p-avatar
-                      icon="pi pi-user"
-                      size="xlarge"
-                      shape="circle"
-                      styleClass="w-32! h-32! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
-                    ></p-avatar>
-                  }
-                  <div
-                    class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]"
-                  >
-                    <div class="flex flex-col items-center gap-1">
-                      <i class="pi pi-camera text-white text-2xl"></i>
-                      <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
-                        'profile.change' | transloco
-                      }}</span>
+                <!-- Hidden file input -->
+                <input
+                  #fileInput
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                />
+
+                <div class="relative group cursor-pointer" (click)="menu.toggle($event)">
+                  @if (isUploadingPhoto()) {
+                    <div
+                      class="w-32 h-32 rounded-full border-4 border-white shadow-xl flex items-center justify-center bg-gray-100"
+                    >
+                      <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
                     </div>
-                  </div>
+                  } @else {
+                    @if (profileImageUrl()) {
+                      <img
+                        [src]="profileImageUrl()"
+                        alt="Profile photo"
+                        class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl transition-all duration-300 group-hover:scale-105"
+                      />
+                    } @else {
+                      <p-avatar
+                        icon="pi pi-user"
+                        size="xlarge"
+                        shape="circle"
+                        styleClass="w-32! h-32! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
+                      ></p-avatar>
+                    }
+                    <div
+                      class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]"
+                    >
+                      <div class="flex flex-col items-center gap-1">
+                        <i class="pi pi-pencil text-white text-2xl"></i>
+                        <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
+                          'profile.edit' | transloco
+                        }}</span>
+                      </div>
+                    </div>
+                  }
                 </div>
+
+                <p-menu
+                  #menu
+                  [model]="menuItems()"
+                  [popup]="true"
+                  appendTo="body"
+                  styleClass="lib-profile-menu"
+                />
+
                 <div class="text-center mt-4">
                   <h2 class="text-xl font-bold text-gray-900 leading-tight">
                     {{ originalData?.fullname || ('common.new_user' | transloco) }}
@@ -240,4 +266,10 @@
       </p-card>
     </div>
   </div>
+
+  <!-- Image Crop Dialog -->
+  <lib-image-crop-dialog #cropDialog (onSave)="onImageCropped($event)" />
+
+  <!-- Avatar Selection Dialog -->
+  <lib-avatar-selection-dialog #avatarDialog (onSelect)="onImageCropped($event)" />
 </div>

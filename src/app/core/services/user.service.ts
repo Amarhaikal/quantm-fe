@@ -21,4 +21,12 @@ export class UserService {
   updateUser(id: number, data: UserUpdateDto): Observable<ApiResponse<UserDetailed>> {
     return this.api.put<ApiResponse<UserDetailed>>(`user/${id}`, data);
   }
+
+  updateProfilePhoto(id: number, data: FormData): Observable<ApiResponse<any>> {
+    return this.api.put<ApiResponse<any>>(`user/${id}/photo`, data);
+  }
+
+  deleteProfilePhoto(id: number): Observable<ApiResponse<any>> {
+    return this.api.delete<ApiResponse<any>>(`user/${id}/photo`);
+  }
 }
