@@ -60,6 +60,9 @@
         "state": "State",
         "postcode": "Postcode",
         "country": "Country",
+        "department": "Department",
+        "designation": "Designation",
+        "remarks": "Remarks",
         "created_by": "Created By",
         "created_date": "Created Date",
         "created_at": "Created At",
@@ -79,7 +82,10 @@
             "city": "Enter your city",
             "state": "Select your state",
             "postcode": "Enter your postcode",
-            "country": "Select your country"
+            "country": "Select your country",
+            "department": "Select your department",
+            "designation": "Enter your designation",
+            "remarks": "Enter your remarks"
         }
     },
     "common": {

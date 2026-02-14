@@ -61,6 +61,9 @@
         "state": "Negeri",
         "postcode": "Poskod",
         "country": "Negara",
+        "department": "Jabatan",
+        "designation": "Jawatan",
+        "remarks": "Catatan",
         "created_by": "Dicipta Oleh",
         "created_date": "Dicipta Pada",
         "created_at": "Dicipta Pada",
@@ -79,7 +82,10 @@
             "city": "Masukkan bandar anda",
             "state": "Pilih negeri anda",
             "postcode": "Masukkan poskod anda",
-            "country": "Pilih negara anda"
+            "country": "Pilih negara anda",
+            "department": "Pilih jabatan anda",
+            "designation": "Masukkan jawatan anda",
+            "remarks": "Masukkan catatan anda"
         }
     },
     "common": {
