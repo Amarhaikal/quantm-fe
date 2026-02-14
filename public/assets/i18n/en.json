@@ -88,6 +88,10 @@
             "remarks": "Enter your remarks"
         }
     },
+    "option": {
+        "male": "Male",
+        "female": "Female"
+    },
     "common": {
         "new_user": "New User",
         "buttons": {

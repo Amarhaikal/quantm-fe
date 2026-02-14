@@ -25,7 +25,7 @@
           [for]="id() + '-' + option.value"
           class="text-sm text-gray-700 cursor-pointer select-none"
         >
-          {{ option.label | transloco }}
+          {{ 'option.' + option.label.toLowerCase() | transloco }}
         </label>
       </div>
     }

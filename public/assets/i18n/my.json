@@ -88,6 +88,10 @@
             "remarks": "Masukkan catatan anda"
         }
     },
+    "option": {
+        "male": "Lelaki",
+        "female": "Perempuan"
+    },
     "common": {
         "new_user": "Pengguna Baru",
         "buttons": {
