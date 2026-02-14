@@ -4,6 +4,7 @@ export const CODE_TYPES = {
   COUNTRY: 'CTRY',
   STATE: 'STT',
   GENDER: 'GNDR',
+  DEPARTMENT: 'DEPT',
 } as const;
 
 export type CodeTypeValue = (typeof CODE_TYPES)[keyof typeof CODE_TYPES];
