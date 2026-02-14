@@ -6,6 +6,7 @@ import {
   inject,
   ChangeDetectionStrategy,
   output,
+  computed,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -42,11 +43,23 @@ export class DropdownComponent implements ControlValueAccessor {
   showClear = input<boolean>(false);
   loading = input<boolean>(false);
 
+  // Support for non-form usage (read-only/one-way binding)
+  externalValue = input<any>(undefined, { alias: 'value' });
+  externalDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
+
   onChange = output<any>();
   onBlur = output<FocusEvent>();
 
-  value = signal<any>(null);
-  disabled = signal<boolean>(false);
+  private _value = signal<any>(null);
+  private _disabled = signal<boolean>(false);
+
+  // Use external input if provided, otherwise fallback to internal signal (from ControlValueAccessor)
+  protected displayValue = computed(() =>
+    this.externalValue() !== undefined ? this.externalValue() : this._value(),
+  );
+  protected displayDisabled = computed(
+    () => !!(this.externalDisabled() !== undefined ? this.externalDisabled() : this._disabled()),
+  );
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
@@ -62,7 +75,7 @@ export class DropdownComponent implements ControlValueAccessor {
   private onModelTouched: () => void = () => {};
 
   writeValue(value: any): void {
-    this.value.set(value);
+    this._value.set(value);
   }
 
   registerOnChange(fn: any): void {
@@ -74,11 +87,11 @@ export class DropdownComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this._disabled.set(isDisabled);
   }
 
   handleValueChange(value: any): void {
-    this.value.set(value);
+    this._value.set(value);
     this.onModelChange(value);
     this.onChange.emit(value);
   }

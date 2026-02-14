@@ -5,7 +5,9 @@ import {
   signal,
   OnInit,
   computed,
+  DestroyRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -62,6 +64,7 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
 })
 export class Profile extends BaseFormComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
   private userService = inject(UserService);
   private toastService = inject(ToastService);
   private authService = inject(AuthService);
@@ -153,7 +156,23 @@ export class Profile extends BaseFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setupFormListeners();
     this.loadProfile();
+  }
+
+  private setupFormListeners() {
+    this.profileForm
+      .get('country')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((countryCode) => {
+        const stateControl = this.profileForm.get('state');
+        if (countryCode && countryCode !== 'MY') {
+          stateControl?.setValue('');
+          stateControl?.disable({ emitEvent: false });
+        } else {
+          stateControl?.enable({ emitEvent: false });
+        }
+      });
   }
 
   loadProfile() {
@@ -220,8 +239,8 @@ export class Profile extends BaseFormComponent implements OnInit {
       address_line_2: address.address_line_2,
       city: address.city,
       postcode: address.postcode,
-      state: address.state.code,
-      country: address.country.code,
+      state: address.state?.code || '',
+      country: address.country?.code || '',
       created_by: created_by,
       created_at: this.dateService.formatAuditDate(created_at),
       updated_by: updated_by,
