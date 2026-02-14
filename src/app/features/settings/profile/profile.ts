@@ -33,6 +33,10 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { BaseFormComponent } from '../../../core/base/base-form.component';
 import { AuditInfoComponent } from '../../../shared/components/audit-info/audit-info';
 
+const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
+const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
+const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -101,6 +105,13 @@ export class Profile extends BaseFormComponent implements OnInit {
     }));
   });
 
+  departmentOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
+      value: department.code,
+      label: department.description,
+    }));
+  });
+
   userId: number | null = null;
   originalData: any = null;
 
@@ -120,6 +131,9 @@ export class Profile extends BaseFormComponent implements OnInit {
         '',
         [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(15)],
       ],
+      department: [{ value: '' }],
+      designation: ['', [Validators.maxLength(120)]],
+      remarks: ['', [Validators.maxLength(255)]],
       address_line_1: ['', [Validators.maxLength(255)]],
       address_line_2: ['', [Validators.maxLength(255)]],
       city: ['', [Validators.maxLength(120)]],
@@ -164,23 +178,22 @@ export class Profile extends BaseFormComponent implements OnInit {
     });
   }
 
-  private handleUserDataResponse(data: any) {
-    console.log('handleUserDataResponse data.phone_no', data.phone_no);
-
+  private mapApiDataToFormData(data: any) {
     const {
-      id,
       fullname,
       shortname,
       username,
       staff_id,
       role,
-      profile_image_url,
       id_no,
       address,
       email,
       phone_no,
       status: userStatus,
       gender,
+      department,
+      designation,
+      remarks,
       joined_dt,
       created_by,
       created_at,
@@ -188,9 +201,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       updated_at,
     } = data;
 
-    this.userId = id;
-
-    const formData = {
+    return {
       fullname,
       shortname,
       username,
@@ -199,6 +210,9 @@ export class Profile extends BaseFormComponent implements OnInit {
       email,
       phone_no: phone_no || '',
       gender: gender?.code || '',
+      department: department?.code || '',
+      designation,
+      remarks,
       role: role.code,
       status: userStatus.code,
       joined_dt,
@@ -213,20 +227,28 @@ export class Profile extends BaseFormComponent implements OnInit {
       updated_by: updated_by,
       updated_at: this.dateService.formatAuditDate(updated_at),
     };
+  }
 
+  private prepareDisplayData(formData: any, apiData: any) {
+    return {
+      ...formData,
+      role_label: apiData.role.description,
+      status_label: apiData.status.description,
+      gender_label: apiData.gender?.description || '',
+    };
+  }
+
+  private handleUserDataResponse(data: any) {
+    this.userId = data.id;
+
+    const formData = this.mapApiDataToFormData(data);
     this.profileForm.patchValue(formData);
     this.profileForm.markAsPristine();
-    console.log('profileForm Raw Value', this.profileForm.getRawValue());
-    this.originalData = {
-      ...formData,
-      role_label: role.description,
-      status_label: userStatus.description,
-      gender_label: gender?.description || '',
-    }; // Store a copy with labels for display
-    console.log('originalData', this.originalData);
 
-    if (profile_image_url) {
-      this.profileImageUrl.set(`${environment.apiUrl}${profile_image_url}`);
+    this.originalData = this.prepareDisplayData(formData, data);
+
+    if (data.profile_image_url) {
+      this.profileImageUrl.set(`${environment.apiUrl}${data.profile_image_url}`);
     }
   }
 
@@ -242,28 +264,20 @@ export class Profile extends BaseFormComponent implements OnInit {
     // Identify changed fields
     const currentValues = this.profileForm.getRawValue();
     const updateData: any = {};
-    const addressFields = [
-      'address_line_1',
-      'address_line_2',
-      'city',
-      'postcode',
-      'state',
-      'country',
-    ];
     let addressUpdated = false;
 
     Object.keys(currentValues).forEach((key) => {
       if (currentValues[key] !== this.originalData[key]) {
-        if (addressFields.includes(key)) {
+        if (ADDRESS_FIELDS.includes(key)) {
           if (!updateData.address) updateData.address = {};
 
-          if (key === 'state' || key === 'country') {
+          if (ADDRESS_REFERENCE_FIELDS.includes(key)) {
             updateData.address[key] = { code: currentValues[key] };
           } else {
             updateData.address[key] = currentValues[key];
           }
           addressUpdated = true;
-        } else if (['gender', 'role', 'status'].includes(key)) {
+        } else if (REFERENCE_FIELDS.includes(key)) {
           updateData[key] = { code: currentValues[key] };
         } else {
           updateData[key] = currentValues[key];

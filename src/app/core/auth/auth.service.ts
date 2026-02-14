@@ -56,6 +56,9 @@ export class AuthService {
             gender: { code: '', description: '' },
             status: { code: '', description: '' },
             joined_dt: '',
+            department: { code: '', description: '' },
+            designation: '',
+            remarks: '',
             address: {
               address_line_1: '',
               address_line_2: '',

@@ -249,6 +249,29 @@
                 [required]="true"
               />
 
+              <!-- Department -->
+              <lib-dropdown
+                label="label.department"
+                formControlName="department"
+                [options]="departmentOptions()"
+              />
+
+              <!-- Designation -->
+              <lib-textbox
+                label="label.designation"
+                formControlName="designation"
+                placeholder="label.placeholders.designation"
+                [maxLength]="120"
+              />
+
+              <!-- Remark -->
+              <lib-textbox
+                label="label.remarks"
+                formControlName="remarks"
+                placeholder="label.placeholders.remarks"
+                [maxLength]="255"
+              />
+
               <!-- Joined Date -->
               <lib-datepicker
                 label="label.joined_date"

@@ -21,6 +21,10 @@ export interface UserDetailed {
   role: SystemCodeReference;
   status: SystemCodeReference;
   id_no?: string;
+  joined_dt: string;
+  department: SystemCodeReference;
+  designation: string;
+  remarks: string;
   address: {
     address_line_1: string;
     address_line_2: string;
@@ -29,7 +33,6 @@ export interface UserDetailed {
     state: SystemCodeReference;
     country: SystemCodeReference;
   };
-  joined_dt: string;
   created_at: string;
   created_by: string;
   updated_at: string | null;
@@ -50,6 +53,9 @@ export interface UserUpdateDto {
   phone_no?: string;
   email?: string;
   joined_dt?: string;
+  department?: { code: string };
+  designation?: string;
+  s?: string;
   address?: {
     address_line_1?: string;
     address_line_2?: string;
