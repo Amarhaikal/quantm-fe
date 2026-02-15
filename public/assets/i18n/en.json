@@ -34,7 +34,8 @@
         "roles": "Roles",
         "system codes": "System Code",
         "logs": "Logs",
-        "logout": "Logout"
+        "logout": "Logout",
+        "appearance": "Appearance"
     },
     "profile": {
         "title": "My Profile",

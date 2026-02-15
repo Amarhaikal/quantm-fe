@@ -34,7 +34,8 @@
         "roles": "Peranan",
         "system codes": "Kod Sistem",
         "logs": "Log",
-        "logout": "Log Keluar"
+        "logout": "Log Keluar",
+        "appearance": "Penampilan"
     },
     "profile": {
         "title": "Profil Saya",
