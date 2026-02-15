@@ -139,5 +139,13 @@
             "accept": "Remove",
             "reject": "Cancel"
         }
+    },
+    "validation": {
+        "required": "This field is required",
+        "email": "Invalid email address",
+        "minlength": "Minimum length is {{requiredLength}} characters",
+        "maxlength": "Maximum length is {{requiredLength}} characters",
+        "invalidIdNo": "Invalid ID No.",
+        "username_taken": "This username is already taken"
     }
 }

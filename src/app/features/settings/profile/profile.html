@@ -116,8 +116,13 @@
                 [maxLength]="20"
               />
 
-              <!-- Username (Readonly) -->
-              <lib-textbox label="label.username" formControlName="username" />
+              <!-- Username -->
+              <lib-textbox
+                label="label.username"
+                formControlName="username"
+                [minlength]="5"
+                [maxLength]="20"
+              />
 
               <!-- Staff ID -->
               <lib-textbox label="label.staff_id" formControlName="staff_id" [maxLength]="10" />

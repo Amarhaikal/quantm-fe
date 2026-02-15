@@ -29,4 +29,8 @@ export class UserService {
   deleteProfilePhoto(id: number): Observable<ApiResponse<any>> {
     return this.api.delete<ApiResponse<any>>(`user/${id}/photo`);
   }
+
+  checkUsernameAvailability(username: string): Observable<ApiResponse<{ available: boolean }>> {
+    return this.api.get<ApiResponse<{ available: boolean }>>(`user/check-username/${username}`);
+  }
 }

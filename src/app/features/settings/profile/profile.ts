@@ -8,6 +8,7 @@ import {
   DestroyRef,
   viewChild,
   ElementRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -31,7 +32,7 @@ import { CodeTypeService } from '../../../core/services/code-type.service';
 import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
-import { catchError, map, Observable, tap, filter, startWith } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { DatePickerComponent } from '../../../shared/components/datepicker/datepicker';
 import { RadioButtonComponent } from '../../../shared/components/radiobutton/radiobutton';
 import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
@@ -82,6 +83,7 @@ export class Profile extends BaseFormComponent implements OnInit {
   private confirmService = inject(ConfirmService);
   private dateService = inject(DateService);
   private translocoService = inject(TranslocoService);
+  private cdr = inject(ChangeDetectorRef);
 
   profileForm: FormGroup;
   isLoading = signal<boolean>(true);
@@ -169,18 +171,18 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.profileForm = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
       shortname: ['', [Validators.maxLength(20)]],
-      username: [{ value: '', disabled: true }],
+      username: ['', [Validators.minLength(5), Validators.maxLength(20)]],
       staff_id: ['', [Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
-      gender: [{ value: '', validators: [Validators.required] }],
-      role: [{ value: '', validators: [Validators.required] }],
-      status: [{ value: '', validators: [Validators.required] }],
+      gender: ['', [Validators.required]],
+      role: ['', [Validators.required]],
+      status: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone_no: [
         '',
         [Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(15)],
       ],
-      department: [{ value: '' }],
+      department: [''],
       designation: ['', [Validators.maxLength(120)]],
       remarks: ['', [Validators.maxLength(255)]],
       address_line_1: ['', [Validators.maxLength(255)]],
@@ -203,11 +205,11 @@ export class Profile extends BaseFormComponent implements OnInit {
 
   ngOnInit() {
     this.authService.triggerRefresh();
-    this.setupFormListeners();
-    this.loadProfile();
+    this.formOnChanges();
+    this.initFacade();
   }
 
-  private setupFormListeners() {
+  private formOnChanges() {
     this.profileForm
       .get('country')
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
@@ -220,9 +222,58 @@ export class Profile extends BaseFormComponent implements OnInit {
           stateControl?.enable({ emitEvent: false });
         }
       });
+
+    this.profileForm
+      .get('username')
+      ?.valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((username) => {
+        const currentUser = this.authService.currentUser();
+
+        // Skip check if username is empty or same as current
+        if (
+          !username ||
+          username.length < 5 ||
+          (currentUser && username === currentUser.username)
+        ) {
+          const errors = this.profileForm.get('username')?.errors;
+          if (errors) {
+            delete errors['notAvailable'];
+            this.profileForm.get('username')?.setErrors(Object.keys(errors).length ? errors : null);
+          }
+          return;
+        }
+
+        this.userService.checkUsernameAvailability(username).subscribe({
+          next: (response: ApiResponse<{ available: boolean }>) => {
+            if (response.status === 200) {
+              if (response.data && response.data.available === false) {
+                const control = this.profileForm.get('username');
+                control?.setErrors({ notAvailable: true }, { emitEvent: true });
+                control?.markAsDirty();
+                control?.markAsTouched();
+              } else {
+                const errors = this.profileForm.get('username')?.errors;
+                if (errors && errors['notAvailable']) {
+                  delete errors['notAvailable'];
+                  this.profileForm
+                    .get('username')
+                    ?.setErrors(Object.keys(errors).length ? errors : null);
+                }
+              }
+            }
+          },
+          error: (err: any) => {
+            this.toastService.error('Error', 'Failed to check username availability');
+          },
+        });
+      });
   }
 
-  loadProfile() {
+  initFacade() {
     const username = this.authService.currentUser()?.username;
     if (!username) {
       this.toastService.error('Error', 'User session not found');
@@ -282,12 +333,12 @@ export class Profile extends BaseFormComponent implements OnInit {
       role: role.code,
       status: userStatus.code,
       joined_dt,
-      address_line_1: address.address_line_1,
-      address_line_2: address.address_line_2,
-      city: address.city,
-      postcode: address.postcode,
-      state: address.state?.code || '',
-      country: address.country?.code || '',
+      address_line_1: address?.address_line_1 || '',
+      address_line_2: address?.address_line_2 || '',
+      city: address?.city || '',
+      postcode: address?.postcode || '',
+      state: address?.state?.code || '',
+      country: address?.country?.code || '',
       created_by: created_by,
       created_at: this.dateService.formatAuditDate(created_at),
       updated_by: updated_by,

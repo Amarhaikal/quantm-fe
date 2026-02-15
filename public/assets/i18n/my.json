@@ -139,5 +139,13 @@
             "accept": "Buang",
             "reject": "Batal"
         }
+    },
+    "validation": {
+        "required": "Bidang ini diperlukan",
+        "email": "Alamat emel tidak sah",
+        "minlength": "Panjang minimum ialah {{requiredLength}} aksara",
+        "maxlength": "Panjang maksimum ialah {{requiredLength}} aksara",
+        "invalidIdNo": "No. ID tidak sah",
+        "username_taken": "Nama pengguna ini telah diambil"
     }
 }

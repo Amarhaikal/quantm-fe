@@ -1,9 +1,20 @@
-import { Component, input, signal, inject, ChangeDetectionStrategy, computed } from '@angular/core';
+import {
+  Component,
+  input,
+  signal,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { Subscription } from 'rxjs';
 
 export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO';
 
@@ -22,7 +33,7 @@ export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO';
   styleUrl: './textbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextboxComponent implements ControlValueAccessor {
+export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy {
   label = input<string>('');
   required = input<boolean>(false);
   placeholder = input<string>('');
@@ -46,14 +57,57 @@ export class TextboxComponent implements ControlValueAccessor {
   protected displayDisabled = computed(
     () => !!(this.externalDisabled() !== undefined ? this.externalDisabled() : this._disabled()),
   );
+  protected isFocused = signal<boolean>(false);
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
+  private cdr = inject(ChangeDetectorRef);
+
+  // Signal to track control state changes
+  private controlState = signal<number>(0);
+  private statusSub?: Subscription;
+
+  protected errors = computed(() => {
+    this.controlState(); // Dependency
+    return this.ngControl?.control?.errors || null;
+  });
+
+  protected showError = computed(() => {
+    this.controlState(); // Dependency
+    const focused = this.isFocused();
+    const control = this.ngControl?.control;
+
+    if (!control) return false;
+
+    // Special case: Always show 'notAvailable' error immediately
+    if (control.hasError('notAvailable')) {
+      return true;
+    }
+
+    return !!(control.invalid && (control.dirty || control.touched || focused));
+  });
 
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  ngOnInit() {
+    // Wait for the next tick to ensure control is bound
+    setTimeout(() => {
+      const control = this.ngControl?.control;
+      if (control) {
+        this.statusSub = control.statusChanges.subscribe(() => {
+          this.controlState.update((n) => n + 1);
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.statusSub?.unsubscribe();
   }
 
   // ControlValueAccessor methods
@@ -80,7 +134,6 @@ export class TextboxComponent implements ControlValueAccessor {
     let val = event.target ? event.target.value : event.value ? event.value : event;
     const max = this.maxLength();
 
-    // Logic: allow up to max + 1 characters
     if (max !== undefined && val.length > max + 1) {
       val = val.substring(0, max + 1);
       if (event.target) {
@@ -93,12 +146,17 @@ export class TextboxComponent implements ControlValueAccessor {
   }
 
   handleBlur(): void {
+    this.isFocused.set(false);
     this.onTouched();
     this.trimValueIfExceeds();
+    this.ngControl?.control?.markAsTouched();
+    this.cdr.detectChanges();
   }
 
   handleFocus(): void {
+    this.isFocused.set(true);
     this.trimValueIfExceeds();
+    this.cdr.detectChanges();
   }
 
   private trimValueIfExceeds(): void {
