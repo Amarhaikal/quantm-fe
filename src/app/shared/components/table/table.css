@@ -1,0 +1,31 @@
+@reference "../../../../styles.css";
+
+:host {
+  display: block;
+}
+
+.table-container {
+  @apply rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: var(--primary-color) !important;
+  @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none!;
+}
+
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  @apply text-sm py-4 px-6 border-b border-gray-50 text-gray-700;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child > td {
+  @apply border-b-0;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
+  @apply bg-indigo-50/30 text-indigo-700;
+}
+
+:host ::ng-deep .p-datatable-hoverable-rows .p-datatable-tbody > tr:hover {
+  @apply bg-gray-50 transition-colors duration-150;
+}

@@ -1,0 +1,41 @@
+<div class="table-container">
+  <p-table
+    [value]="data()"
+    [columns]="columns()"
+    [loading]="loading()"
+    [rowHover]="rowHover()"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    styleClass="p-datatable-sm p-datatable-striped"
+  >
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.field) {
+          <th [style.width]="col.width">
+            {{ col.header | transloco }}
+          </th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-rowData let-columns="columns">
+      <tr (click)="onRowSelect.emit(rowData)">
+        @for (col of columns; track col.field) {
+          <td>
+            {{ rowData[col.field] }}
+          </td>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="columns().length" class="text-center p-8">
+          <div class="flex flex-col items-center gap-2 text-gray-400">
+            <i class="pi pi-inbox text-3xl"></i>
+            <span>{{ 'common.no_data_found' | transloco }}</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
