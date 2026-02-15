@@ -158,6 +158,25 @@ body {
   @apply w-full text-sm rounded-lg border-gray-200! px-3 py-2;
 }
 
+/* Global DatePicker Centering Fix */
+.p-datepicker-panel,
+.p-datepicker-panel * {
+  margin: initial !important;
+}
+
+.p-datepicker-panel .p-datepicker-day,
+.p-datepicker-panel .p-datepicker-weekday {
+  margin: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.p-datepicker-panel td,
+.p-datepicker-panel th {
+  text-align: center !important;
+}
+
 /* Global ConfirmDialog Styling */
 .p-confirmdialog.p-dialog {
   @apply shadow-2xl rounded-2xl border-none! overflow-hidden bg-white!;
