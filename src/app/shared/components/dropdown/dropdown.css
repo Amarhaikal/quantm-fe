@@ -20,3 +20,16 @@
 :host ::ng-deep .p-select .p-select-trigger {
   @apply w-10 text-gray-400;
 }
+
+/* Dropdown Panel - Filtering Styling */
+::ng-deep .lib-dropdown-panel .p-select-header {
+  @apply p-2 border-b border-gray-100;
+}
+
+::ng-deep .lib-dropdown-panel .p-select-filter {
+  @apply w-full h-9! text-sm! px-3! rounded-lg! border! border-gray-300! focus:ring-2! focus:ring-indigo-500/20! focus:border-indigo-500! transition-all! shadow-none!;
+}
+
+::ng-deep .lib-dropdown-panel .p-inputicon {
+  top: 10px !important;
+}

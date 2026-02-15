@@ -40,7 +40,7 @@ export class DropdownComponent implements ControlValueAccessor {
   hint = input<string>('');
   id = input<string>(`dd-${Math.random().toString(36).substring(2, 11)}`);
   filter = input<boolean>(true);
-  showClear = input<boolean>(false);
+  showClear = input<boolean>(true);
   loading = input<boolean>(false);
 
   // Support for non-form usage (read-only/one-way binding)
