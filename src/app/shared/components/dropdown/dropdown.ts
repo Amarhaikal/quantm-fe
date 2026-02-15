@@ -39,9 +39,13 @@ export class DropdownComponent implements ControlValueAccessor {
   placeholder = input<string>('');
   hint = input<string>('');
   id = input<string>(`dd-${Math.random().toString(36).substring(2, 11)}`);
-  filter = input<boolean>(true);
-  showClear = input<boolean>(true);
+  filter = true;
   loading = input<boolean>(false);
+  isFocused = signal(false);
+  isOpen = signal(false);
+
+  // Show clear button when focused or when the panel is open
+  protected shouldShowClear = computed(() => this.isFocused() || this.isOpen());
 
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<any>(undefined, { alias: 'value' });
@@ -96,8 +100,24 @@ export class DropdownComponent implements ControlValueAccessor {
     this.onChange.emit(value);
   }
 
+  handleFocus(): void {
+    this.isFocused.set(true);
+  }
+
   handleBlur(event: any): void {
+    // Delay hiding the clear button to allow click events to process
+    setTimeout(() => {
+      this.isFocused.set(false);
+    }, 200);
     this.onModelTouched();
     this.onBlur.emit(event);
+  }
+
+  handleShow(): void {
+    this.isOpen.set(true);
+  }
+
+  handleHide(): void {
+    this.isOpen.set(false);
   }
 }
