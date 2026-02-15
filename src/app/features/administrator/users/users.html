@@ -1,1 +1,35 @@
-<p>users works!</p>
+<div class="w-full px-4 md:px-0">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ 'users.title' | transloco }}</h1>
+  </div>
+
+  <div class="w-full bg-white p-4 rounded-2xl border border-gray-200 shadow-sm mb-6">
+    <form
+      [formGroup]="searchForm"
+      class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-[1fr_1fr_1fr_auto] items-end gap-4"
+    >
+      <lib-textbox
+        formControlName="username"
+        [label]="'label.username' | transloco"
+        [placeholder]="'label.placeholders.username' | transloco"
+      />
+
+      <lib-textbox
+        formControlName="fullName"
+        [label]="'label.full_name' | transloco"
+        [placeholder]="'label.placeholders.full_name' | transloco"
+      />
+
+      <lib-dropdown
+        formControlName="role"
+        [label]="'label.role' | transloco"
+        [options]="roles"
+        [placeholder]="'label.placeholders.role' | transloco"
+      />
+
+      <div class="flex shrink-0">
+        <lib-button type="RESET" (click)="resetSearch()" />
+      </div>
+    </form>
+  </div>
+</div>

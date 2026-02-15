@@ -1,4 +1,4 @@
-<button [type]="htmlType()" [class]="baseClass()" [disabled]="disabled() || loading()">
+<button [type]="finalHtmlType()" [class]="baseClass()" [disabled]="disabled() || loading()">
   @if (finalIcon() && iconPos() === 'left') {
     <i [class]="finalIcon()"></i>
   }

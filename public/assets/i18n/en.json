@@ -39,7 +39,6 @@
     },
     "profile": {
         "title": "My Profile",
-        "subtitle": "Manage your account settings and personal information",
         "change": "Change",
         "edit": "Edit",
         "choose_avatar": "Choose Avatar",
@@ -53,6 +52,9 @@
         "photo_remove_success": "Profile photo removed successfully",
         "photo_upload_error": "Failed to upload profile photo",
         "photo_remove_error": "Failed to remove profile photo"
+    },
+    "users": {
+        "title": "Users"
     },
     "label": {
         "full_name": "Full Name",
@@ -82,21 +84,23 @@
         "updated_at": "Updated At",
         "phone_no": "Phone Number",
         "placeholders": {
-            "full_name": "Enter your full name",
-            "short_name": "Enter your short name",
-            "staff_id": "Enter your staff ID",
+            "full_name": "Enter full name",
+            "short_name": "Enter short name",
+            "staff_id": "Enter staff ID",
             "id_no": "000000-00-0000",
-            "email": "Enter your email",
-            "phone_no": "Enter your phone number",
+            "email": "Enter email",
+            "phone_no": "Enter phone number",
             "joined_date": "Select joined date",
-            "address": "Enter your address",
-            "city": "Enter your city",
-            "state": "Select your state",
-            "postcode": "Enter your postcode",
-            "country": "Select your country",
-            "department": "Select your department",
-            "designation": "Enter your designation",
-            "remarks": "Enter your remarks"
+            "address": "Enter address",
+            "city": "Enter city",
+            "state": "Select state",
+            "postcode": "Enter postcode",
+            "country": "Select country",
+            "department": "Select department",
+            "designation": "Enter designation",
+            "remarks": "Enter remarks",
+            "username": "Enter username",
+            "role": "Select role"
         }
     },
     "option": {

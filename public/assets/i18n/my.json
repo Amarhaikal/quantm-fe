@@ -39,7 +39,6 @@
     },
     "profile": {
         "title": "Profil Saya",
-        "subtitle": "Urus tetapan akaun dan maklumat peribadi anda",
         "change": "Tukar",
         "edit": "Kemaskini",
         "choose_avatar": "Pilih Avatar",
@@ -53,6 +52,9 @@
         "photo_remove_success": "Foto profil berjaya dibuang",
         "photo_upload_error": "Gagal memuat naik foto profil",
         "photo_remove_error": "Gagal membuang foto profil"
+    },
+    "users": {
+        "title": "Pengguna"
     },
     "label": {
         "full_name": "Nama Penuh",
@@ -82,21 +84,23 @@
         "updated_date": "Dikemaskini Pada",
         "updated_at": "Dikemaskini Pada",
         "placeholders": {
-            "full_name": "Masukkan nama penuh anda",
-            "short_name": "Masukkan nama pendek anda",
-            "staff_id": "Masukkan no. staf anda",
+            "full_name": "Masukkan nama penuh",
+            "short_name": "Masukkan nama pendek",
+            "staff_id": "Masukkan no. staf",
             "id_no": "000000-00-0000",
-            "email": "Masukkan emel anda",
-            "phone_no": "Masukkan nombor telefon anda",
+            "email": "Masukkan emel",
+            "phone_no": "Masukkan nombor telefon",
             "joined_date": "Pilih tarikh menyertai",
-            "address": "Masukkan alamat anda",
-            "city": "Masukkan bandar anda",
-            "state": "Pilih negeri anda",
-            "postcode": "Masukkan poskod anda",
-            "country": "Pilih negara anda",
-            "department": "Pilih jabatan anda",
-            "designation": "Masukkan jawatan anda",
-            "remarks": "Masukkan catatan anda"
+            "address": "Masukkan alamat",
+            "city": "Masukkan bandar",
+            "state": "Pilih negeri",
+            "postcode": "Masukkan poskod",
+            "country": "Pilih negara",
+            "department": "Pilih jabatan",
+            "designation": "Masukkan jawatan",
+            "remarks": "Masukkan catatan",
+            "username": "Masukkan nama pengguna",
+            "role": "Pilih peranan"
         }
     },
     "option": {

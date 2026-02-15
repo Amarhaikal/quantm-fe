@@ -77,31 +77,17 @@ export class ButtonComponent {
   });
 
   finalVariant = computed((): ButtonVariant => {
-    // If variant is manually set to something other than default 'primary', respect it
-    // BUT we need to know if the user *explicitly* set it or if it's just the default.
-    // simpler approach: if type is set, use type defaults unless variant is *explicitly* passed?
-    // Angular signals don't easily tell us "was this input set by user".
-    // So we will prioritize the `type` defaults if `type` is present, unless we change the default of variant to undefined.
-
-    // Let's assume if the user passes `type`, they want that style, unless they *also* pass `variant`?
-    // Actually, the `variant` input has a default of 'primary'.
-    // Let's rely on the `type` logic first.
-
     const t = this.type();
-    // logic: if user explicitly provided a variant in template, we might want to respect it
-    // but we can't easily detect "user provided".
-
-    // Proposed logic:
-    // If `type` is defined:
-    //   CANCEL -> secondary (default)
-    //   Others -> primary (default)
-    // But how to allow override?
-    // Maybe we just say: type sets the defaults for label/icon, but variant is independent?
-    // The implementation plan said: "CANCEL: variant='secondary'".
+    // If the variant is explicitly set to something other than primary, respect it
+    if (this.variant() !== 'primary') return this.variant();
 
     if (t === 'CANCEL' || t === 'RESET') return 'secondary';
-
     return this.variant();
+  });
+
+  finalHtmlType = computed((): ButtonHtmlType => {
+    if (this.type() === 'RESET') return 'reset';
+    return this.htmlType();
   });
 
   baseClass = computed(() => {
