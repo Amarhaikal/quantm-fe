@@ -1,8 +1,17 @@
-import { Component, input, signal, inject, ChangeDetectionStrategy, output } from '@angular/core';
+import {
+  Component,
+  input,
+  signal,
+  inject,
+  ChangeDetectionStrategy,
+  output,
+  computed,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
 
 export interface OptionRadio {
   value: string;
@@ -18,18 +27,37 @@ export interface OptionRadio {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioButtonComponent implements ControlValueAccessor {
+  private appearanceService = inject(AppearanceService);
+
   label = input<string>('');
   required = input<boolean>(false);
   options = input<OptionRadio[]>([]);
   id = input<string>(`rb-${Math.random().toString(36).substring(2, 11)}`);
   name = input<string>(`group-${Math.random().toString(36).substring(2, 11)}`);
   hint = input<string>('');
+  labelPosition = input<LabelPosition | undefined>(undefined);
+
+  /**
+   * Effective label position based on explicit property or global appearance setting.
+   */
+  effectiveLabelPosition = computed(
+    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
+  );
+
+  isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
   onChange = output<any>();
   onBlur = output<FocusEvent>();
 
   value = signal<any>(null);
-  disabled = signal<boolean>(false);
+  private _disabled = signal<boolean>(false);
+
+  /**
+   * Effective disabled state based on explicit property or form control state.
+   */
+  effectiveDisabled = computed(
+    () => !!(this.isDisabled() !== undefined ? this.isDisabled() : this._disabled()),
+  );
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
@@ -57,7 +85,7 @@ export class RadioButtonComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this._disabled.set(isDisabled);
   }
 
   handleValueChange(value: any): void {

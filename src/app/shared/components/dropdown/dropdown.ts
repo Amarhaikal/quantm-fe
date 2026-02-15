@@ -18,6 +18,7 @@ import {
 import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
 
 export interface OptionDropdown {
   value: string;
@@ -33,6 +34,8 @@ export interface OptionDropdown {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent implements ControlValueAccessor {
+  private appearanceService = inject(AppearanceService);
+
   label = input<string>('');
   required = input<boolean>(false);
   options = input<OptionDropdown[]>([]);
@@ -47,9 +50,18 @@ export class DropdownComponent implements ControlValueAccessor {
   // Show clear button when focused or when the panel is open
   protected shouldShowClear = computed(() => this.isFocused() || this.isOpen());
 
+  labelPosition = input<LabelPosition | undefined>(undefined);
+
+  /**
+   * Effective label position based on explicit property or global appearance setting.
+   */
+  effectiveLabelPosition = computed(
+    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
+  );
+
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<any>(undefined, { alias: 'value' });
-  externalDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
+  isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
   onChange = output<any>();
   onBlur = output<FocusEvent>();
@@ -61,8 +73,8 @@ export class DropdownComponent implements ControlValueAccessor {
   protected displayValue = computed(() =>
     this.externalValue() !== undefined ? this.externalValue() : this._value(),
   );
-  protected displayDisabled = computed(
-    () => !!(this.externalDisabled() !== undefined ? this.externalDisabled() : this._disabled()),
+  protected effectiveDisabled = computed(
+    () => !!(this.isDisabled() !== undefined ? this.isDisabled() : this._disabled()),
   );
 
   // Inject NgControl to access validation state

@@ -25,11 +25,14 @@ options: OptionRadio[] = [
 
 ## 🛠 Features
 
+- **Appearance Logic**: Consumes `AppearanceService` for global label positioning.
+- **Custom Theming**: Active state uses `indigo`, while the entire control turns `gray` when disabled.
+- **Standardized Disabled State**: Correctly handles both manual `[disabled]` attributes and `FormControl` disabled states.
 - **Standardized Options**: Uses `OptionRadio` interface for consistent data structure.
 - **Reactive Forms Integration**: Supports `formControlName` and `formControl` via `ControlValueAccessor`.
 - **Signals Powered**: Uses the latest Angular signal-based inputs.
 - **Accessibility (A11y)**: Automatically handles label-to-input associations and ARIA attributes via PrimeNG.
-- **Validation Support**: Automatically reflects valid/invalid states (e.g., `required`) from the parent `FormControl`.
+- **Validation Support**: Automatically reflects valid/invalid states from the parent `FormControl`.
 
 ## ⚙️ API
 
@@ -44,14 +47,16 @@ export interface OptionRadio {
 
 ### Inputs
 
-| Property   | Type                   | Default          | Description                                           |
-| :--------- | :--------------------- | :--------------- | :---------------------------------------------------- |
-| `label`    | `input<string>`        | `''`             | Text displayed above the radio button group.          |
-| `options`  | `input<OptionRadio[]>` | `[]`             | Array of options to display.                          |
-| `required` | `input<boolean>`       | `false`          | Whether the field is required (for visual indicator). |
-| `id`       | `input<string>`        | _Auto-generated_ | Unique base identifier for labels and inputs.         |
-| `name`     | `input<string>`        | _Auto-generated_ | The name attribute for the group of radio buttons.    |
-| `hint`     | `input<string>`        | `''`             | Helper/Hint text displayed below the field.           |
+| Property        | Type                   | Default          | Description                                           |
+| :-------------- | :--------------------- | :--------------- | :---------------------------------------------------- |
+| `label`         | `input<string>`        | `''`             | Key for translation (e.g., `label.gender`).           |
+| `options`       | `input<OptionRadio[]>` | `[]`             | Array of options to display.                          |
+| `required`      | `input<boolean>`       | `false`          | Whether the field is required (for visual indicator). |
+| `id`            | `input<string>`        | _Auto-generated_ | Unique base identifier for labels and inputs.         |
+| `name`          | `input<string>`        | _Auto-generated_ | The name attribute for the group.                     |
+| `hint`          | `input<string>`        | `''`             | Helper/Hint text displayed below the field.           |
+| `labelPosition` | `'left' \| 'top'`      | _Global Default_ | Override the default label positioning.               |
+| `disabled`      | `input<boolean>`       | `false`          | Manually toggle the disabled state.                   |
 
 ### Outputs
 

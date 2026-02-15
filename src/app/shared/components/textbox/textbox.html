@@ -1,6 +1,16 @@
-<div class="flex flex-col gap-2 w-full">
+<div
+  class="flex gap-2 w-full"
+  [class.flex-col]="effectiveLabelPosition() === 'top'"
+  [class.flex-row]="effectiveLabelPosition() === 'left'"
+  [class.items-start]="effectiveLabelPosition() === 'left'"
+>
   @if (label()) {
-    <label [for]="id()" class="text-sm font-medium text-gray-600 select-none">
+    <label
+      [for]="id()"
+      class="text-sm font-medium text-gray-600 select-none"
+      [class.w-1/3]="effectiveLabelPosition() === 'left'"
+      [class.pt-2]="effectiveLabelPosition() === 'left'"
+    >
       {{ label() | transloco }}
       @if (required()) {
         <span class="text-red-500 ml-0.5">*</span>
@@ -8,103 +18,116 @@
     </label>
   }
 
-  <span [class.p-input-icon-left]="icon()" class="w-full relative block">
-    @if (icon()) {
-      <i [class]="icon()" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10"></i>
-    }
-    @if (type() === 'IDNO') {
-      <p-inputMask
-        [id]="id()"
-        mask="999999-99-9999"
-        [ngModel]="displayValue()"
-        (ngModelChange)="handleInput($event)"
-        (onBlur)="handleBlur()"
-        (onFocus)="handleFocus()"
-        [placeholder]="(placeholder() | transloco) || '000000-00-0000'"
-        [disabled]="displayDisabled()"
-        styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
-        [class.pl-9]="icon()"
-        [class.bg-gray-50]="displayDisabled()"
-        [class.ng-invalid]="showError()"
-        [class.ng-dirty]="ngControl?.dirty"
-      ></p-inputMask>
-    } @else if (type() === 'PHONENO') {
-      <p-inputMask
-        [id]="id()"
-        mask="999-999 9999?9"
-        [unmask]="true"
-        [autoClear]="false"
-        [ngModel]="displayValue()"
-        (ngModelChange)="handleInput($event)"
-        (onBlur)="handleBlur()"
-        (onFocus)="handleFocus()"
-        [placeholder]="(placeholder() | transloco) || '01x-xxxx xxxx'"
-        [disabled]="displayDisabled()"
-        styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
-        [class.pl-9]="icon()"
-        [class.bg-gray-50]="displayDisabled()"
-        [class.ng-invalid]="showError()"
-        [class.ng-dirty]="ngControl?.dirty"
-      ></p-inputMask>
-    } @else {
-      <input
-        pInputText
-        [id]="id()"
-        [type]="type()"
-        [placeholder]="placeholder() | transloco"
-        [value]="displayValue()"
-        [disabled]="displayDisabled()"
-        (input)="handleInput($event)"
-        (blur)="handleBlur()"
-        (focus)="handleFocus()"
-        class="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm px-3"
-        [class.pl-9]="icon()"
-        [class.bg-gray-50]="displayDisabled()"
-        [class.ng-invalid]="showError()"
-        [class.ng-dirty]="ngControl?.dirty"
-      />
-    }
-  </span>
+  <div
+    class="flex flex-col gap-2"
+    [class.flex-1]="effectiveLabelPosition() === 'left'"
+    [class.w-full]="effectiveLabelPosition() === 'top'"
+  >
+    <span [class.p-input-icon-left]="icon()" class="w-full relative block">
+      @if (icon()) {
+        <i [class]="icon()" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10"></i>
+      }
+      @if (type() === 'IDNO') {
+        <p-inputMask
+          [id]="id()"
+          mask="999999-99-9999"
+          [ngModel]="displayValue()"
+          (ngModelChange)="handleInput($event)"
+          (onBlur)="handleBlur()"
+          (onFocus)="handleFocus()"
+          [placeholder]="(placeholder() | transloco) || '000000-00-0000'"
+          [disabled]="effectiveDisabled()"
+          styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm! px-3"
+          [class.pl-9]="icon()"
+          [class.bg-gray-100!]="effectiveDisabled()"
+          [class.text-gray-800!]="effectiveDisabled()"
+          [class.ng-invalid]="showError()"
+          [class.ng-dirty]="ngControl?.dirty"
+        ></p-inputMask>
+      } @else if (type() === 'PHONENO') {
+        <p-inputMask
+          [id]="id()"
+          mask="999-999 9999?9"
+          [unmask]="true"
+          [autoClear]="false"
+          [ngModel]="displayValue()"
+          (ngModelChange)="handleInput($event)"
+          (onBlur)="handleBlur()"
+          (onFocus)="handleFocus()"
+          [placeholder]="(placeholder() | transloco) || '01x-xxxx xxxx'"
+          [disabled]="effectiveDisabled()"
+          styleClass="w-full rounded-lg! border border-gray-300! focus:ring-indigo-500! focus:border-indigo-500! h-9 transition-all text-sm! px-3"
+          [class.pl-9]="icon()"
+          [class.bg-gray-100!]="effectiveDisabled()"
+          [class.text-gray-800!]="effectiveDisabled()"
+          [class.ng-invalid]="showError()"
+          [class.ng-dirty]="ngControl?.dirty"
+        ></p-inputMask>
+      } @else {
+        <input
+          pInputText
+          [id]="id()"
+          [type]="type() === 'PHONENO' ? 'text' : type()"
+          [placeholder]="placeholder() | transloco"
+          [ngModel]="displayValue()"
+          (ngModelChange)="handleInput($event)"
+          [disabled]="effectiveDisabled()"
+          (focus)="effectiveDisabled() ? null : handleFocus()"
+          (blur)="handleBlur()"
+          class="w-full h-9 rounded-lg! border border-gray-300! pr-10 hover:border-indigo-400! transition-colors shadow-none! px-3 text-sm!"
+          [class.pl-10]="icon()"
+          [class.ng-invalid]="showError()"
+          [class.border-red-500]="showError()"
+          [class.border-red-500!]="showError()"
+          [class.bg-gray-100!]="effectiveDisabled()"
+          [class.text-gray-500!]="effectiveDisabled()"
+          [class.cursor-not-allowed]="effectiveDisabled()"
+        />
+      }
+    </span>
 
-  @if (showError()) {
-    <div class="flex flex-col gap-1">
-      @if (errors()?.['required']) {
-        <small class="text-red-500 text-xs ml-1">{{ 'validation.required' | transloco }}</small>
-      }
-      @if (errors()?.['email']) {
-        <small class="text-red-500 text-xs ml-1">{{ 'validation.email' | transloco }}</small>
-      }
-      @if (errors()?.['minlength']) {
-        <small class="text-red-500 text-xs ml-1">
-          {{
-            'validation.minlength'
-              | transloco: { requiredLength: errors()?.['minlength'].requiredLength }
-          }}
-        </small>
-      }
-      @if (errors()?.['maxlength']) {
-        <small class="text-red-500 text-xs ml-1">
-          {{
-            'validation.maxlength'
-              | transloco: { requiredLength: errors()?.['maxlength'].requiredLength }
-          }}
-        </small>
-      }
-      @if (errors()?.['invalidIdNo']) {
-        <small class="text-red-500 text-xs ml-1">{{ 'validation.invalidIdNo' | transloco }}</small>
-      }
-      @if (errors()?.['notAvailable']) {
-        <small class="text-red-500 text-xs ml-1">{{
-          'validation.username_taken' | transloco
-        }}</small>
-      }
-      @if (errors()?.['pattern']) {
-        <small class="text-red-500 text-xs ml-1">{{ patternErrorKey() | transloco }}</small>
-      }
-    </div>
-  } @else if (hint()) {
-    <small [id]="id() + '-help'" class="text-gray-400 text-xs ml-1">
-      {{ hint() }}
-    </small>
-  }
+    @if (showError()) {
+      <div class="flex flex-col gap-1">
+        @if (errors()?.['required']) {
+          <small class="text-red-500 text-xs ml-1">{{ 'validation.required' | transloco }}</small>
+        }
+        @if (errors()?.['email']) {
+          <small class="text-red-500 text-xs ml-1">{{ 'validation.email' | transloco }}</small>
+        }
+        @if (errors()?.['minlength']) {
+          <small class="text-red-500 text-xs ml-1">
+            {{
+              'validation.minlength'
+                | transloco: { requiredLength: errors()?.['minlength'].requiredLength }
+            }}
+          </small>
+        }
+        @if (errors()?.['maxlength']) {
+          <small class="text-red-500 text-xs ml-1">
+            {{
+              'validation.maxlength'
+                | transloco: { requiredLength: errors()?.['maxlength'].requiredLength }
+            }}
+          </small>
+        }
+        @if (errors()?.['invalidIdNo']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.invalidIdNo' | transloco
+          }}</small>
+        }
+        @if (errors()?.['notAvailable']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.username_taken' | transloco
+          }}</small>
+        }
+        @if (errors()?.['pattern']) {
+          <small class="text-red-500 text-xs ml-1">{{ patternErrorKey() | transloco }}</small>
+        }
+      </div>
+    } @else if (hint()) {
+      <small [id]="id() + '-help'" class="text-gray-400 text-xs ml-1">
+        {{ hint() }}
+      </small>
+    }
+  </div>
 </div>

@@ -8,22 +8,32 @@ A highly reusable and accessible textbox component built with **Angular v20+**, 
 
 ## 🚀 Usage
 
-The Textbox component is designed to be used inside a `FormGroup`. You do not need manual value bindings; simply use `formControlName`. Labels are **top-aligned** by default for better scanning and mobile support.
+The Textbox component is designed to be used inside a `FormGroup`. It automatically handles translations for labels and placeholders.
+
+### Global Appearance
+
+By default, the component follows the global settings in `AppearanceService`. You can override the label position per-component if needed.
 
 ```html
 <form [formGroup]="form">
+  <!-- Default (Standardized via AppearanceService) -->
   <lib-textbox
-    label="Username"
+    label="label.username"
     formControlName="username"
-    placeholder="Enter your username"
-    hint="Enter your username to reset your password."
-    icon="pi pi-user"
+    placeholder="placeholder.enter_username"
   />
+
+  <!-- Explicit Override -->
+  <lib-textbox label="label.email" formControlName="email" labelPosition="top" />
 </form>
 ```
 
 ## 🛠 Features
 
+- **Appearance Logic**: Consumes `AppearanceService` for global label positioning (`left` vs `top`).
+- **Standardized Disabled State**: Correctly handles both manual `[disabled]` attributes and `FormControl` disabled states.
+- **Darker Value Contrast**: Disabled text is set to `gray-500` on a `gray-100` background for better readability.
+- **Typography**: Optimized to a consistent 14px (`text-sm`) for both labels and input values.
 - **Reactive Forms Integration**: Supports `formControlName` and `formControl` via `ControlValueAccessor`.
 - **Signals Powered**: Uses the latest Angular signal-based inputs and outputs.
 - **Accessibility (A11y)**: Automatically handles label-to-input associations and ARIA attributes.
@@ -33,14 +43,16 @@ The Textbox component is designed to be used inside a `FormGroup`. You do not ne
 
 ### Inputs
 
-| Property      | Type                | Default          | Description                                            |
-| :------------ | :------------------ | :--------------- | :----------------------------------------------------- |
-| `label`       | `input<string>`     | `''`             | Text displayed above the input field.                  |
-| `placeholder` | `input<string>`     | `''`             | Help text displayed inside the field when empty.       |
-| `hint`        | `input<string>`     | `''`             | Helper/Hint text displayed below the field.            |
-| `type`        | `'text' \| 'email'` | `'text'`         | HTML input type (restricted to supported types).       |
-| `id`          | `input<string>`     | _Auto-generated_ | Unique identifier for the input and label association. |
-| `icon`        | `input<string>`     | `''`             | PrimeNG icon class (e.g., `pi pi-search`).             |
+| Property        | Type                    | Default          | Description                                            |
+| :-------------- | :---------------------- | :--------------- | :----------------------------------------------------- |
+| `label`         | `input<string>`         | `''`             | Key for translation (e.g., `label.username`).          |
+| `placeholder`   | `input<string>`         | `''`             | Key for translation.                                   |
+| `hint`          | `input<string>`         | `''`             | Helper/Hint text displayed below the field.            |
+| `type`          | `'text' \| 'email'` etc | `'text'`         | HTML input type. Supports `IDNO` and `PHONENO` masks.  |
+| `id`            | `input<string>`         | _Auto-generated_ | Unique identifier for the input and label association. |
+| `icon`          | `input<string>`         | `''`             | PrimeNG icon class (e.g., `pi pi-search`).             |
+| `labelPosition` | `'left' \| 'top'`       | _Global Default_ | Override the default label positioning.                |
+| `disabled`      | `input<boolean>`        | `false`          | Manually toggle the disabled state.                    |
 
 ### Outputs
 

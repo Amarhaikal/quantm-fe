@@ -15,6 +15,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
+import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
 
 export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO';
 
@@ -34,6 +35,8 @@ export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy {
+  private appearanceService = inject(AppearanceService);
+
   label = input<string>('');
   required = input<boolean>(false);
   placeholder = input<string>('');
@@ -43,10 +46,18 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   icon = input<string>('');
   maxLength = input<number | undefined>(undefined);
   patternErrorKey = input<string>('validation.pattern_error');
+  labelPosition = input<LabelPosition | undefined>(undefined);
+
+  /**
+   * Effective label position based on explicit property or global appearance setting.
+   */
+  effectiveLabelPosition = computed(
+    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
+  );
 
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<string | null | undefined>(undefined, { alias: 'value' });
-  externalDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
+  isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
   private _value = signal<string>('');
   private _disabled = signal<boolean>(false);
@@ -55,8 +66,8 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   protected displayValue = computed(
     () => (this.externalValue() !== undefined ? this.externalValue() : this._value()) || '',
   );
-  protected displayDisabled = computed(
-    () => !!(this.externalDisabled() !== undefined ? this.externalDisabled() : this._disabled()),
+  protected effectiveDisabled = computed(
+    () => !!(this.isDisabled() !== undefined ? this.isDisabled() : this._disabled()),
   );
   protected isFocused = signal<boolean>(false);
 

@@ -18,6 +18,15 @@
   @apply border-indigo-800! bg-indigo-700!;
 }
 
+/* Disabled state */
+:host ::ng-deep .p-radiobutton.p-disabled .p-radiobutton-box {
+  @apply border-gray-300! bg-gray-100! opacity-60;
+}
+
+:host ::ng-deep .p-radiobutton.p-radiobutton-checked.p-disabled .p-radiobutton-box {
+  @apply border-gray-400! bg-gray-400!;
+}
+
 :host ::ng-deep .p-radiobutton .p-radiobutton-box.p-focus {
   @apply ring-2 ring-indigo-500/20 border-indigo-600!;
 }

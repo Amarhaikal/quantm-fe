@@ -5,11 +5,13 @@ import {
   inject,
   ChangeDetectionStrategy,
   viewChild,
+  computed,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
 
 @Component({
   selector: 'lib-datepicker',
@@ -20,6 +22,8 @@ import { TranslocoPipe } from '@ngneat/transloco';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatePickerComponent implements ControlValueAccessor {
+  private appearanceService = inject(AppearanceService);
+
   label = input<string>('');
   required = input<boolean>(false);
   placeholder = input<string>('');
@@ -29,9 +33,26 @@ export class DatePickerComponent implements ControlValueAccessor {
   hourFormat = input<'12' | '24'>('24');
   dateFormat = input<string>('dd/mm/yy'); // PrimeNG format
   showIcon = input<boolean>(true);
+  labelPosition = input<LabelPosition | undefined>(undefined);
+
+  /**
+   * Effective label position based on explicit property or global appearance setting.
+   */
+  effectiveLabelPosition = computed(
+    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
+  );
+
+  isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
   value = signal<Date | null>(null);
-  disabled = signal<boolean>(false);
+  private _disabled = signal<boolean>(false);
+
+  /**
+   * Effective disabled state based on explicit property or form control state.
+   */
+  effectiveDisabled = computed(
+    () => !!(this.isDisabled() !== undefined ? this.isDisabled() : this._disabled()),
+  );
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
@@ -65,7 +86,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this._disabled.set(isDisabled);
   }
 
   handleValueChange(date: Date | null): void {

@@ -195,7 +195,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       ],
       staff_id: ['', [Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
-      gender: ['', [Validators.required]],
+      gender: ['', { disabled: true }],
       role: ['', [Validators.required]],
       status: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
