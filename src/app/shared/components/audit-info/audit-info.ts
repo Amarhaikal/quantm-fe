@@ -1,6 +1,7 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoService } from '@ngneat/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TextboxComponent } from '../textbox/textbox';
 
 export interface AuditData {
@@ -13,10 +14,14 @@ export interface AuditData {
 @Component({
   selector: 'lib-audit-info',
   standalone: true,
-  imports: [CommonModule, TranslocoPipe, TextboxComponent],
+  imports: [CommonModule, TextboxComponent],
   templateUrl: './audit-info.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuditInfoComponent {
+  private translocoService = inject(TranslocoService);
   data = input<AuditData | null>(null);
+
+  // Guard to ensure translations are loaded before rendering
+  protected translationsLoaded = toSignal(this.translocoService.selectTranslation());
 }

@@ -95,7 +95,9 @@ export class HeaderComponent {
   private translationLoaded = toSignal(this.translocoService.selectTranslation());
 
   menuItems = computed<MenuItem[]>(() => {
-    this.translationLoaded(); // Depend on translations being ready
+    const translations = this.translationLoaded();
+    if (!translations) return [];
+
     return [
       {
         label: this.translocoService.translate('sidemenu.profile'),
