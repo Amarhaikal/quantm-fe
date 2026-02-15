@@ -17,6 +17,10 @@
   @apply text-sm px-3 flex items-center h-full text-gray-700;
 }
 
+:host ::ng-deep .p-select .p-select-label.p-placeholder {
+  @apply text-gray-500;
+}
+
 :host ::ng-deep .p-select .p-select-trigger {
   @apply w-10 text-gray-400;
 }
