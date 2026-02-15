@@ -42,6 +42,7 @@ import { ImageCropDialog } from '../../../shared/components/image-crop-dialog/im
 import { AvatarSelectionDialog } from '../../../shared/components/avatar-selection-dialog/avatar-selection-dialog';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { ScrollTopModule } from 'primeng/scrolltop';
 
 const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
@@ -68,10 +69,14 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     ImageCropDialog,
     AvatarSelectionDialog,
     MenuModule,
+    ScrollTopModule,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:scroll)': 'onWindowScroll()',
+  },
 })
 export class Profile extends BaseFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -93,6 +98,7 @@ export class Profile extends BaseFormComponent implements OnInit {
   fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   cropDialog = viewChild<ImageCropDialog>('cropDialog');
   avatarDialog = viewChild<AvatarSelectionDialog>('avatarDialog');
+  showScrollDown = signal<boolean>(true);
 
   // This signal updates only when the translation dictionary is actually loaded
   private translationLoaded = toSignal(this.translocoService.selectTranslation());
@@ -310,7 +316,7 @@ export class Profile extends BaseFormComponent implements OnInit {
     });
   }
 
-  private mapApiDataToFormData(data: any) {
+  private patchForm(data: any) {
     const {
       fullname,
       shortname,
@@ -373,7 +379,7 @@ export class Profile extends BaseFormComponent implements OnInit {
   private handleUserDataResponse(data: any) {
     this.userId = data.id;
 
-    const formData = this.mapApiDataToFormData(data);
+    const formData = this.patchForm(data);
     this.profileForm.patchValue(formData);
     this.profileForm.markAsPristine();
 
@@ -550,5 +556,18 @@ export class Profile extends BaseFormComponent implements OnInit {
 
   private getTranslation(key: string): string {
     return this.translocoService.translate(key);
+  }
+
+  onWindowScroll() {
+    const scrollPosition =
+      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.showScrollDown.set(scrollPosition < 200);
+  }
+
+  scrollToBottom() {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 }

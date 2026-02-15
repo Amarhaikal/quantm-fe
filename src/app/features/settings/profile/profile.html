@@ -280,4 +280,17 @@
 
   <!-- Avatar Selection Dialog -->
   <lib-avatar-selection-dialog #avatarDialog (onSelect)="onImageCropped($event)" />
+
+  <!-- Scroll Top/Down Buttons -->
+  <p-scrollTop threshold="200" icon="pi pi-chevron-up" />
+  @if (showScrollDown()) {
+    <button
+      type="button"
+      class="scroll-down-btn shadow-lg"
+      (click)="scrollToBottom()"
+      aria-label="Scroll to bottom"
+    >
+      <i class="pi pi-chevron-down"></i>
+    </button>
+  }
 </div>
