@@ -38,7 +38,7 @@
           } @else {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <!-- Profile Photo (Row 1) -->
-              <div class="md:col-span-2 flex flex-col items-center justify-center mb-6 py-4">
+              <div class="md:col-span-2 flex flex-col items-center justify-center mb-2 py-2">
                 <!-- Hidden file input -->
                 <input
                   #fileInput
@@ -172,12 +172,7 @@
               />
 
               <!-- Status -->
-              <lib-dropdown
-                label="label.status"
-                formControlName="status"
-                [options]="statusOptions()"
-                [required]="true"
-              />
+              <lib-textbox label="label.status" formControlName="status" [disabled]="true" />
 
               <!-- Department -->
               <lib-dropdown

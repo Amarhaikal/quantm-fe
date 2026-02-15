@@ -2,8 +2,8 @@
 ::ng-deep .p-scrolltop {
   position: fixed !important;
   right: 2rem !important;
-  width: 3.5rem !important;
-  height: 3.5rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
 }
 
 .scroll-down-btn {
@@ -11,7 +11,7 @@
 }
 
 ::ng-deep .p-scrolltop {
-  bottom: 6rem !important;
+  bottom: 5.5rem !important;
 }
 
 .scroll-down-btn,
@@ -43,5 +43,5 @@
 
 /* Hide default PrimeNG background if any */
 ::ng-deep .p-scrolltop {
-  min-width: 3.5rem !important;
+  min-width: 2.5rem !important;
 }

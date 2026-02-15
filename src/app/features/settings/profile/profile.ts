@@ -155,13 +155,6 @@ export class Profile extends BaseFormComponent implements OnInit {
     }));
   });
 
-  statusOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_STATUS).map((status) => ({
-      value: status.code,
-      label: status.description,
-    }));
-  });
-
   departmentOptions = computed<OptionDropdown[]>(() => {
     return this.codeTypeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
       value: department.code,
@@ -197,7 +190,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: ['', { disabled: true }],
       role: ['', [Validators.required]],
-      status: ['', [Validators.required]],
+      status: ['', { disabled: true }],
       email: ['', [Validators.required, Validators.email]],
       phone_no: [
         '',
@@ -352,7 +345,7 @@ export class Profile extends BaseFormComponent implements OnInit {
       designation,
       remarks,
       role: role.code,
-      status: userStatus.code,
+      status: userStatus.description,
       joined_dt,
       address_line_1: address?.address_line_1 || '',
       address_line_2: address?.address_line_2 || '',
