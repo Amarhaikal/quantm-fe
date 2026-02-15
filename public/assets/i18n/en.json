@@ -62,7 +62,7 @@
         "username": "Username",
         "staff_id": "Staff ID",
         "id_no": "ID No.",
-        "email": "Email address",
+        "email": "Email",
         "gender": "Gender",
         "joined_date": "Joined Date",
         "role": "Role",
@@ -111,6 +111,7 @@
         "new_user": "New User",
         "cancel": "Cancel",
         "save": "Save",
+        "no_data_found": "No data found.",
         "buttons": {
             "cancel": "Cancel",
             "save": "Save",

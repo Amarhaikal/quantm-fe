@@ -30,6 +30,10 @@ export class UserService {
     return this.api.delete<ApiResponse<any>>(`user/${id}/photo`);
   }
 
+  getUsers(params: any): Observable<ApiResponse<any>> {
+    return this.api.get<ApiResponse<any>>('user/list', params);
+  }
+
   checkUsernameAvailability(username: string): Observable<ApiResponse<{ available: boolean }>> {
     return this.api.get<ApiResponse<{ available: boolean }>>(`user/check-username/${username}`);
   }

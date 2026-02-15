@@ -10,21 +10,21 @@
     >
       <lib-textbox
         formControlName="username"
-        [label]="'label.username' | transloco"
-        [placeholder]="'label.placeholders.username' | transloco"
+        label="label.username"
+        placeholder="label.placeholders.username"
       />
 
       <lib-textbox
-        formControlName="fullName"
-        [label]="'label.full_name' | transloco"
-        [placeholder]="'label.placeholders.full_name' | transloco"
+        formControlName="fullname"
+        label="label.full_name"
+        placeholder="label.placeholders.full_name"
       />
 
       <lib-dropdown
         formControlName="role"
-        [label]="'label.role' | transloco"
-        [options]="roles"
-        [placeholder]="'label.placeholders.role' | transloco"
+        label="label.role"
+        [options]="rolesOptions()"
+        placeholder="label.placeholders.role"
       />
 
       <div class="flex shrink-0">
@@ -32,4 +32,6 @@
       </div>
     </form>
   </div>
+
+  <lib-table [data]="users()" [columns]="searchColumns" [loading]="loading()" />
 </div>

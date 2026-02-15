@@ -62,7 +62,7 @@
         "username": "Nama Pengguna",
         "staff_id": "No. Staf",
         "id_no": "No. ID",
-        "email": "Alamat Emel",
+        "email": "Emel",
         "gender": "Jantina",
         "joined_date": "Tarikh Menyertai",
         "role": "Peranan",
@@ -111,6 +111,7 @@
         "new_user": "Pengguna Baru",
         "cancel": "Batal",
         "save": "Simpan",
+        "no_data_found": "Tiada data dijumpai.",
         "buttons": {
             "cancel": "Batal",
             "save": "Simpan",

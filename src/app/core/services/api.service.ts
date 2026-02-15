@@ -10,8 +10,11 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/api`;
 
-  get<T>(endpoint: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { withCredentials: true });
+  get<T>(endpoint: string, params?: any): Observable<T> {
+    return this.http.get<T>(`${this.baseUrl}/${endpoint}`, {
+      params,
+      withCredentials: true,
+    });
   }
 
   post<T>(endpoint: string, body: any): Observable<T> {
