@@ -18,6 +18,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
       },
+      {
+        path: 'admin',
+        loadChildren: () =>
+          import('./features/administrator/administrator.routes').then(
+            (m) => m.ADMINISTRATOR_ROUTES,
+          ),
+      },
     ],
   },
   {
