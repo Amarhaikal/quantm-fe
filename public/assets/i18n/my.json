@@ -146,6 +146,9 @@
         "minlength": "Panjang minimum ialah {{requiredLength}} aksara",
         "maxlength": "Panjang maksimum ialah {{requiredLength}} aksara",
         "invalidIdNo": "No. ID tidak sah",
-        "username_taken": "Nama pengguna ini telah diambil"
+        "username_taken": "Nama pengguna ini telah diambil",
+        "username_pattern": "Nama pengguna hanya boleh mengandungi huruf, nombor, titik, garis bawah dan sempang",
+        "name_pattern": "Nama hanya boleh mengandungi huruf, ruang, titik, sempang, dan petikan tunggal",
+        "pattern_error": "Format tidak sah"
     }
 }

@@ -42,6 +42,7 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   id = input<string>(`txt-${Math.random().toString(36).substring(2, 11)}`);
   icon = input<string>('');
   maxLength = input<number | undefined>(undefined);
+  patternErrorKey = input<string>('validation.pattern_error');
 
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<string | null | undefined>(undefined, { alias: 'value' });

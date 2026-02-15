@@ -1,7 +1,7 @@
 {
     "login": {
-        "title": "Login to Quantm-LMS",
-        "welcome": "Welcome Back! Enter your credentials to access your dashboard",
+        "title": "Welcome to Quantm-LMS",
+        "welcome": "Welcome Back to Loan Management System",
         "username": "Username or Email",
         "password": "Password",
         "submit": "Login",
@@ -146,6 +146,9 @@
         "minlength": "Minimum length is {{requiredLength}} characters",
         "maxlength": "Maximum length is {{requiredLength}} characters",
         "invalidIdNo": "Invalid ID No.",
-        "username_taken": "This username is already taken"
+        "username_taken": "This username is already taken",
+        "username_pattern": "Username can only contain letters, numbers, dots, underscores, and hyphens",
+        "name_pattern": "Name can only contain letters, spaces, dots, hyphens, and single quotes",
+        "pattern_error": "Invalid format"
     }
 }

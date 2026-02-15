@@ -98,6 +98,9 @@
           'validation.username_taken' | transloco
         }}</small>
       }
+      @if (errors()?.['pattern']) {
+        <small class="text-red-500 text-xs ml-1">{{ patternErrorKey() | transloco }}</small>
+      }
     </div>
   } @else if (hint()) {
     <small [id]="id() + '-help'" class="text-gray-400 text-xs ml-1">

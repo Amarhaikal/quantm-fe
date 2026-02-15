@@ -106,6 +106,7 @@
                 placeholder="label.placeholders.full_name"
                 [required]="true"
                 [maxLength]="80"
+                patternErrorKey="validation.name_pattern"
               />
 
               <!-- Short Name (Row 2, Col 2) -->
@@ -114,6 +115,7 @@
                 formControlName="shortname"
                 placeholder="label.placeholders.short_name"
                 [maxLength]="20"
+                patternErrorKey="validation.name_pattern"
               />
 
               <!-- Username -->
@@ -122,6 +124,7 @@
                 formControlName="username"
                 [minlength]="5"
                 [maxLength]="20"
+                patternErrorKey="validation.username_pattern"
               />
 
               <!-- Staff ID -->

@@ -169,9 +169,24 @@ export class Profile extends BaseFormComponent implements OnInit {
   constructor() {
     super();
     this.profileForm = this.fb.group({
-      fullname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
-      shortname: ['', [Validators.maxLength(20)]],
-      username: ['', [Validators.minLength(5), Validators.maxLength(20)]],
+      fullname: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(80),
+          Validators.pattern(/^[a-zA-Z\s'. -]+$/),
+        ],
+      ],
+      shortname: ['', [Validators.maxLength(20), Validators.pattern(/^[a-zA-Z\s'. -]+$/)]],
+      username: [
+        '',
+        [
+          Validators.minLength(5),
+          Validators.maxLength(20),
+          Validators.pattern(/^[a-zA-Z0-9._-]+$/),
+        ],
+      ],
       staff_id: ['', [Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: ['', [Validators.required]],
