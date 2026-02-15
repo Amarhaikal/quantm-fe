@@ -9,7 +9,16 @@
 :root {
   font-family: 'Inter', sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+
+  /* Theme Colors */
+  --primary-color: #191c32;
+  --secondary-color: #4f46e5; /* indigo-600 */
+
+  /* PrimeNG Variable Mappings */
+  --p-datepicker-date-selected-background: var(--secondary-color);
+  --p-datepicker-date-selected-color: #ffffff;
 }
+
 
 body {
   font-family: var(--font-sans);
@@ -164,6 +173,11 @@ body {
   margin: initial !important;
 }
 
+.p-datepicker-panel {
+  padding-bottom: 1rem !important;
+}
+
+
 .p-datepicker-panel .p-datepicker-day,
 .p-datepicker-panel .p-datepicker-weekday {
   margin: auto !important;
@@ -175,6 +189,23 @@ body {
 .p-datepicker-panel td,
 .p-datepicker-panel th {
   text-align: center !important;
+}
+
+.p-datepicker-header {
+  @apply border-b border-gray-300 pb-2 mb-4!;
+}
+
+.p-datepicker table[data-pc-section="table"] {
+  margin-top: 1rem !important;
+}
+
+.p-datepicker-day-selected {
+  background: var(--p-datepicker-date-selected-background) !important;
+  color: var(--p-datepicker-date-selected-color) !important;
+}
+
+.p-datepicker-day:not(.p-datepicker-day-selected):not(.p-disabled):hover {
+  background: rgba(79, 70, 229, 0.1) !important; /* light indigo-600 hover */
 }
 
 /* Global ConfirmDialog Styling */
