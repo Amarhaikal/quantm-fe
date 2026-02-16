@@ -15,6 +15,7 @@ import { Drawer, DrawerModule } from 'primeng/drawer';
 import { RippleModule } from 'primeng/ripple';
 import { NgOptimizedImage, CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MenuService } from '../../../core/services/menu.service';
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
@@ -33,6 +34,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    TooltipModule,
     TranslocoPipe,
   ],
   templateUrl: './sidemenu.html',
@@ -78,6 +80,26 @@ export class Sidemenu implements OnInit {
   expandedItems = signal<Set<number>>(new Set());
 
   profileImageUrl = this.authService.profileImageUrl;
+
+  isSidebarExpanded = computed(() => this.menuService.isSidebarVisible());
+  isMini = computed(() => this.menuService.isDesktop() && !this.menuService.isSidebarVisible());
+
+  miniMenuItems = computed(() => {
+    const flattened: any[] = [];
+    this.menuData().forEach((item) => {
+      if (item.url) {
+        flattened.push(item);
+      }
+      if (item.childs && item.childs.length > 0) {
+        item.childs.forEach((child: any) => {
+          if (child.url) {
+            flattened.push(child);
+          }
+        });
+      }
+    });
+    return flattened;
+  });
 
   ngOnInit() {
     this.menuService.getMenu().subscribe({

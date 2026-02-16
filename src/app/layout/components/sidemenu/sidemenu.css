@@ -2,7 +2,21 @@
 :host ::ng-deep [data-pc-section="root"] {
     border: none !important;
     background: #171A31 !important;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+:host ::ng-deep .sidemenu-expanded .p-drawer,
+:host ::ng-deep .sidemenu-expanded[data-pc-section="root"] {
     width: 300px !important;
+}
+
+:host ::ng-deep .sidemenu-mini .p-drawer,
+:host ::ng-deep .sidemenu-mini[data-pc-section="root"] {
+    width: 80px !important;
+}
+
+:host ::ng-deep .p-drawer-content {
+    overflow-x: hidden !important;
 }
 
 .submenu-hidden {
@@ -14,3 +28,4 @@
     height: auto;
     overflow: visible;
 }
+

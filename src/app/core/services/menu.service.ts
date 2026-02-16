@@ -10,16 +10,19 @@ export class MenuService {
   private api = inject(ApiService);
 
   isSidebarVisible = signal<boolean>(true);
+  isDesktop = signal<boolean>(true);
 
   constructor() {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(max-width: 1300px)');
 
       // Set initial state based on current window width
+      this.isDesktop.set(!mediaQuery.matches);
       this.isSidebarVisible.set(!mediaQuery.matches);
 
       // Add listener for changes
       mediaQuery.addEventListener('change', (e) => {
+        this.isDesktop.set(!e.matches);
         this.isSidebarVisible.set(!e.matches);
       });
     }

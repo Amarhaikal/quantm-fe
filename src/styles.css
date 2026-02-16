@@ -325,3 +325,15 @@ body {
 .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
   @apply bg-gray-50 text-gray-900;
 }
+
+/* Global Tooltip Customization */
+.p-tooltip .p-tooltip-text {
+  @apply bg-gray-800 text-white rounded-lg shadow-lg;
+  padding: 0.5rem 0.75rem !important; /* p-2 equivalent */
+  font-size: 0.8125rem !important;
+  line-height: 1.25rem !important;
+}
+
+.p-tooltip-right .p-tooltip-arrow {
+  border-right-color: #1f2937 !important; /* gray-800 */
+}
