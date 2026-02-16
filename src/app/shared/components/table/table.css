@@ -42,6 +42,16 @@
   @apply w-8 h-8 min-w-8!;
 }
 
+/* Disabled state styling */
+:host ::ng-deep .p-paginator button.p-disabled {
+  @apply text-gray-300! opacity-60!;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .p-paginator button.p-disabled svg {
+  @apply text-gray-300!;
+}
+
 /* Reduce icons size */
 :host ::ng-deep .p-paginator .p-paginator-icon {
   @apply text-xs!;
