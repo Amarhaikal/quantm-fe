@@ -7,7 +7,11 @@ import { of } from 'rxjs';
 export const pendingChangesGuard: CanDeactivateFn<HasUnsavedChanges> = (component) => {
   const confirmService = inject(ConfirmService);
 
-  if (component.hasUnsavedChanges()) {
+  if (
+    component &&
+    typeof component.hasUnsavedChanges === 'function' &&
+    component.hasUnsavedChanges()
+  ) {
     return confirmService.confirmDiscardChanges();
   }
 

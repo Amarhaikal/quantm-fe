@@ -10,7 +10,6 @@ export const ADMINISTRATOR_ROUTES: Routes = [
   {
     path: 'users',
     loadComponent: () => import('./users/users').then((m) => m.Users),
-    canDeactivate: [pendingChangesGuard],
   },
   {
     path: 'users/add',
