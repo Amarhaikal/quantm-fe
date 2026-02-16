@@ -40,113 +40,144 @@
       <!-- Menu Items Section -->
       <div class="overflow-y-auto px-4 py-4 mt-4 flex-1">
         <ul class="list-none p-0 m-0">
-          @if (isMini()) {
-            <!-- Mini Menu Mode: Icons Only with Tooltips -->
-            @for (item of miniMenuItems(); track item.id) {
-              <li class="mb-2 flex justify-center">
-                <a
-                  pRipple
-                  [routerLink]="item.url"
-                  routerLinkActive="!bg-white/10 !text-indigo-400"
-                  [pTooltip]="'sidemenu.' + item.name.toLowerCase() | transloco"
-                  tooltipPosition="right"
-                  class="flex items-center justify-center cursor-pointer p-3 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple w-12 h-12"
-                >
-                  <i
-                    [class]="
-                      'pi pi-' +
-                      (item.icon === 'person'
-                        ? 'user'
-                        : item.icon === 'group'
-                          ? 'users'
-                          : item.icon === 'terminal'
-                            ? 'code'
-                            : item.icon === 'settings'
-                              ? 'cog'
-                              : item.icon === 'admin_panel_settings'
-                                ? 'shield'
-                                : item.icon)
-                    "
-                    class="text-xl"
-                  ></i>
-                </a>
-              </li>
+          @if (isLoading()) {
+            @if (isMini()) {
+              <!-- Mini Skeleton -->
+              @for (i of [1, 2, 3, 4, 5]; track i) {
+                <li class="mb-2 flex justify-center">
+                  <p-skeleton
+                    width="3rem"
+                    height="3rem"
+                    borderRadius="8px"
+                    styleClass="sidemenu-skeleton"
+                  />
+                </li>
+              }
+            } @else {
+              <!-- Full Skeleton -->
+              @for (i of [1, 2, 3, 4, 5]; track i) {
+                <li class="mb-4">
+                  <div class="p-3 flex items-center gap-3">
+                    <p-skeleton
+                      width="1.5rem"
+                      height="1.5rem"
+                      borderRadius="4px"
+                      styleClass="sidemenu-skeleton"
+                    />
+                    <p-skeleton width="70%" height="1.25rem" styleClass="sidemenu-skeleton" />
+                  </div>
+                </li>
+              }
             }
           } @else {
-            <!-- Full Menu Mode -->
-            @for (item of menuData(); track item.id) {
-              <li>
-                @if (item.childs && item.childs.length > 0) {
-                  <div
-                    pRipple
-                    (click)="toggleItem(item.id, $event)"
-                    class="p-3 flex items-center justify-between text-white/70 cursor-pointer p-ripple hover:bg-white/5 rounded-lg transition-colors duration-200"
-                  >
-                    <div class="flex items-center gap-3">
-                      <i
-                        [class]="
-                          'pi pi-' +
-                          (item.icon === 'settings'
-                            ? 'cog'
-                            : item.icon === 'admin_panel_settings'
-                              ? 'shield'
-                              : item.icon)
-                        "
-                      ></i>
-                      <span class="font-medium">{{
-                        'sidemenu.' + item.name.toLowerCase() | transloco
-                      }}</span>
-                    </div>
-                    <i
-                      class="pi pi-chevron-down text-xs transition-transform duration-300"
-                      [class.rotate-180]="isExpanded(item.id)"
-                    ></i>
-                  </div>
-                  <ul
-                    class="list-none p-0 m-0 pl-4 overflow-hidden"
-                    [@expandCollapse]="isExpanded(item.id) ? 'expanded' : 'collapsed'"
-                  >
-                    @for (child of item.childs; track child.id) {
-                      <li>
-                        <a
-                          pRipple
-                          [routerLink]="child.url"
-                          routerLinkActive="!bg-white/10 !text-indigo-400"
-                          class="flex items-center cursor-pointer p-2 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
-                        >
-                          <i
-                            [class]="
-                              'pi pi-' +
-                              (child.icon === 'person'
-                                ? 'user'
-                                : child.icon === 'group'
-                                  ? 'users'
-                                  : child.icon === 'terminal'
-                                    ? 'code'
-                                    : child.icon)
-                            "
-                          ></i>
-                          <span class="font-medium">{{
-                            'sidemenu.' + child.name.toLowerCase() | transloco
-                          }}</span>
-                        </a>
-                      </li>
-                    }
-                  </ul>
-                } @else {
+            @if (isMini()) {
+              <!-- Mini Menu Mode: Icons Only with Tooltips -->
+              @for (item of miniMenuItems(); track item.id) {
+                <li class="mb-2 flex justify-center">
                   <a
                     pRipple
                     [routerLink]="item.url"
                     routerLinkActive="!bg-white/10 !text-indigo-400"
-                    class="flex items-center cursor-pointer p-4 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
+                    [pTooltip]="'sidemenu.' + item.name.toLowerCase() | transloco"
+                    tooltipPosition="right"
+                    class="flex items-center justify-center cursor-pointer p-3 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple w-12 h-12"
                   >
-                    <i [class]="'pi pi-' + item.icon"></i>
-                    <span class="font-medium">{{
-                      'sidemenu.' + item.name.toLowerCase() | transloco
-                    }}</span>
+                    <i
+                      [class]="
+                        'pi pi-' +
+                        (item.icon === 'person'
+                          ? 'user'
+                          : item.icon === 'group'
+                            ? 'users'
+                            : item.icon === 'terminal'
+                              ? 'code'
+                              : item.icon === 'settings'
+                                ? 'cog'
+                                : item.icon === 'admin_panel_settings'
+                                  ? 'shield'
+                                  : item.icon)
+                      "
+                      class="text-xl"
+                    ></i>
                   </a>
-                }
-              </li>
+                </li>
+              }
+            } @else {
+              <!-- Full Menu Mode -->
+              @for (item of menuData(); track item.id) {
+                <li>
+                  @if (item.childs && item.childs.length > 0) {
+                    <div
+                      pRipple
+                      (click)="toggleItem(item.id, $event)"
+                      class="p-3 flex items-center justify-between text-white/70 cursor-pointer p-ripple hover:bg-white/5 rounded-lg transition-colors duration-200"
+                    >
+                      <div class="flex items-center gap-3">
+                        <i
+                          [class]="
+                            'pi pi-' +
+                            (item.icon === 'settings'
+                              ? 'cog'
+                              : item.icon === 'admin_panel_settings'
+                                ? 'shield'
+                                : item.icon)
+                          "
+                        ></i>
+                        <span class="font-medium">{{
+                          'sidemenu.' + item.name.toLowerCase() | transloco
+                        }}</span>
+                      </div>
+                      <i
+                        class="pi pi-chevron-down text-xs transition-transform duration-300"
+                        [class.rotate-180]="isExpanded(item.id)"
+                      ></i>
+                    </div>
+                    <ul
+                      class="list-none p-0 m-0 pl-4 overflow-hidden"
+                      [@expandCollapse]="isExpanded(item.id) ? 'expanded' : 'collapsed'"
+                    >
+                      @for (child of item.childs; track child.id) {
+                        <li>
+                          <a
+                            pRipple
+                            [routerLink]="child.url"
+                            routerLinkActive="!bg-white/10 !text-indigo-400"
+                            class="flex items-center cursor-pointer p-2 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
+                          >
+                            <i
+                              [class]="
+                                'pi pi-' +
+                                (child.icon === 'person'
+                                  ? 'user'
+                                  : child.icon === 'group'
+                                    ? 'users'
+                                    : child.icon === 'terminal'
+                                      ? 'code'
+                                      : child.icon)
+                              "
+                            ></i>
+                            <span class="font-medium">{{
+                              'sidemenu.' + child.name.toLowerCase() | transloco
+                            }}</span>
+                          </a>
+                        </li>
+                      }
+                    </ul>
+                  } @else {
+                    <a
+                      pRipple
+                      [routerLink]="item.url"
+                      routerLinkActive="!bg-white/10 !text-indigo-400"
+                      class="flex items-center cursor-pointer p-4 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple gap-3"
+                    >
+                      <i [class]="'pi pi-' + item.icon"></i>
+                      <span class="font-medium">{{
+                        'sidemenu.' + item.name.toLowerCase() | transloco
+                      }}</span>
+                    </a>
+                  }
+                </li>
+              }
             }
           }
         </ul>
@@ -156,19 +187,29 @@
       @if (!isMini()) {
         <div class="mt-auto">
           <hr class="mb-4 mx-4 border-t border-0 border-white/10" />
-          <div class="m-4 flex items-center p-4 gap-2 rounded-border bg-white/10 min-h-[72px]">
-            <p-avatar
-              [image]="profileImageUrl()"
-              shape="circle"
-              styleClass="!w-10 !h-10 border-2 border-white/20 shrink-0"
-            />
-            <div class="flex flex-col overflow-hidden">
-              <span class="font-bold text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                {{ userData()?.shortname || userData()?.fullname }}
-              </span>
-              <span class="text-xs text-white/60 truncate">@{{ userData()?.username }}</span>
+          @if (isLoading()) {
+            <div class="m-4 flex items-center p-4 gap-2 rounded-border bg-white/10 min-h-[72px]">
+              <p-skeleton shape="circle" size="2.5rem" styleClass="sidemenu-skeleton" />
+              <div class="flex flex-col gap-2 flex-1">
+                <p-skeleton width="80%" height="0.75rem" styleClass="sidemenu-skeleton" />
+                <p-skeleton width="60%" height="0.5rem" styleClass="sidemenu-skeleton" />
+              </div>
             </div>
-          </div>
+          } @else {
+            <div class="m-4 flex items-center p-4 gap-2 rounded-border bg-white/10 min-h-[72px]">
+              <p-avatar
+                [image]="profileImageUrl()"
+                shape="circle"
+                styleClass="!w-10 !h-10 border-2 border-white/20 shrink-0"
+              />
+              <div class="flex flex-col overflow-hidden">
+                <span class="font-bold text-white whitespace-nowrap overflow-hidden text-ellipsis">
+                  {{ userData()?.shortname || userData()?.fullname }}
+                </span>
+                <span class="text-xs text-white/60 truncate">@{{ userData()?.username }}</span>
+              </div>
+            </div>
+          }
         </div>
       }
     </div>

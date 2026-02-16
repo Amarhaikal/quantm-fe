@@ -15,6 +15,7 @@ import { Drawer, DrawerModule } from 'primeng/drawer';
 import { RippleModule } from 'primeng/ripple';
 import { NgOptimizedImage, CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { MenuService } from '../../../core/services/menu.service';
@@ -30,6 +31,7 @@ import { environment } from '../../../../environments/environment';
     ButtonModule,
     DrawerModule,
     RippleModule,
+    SkeletonModule,
     NgOptimizedImage,
     CommonModule,
     RouterLink,
@@ -75,6 +77,7 @@ export class Sidemenu implements OnInit {
     profile_image_url: string | null;
   } | null>(null);
   menuData = signal<any[]>([]);
+  isLoading = signal<boolean>(true);
 
   // Track expanded menu items by ID using a Signal
   expandedItems = signal<Set<number>>(new Set());
@@ -116,9 +119,11 @@ export class Sidemenu implements OnInit {
           });
           this.expandedItems.set(idsToExpand);
         }
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error('Failed to fetch menu data:', err);
+        this.isLoading.set(false);
       },
     });
   }
