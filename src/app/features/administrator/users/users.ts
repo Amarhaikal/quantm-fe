@@ -37,6 +37,9 @@ export class Users implements OnInit {
 
   users = signal<any[]>([]);
   loading = signal<boolean>(false);
+  totalRecords = signal<number>(0);
+  pageNo = signal<number>(1);
+  pageSize = signal<number>(10);
 
   searchForm = this.fb.group({
     username: [''],
@@ -81,8 +84,8 @@ export class Users implements OnInit {
 
     const apiParams = {
       ...filteredParams,
-      page_no: 1,
-      page_size: 10,
+      page_no: this.pageNo(),
+      page_size: this.pageSize(),
     };
 
     this.userService.getUsers(apiParams).subscribe({
@@ -90,10 +93,11 @@ export class Users implements OnInit {
         console.log('User list API response:', response);
         const mappedData = response.data.data.map((user: any) => ({
           ...user,
-          role: user.role?.description || '-',
-          status: user.status?.description || '-',
+          role: user.role?.description,
+          status: user.status?.description,
         }));
         this.users.set(mappedData);
+        this.totalRecords.set(response.data.total_count);
         console.log('Mapped user data:', this.users());
         this.loading.set(false);
       },
@@ -104,8 +108,16 @@ export class Users implements OnInit {
     });
   }
 
+  handlePageChange(event: any) {
+    this.pageNo.set(event.first / event.rows + 1);
+    this.pageSize.set(event.rows);
+    this.fetchUsers();
+  }
+
   resetSearch() {
     this.searchForm.reset();
+    this.pageNo.set(1);
     console.log('Search reset');
+    this.fetchUsers();
   }
 }

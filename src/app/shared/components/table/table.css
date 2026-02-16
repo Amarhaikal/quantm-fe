@@ -29,3 +29,35 @@
 :host ::ng-deep .p-datatable-hoverable-rows .p-datatable-tbody > tr:hover {
   @apply bg-gray-50 transition-colors duration-150;
 }
+
+:host ::ng-deep .p-paginator,
+:host ::ng-deep .p-paginator-current,
+:host ::ng-deep .p-paginator-pages .p-paginator-page,
+:host ::ng-deep .p-select .p-select-label {
+  @apply text-sm! font-medium;
+}
+
+/* Reduce navigation buttons size */
+:host ::ng-deep .p-paginator .p-paginator-nav-link {
+  @apply w-8 h-8 min-w-8!;
+}
+
+/* Reduce icons size */
+:host ::ng-deep .p-paginator .p-paginator-icon {
+  @apply text-xs!;
+}
+
+/* Reduce dropdown size and add specific padding */
+:host ::ng-deep .p-paginator .p-select {
+  @apply h-auto min-w-[65px]! border-gray-200!;
+  padding: 6px 0px 6px 8px !important;
+}
+
+:host ::ng-deep .p-paginator .p-select .p-select-label {
+  @apply p-0! leading-none;
+}
+
+:host ::ng-deep .p-paginator {
+  @apply justify-end px-4 border-t border-gray-50 bg-gray-50/20 py-1.5;
+  overflow: visible !important;
+}

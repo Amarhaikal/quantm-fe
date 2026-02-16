@@ -33,5 +33,13 @@
     </form>
   </div>
 
-  <lib-table [data]="users()" [columns]="searchColumns" [loading]="loading()" />
+  <lib-table
+    [data]="users()"
+    [columns]="searchColumns"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    [rows]="pageSize()"
+    [first]="(pageNo() - 1) * pageSize()"
+    (onPageChange)="handlePageChange($event)"
+  />
 </div>

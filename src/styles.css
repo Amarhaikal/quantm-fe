@@ -310,3 +310,18 @@ body {
   @apply w-8 h-8 rounded-full hover:bg-gray-100 transition-all border-none! outline-none! flex items-center justify-center;
   background: transparent !important;
 }
+/* Global PrimeNG Select Option Styling (Applies to body-appended overlays) */
+.p-select-option {
+  @apply transition-all duration-150 rounded-md m-0.5!;
+  font-size: 13px !important;
+  padding: 5px 10px !important;
+  color: #4b5563; /* text-gray-600 */
+}
+
+.p-select-option.p-select-option-selected {
+  @apply bg-indigo-50 text-indigo-700 font-medium;
+}
+
+.p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
+  @apply bg-gray-50 text-gray-900;
+}
