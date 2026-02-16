@@ -35,7 +35,9 @@
         "system codes": "System Code",
         "logs": "Logs",
         "logout": "Logout",
-        "appearance": "Appearance"
+        "appearance": "Appearance",
+        "search": "Search menus...",
+        "no_results": "No menus found"
     },
     "profile": {
         "title": "My Profile",

@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { Drawer, DrawerModule } from 'primeng/drawer';
@@ -34,6 +35,7 @@ import { environment } from '../../../../environments/environment';
     SkeletonModule,
     NgOptimizedImage,
     CommonModule,
+    FormsModule,
     RouterLink,
     RouterLinkActive,
     TooltipModule,
@@ -78,6 +80,7 @@ export class Sidemenu implements OnInit {
   } | null>(null);
   menuData = signal<any[]>([]);
   isLoading = signal<boolean>(true);
+  searchQuery = signal<string>('');
 
   // Track expanded menu items by ID using a Signal
   expandedItems = signal<Set<number>>(new Set());
@@ -87,6 +90,7 @@ export class Sidemenu implements OnInit {
   isSidebarExpanded = computed(() => this.menuService.isSidebarVisible());
   isMini = computed(() => this.menuService.isDesktop() && !this.menuService.isSidebarVisible());
 
+  // Computed data for the mini sidebar (always show all clickable items)
   miniMenuItems = computed(() => {
     const flattened: any[] = [];
     this.menuData().forEach((item) => {
@@ -102,6 +106,30 @@ export class Sidemenu implements OnInit {
       }
     });
     return flattened;
+  });
+
+  // Computed data for the full sidebar (filtered by search query)
+  filteredMenuData = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    if (!query) return this.menuData();
+
+    return this.menuData()
+      .map((item) => {
+        const matchesParent = item.name.toLowerCase().includes(query);
+        const matchedChilds =
+          item.childs?.filter((child: any) => child.name.toLowerCase().includes(query)) || [];
+
+        if (matchesParent || matchedChilds.length > 0) {
+          // If query matched, expand this item automatically
+          setTimeout(() => {
+            this.expandedItems.update((prev) => new Set(prev).add(item.id));
+          }, 0);
+
+          return { ...item, childs: matchedChilds.length > 0 ? matchedChilds : item.childs };
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
   });
 
   ngOnInit() {

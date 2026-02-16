@@ -35,7 +35,9 @@
         "system codes": "Kod Sistem",
         "logs": "Log",
         "logout": "Log Keluar",
-        "appearance": "Penampilan"
+        "appearance": "Penampilan",
+        "search": "Cari menu...",
+        "no_results": "Menu tidak dijumpai"
     },
     "profile": {
         "title": "Profil Saya",
