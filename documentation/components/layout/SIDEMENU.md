@@ -1,6 +1,6 @@
 # Sidemenu Component
 
-A high-performance, responsive sidemenu built with **Angular v20+**, **Signals**, and **PrimeNG**. It features smooth animations, dynamic menu data fetching, and an automatic auto-hide mechanism for smaller screens.
+A high-performance, responsive dual-mode sidemenu built with **Angular v20+**, **Signals**, and **PrimeNG**. It features smooth transitions between expanded and mini modes, dynamic menu data fetching, and intelligent desktop/mobile behavior.
 
 ## 📍 Location
 
@@ -8,7 +8,7 @@ A high-performance, responsive sidemenu built with **Angular v20+**, **Signals**
 
 ## 🚀 Usage
 
-The Sidemenu is a core layout component usually placed within the `MainLayoutComponent`. It receives user profile data via an input signal.
+The Sidemenu is a core layout component placed within the `MainLayoutComponent`. It intelligently handles desktop mini-expansion and mobile drawer behaviors.
 
 ```html
 <app-sidemenu [userData]="userData()" />
@@ -16,38 +16,55 @@ The Sidemenu is a core layout component usually placed within the `MainLayoutCom
 
 ## 🛠 Features
 
-- **Dynamic Menu Data**: Fetches menu hierarchy (parents and children) from `MenuService`.
-- **Signals Powered**: Uses `input()` and `signal()` for reactive state management.
-- **Smooth Animations**: Native Angular animations (`@expandCollapse`) for sliding submenus.
-- **Automatic Auto-hide**: Automatically hides/collapses when screen width is **1300px or below** using a native `MediaQueryList` listener.
-- **Logo Navigation**: Clicking the logo navigates the user back to the root (`/`) path.
-- **Active State Styling**: Automatically highlights the active route with `indigo-400` font color.
-- **Accessibility**: Includes ARIA labels and follows semantic HTML structures.
+- **Dual-Mode Desktop Interface**:
+  - **Expanded (300px)**: Default view showing full menu labels and submenus.
+  - **Mini (80px)**: Compact view showing icons only, ideal for maximizing workspace.
+- **Intelligent Mini Mode**:
+  - Automatically flattens the menu hierarchy to show only clickable routes.
+  - Displays a square compact logo (`logo.png`) instead of the full brand logo.
+  - Hides complex user profile details to maintain a clean vertical strip.
+- **Interactive Tooltips**: In Mini mode, hovering over an icon reveals the menu name via a polished **PrimeNG Tooltip** (localized via Transloco).
+- **Global Layout Synchronization**: Communicates with `MainLayoutComponent` to adjust content padding (`300px` vs `80px`) seamlessly.
+- **Signals Powered**: Uses computed signals (`isMini`, `miniMenuItems`, `isSidebarExpanded`) for highly efficient UI updates.
+- **Smooth Animations**: Native Angular animations for sliding submenus and CSS transitions for width adjustments.
+- **Logo Branding**: Automatically switches between full and compact logos based on the sidebar state.
+- **Active State Styling**: Highlights active routes with a vibrant `indigo-400` color.
 
 ## ⚙️ API
 
 ### Inputs
 
-| Property   | Type                                                                  | Default | Description                                                |
-| :--------- | :-------------------------------------------------------------------- | :------ | :--------------------------------------------------------- |
-| `userData` | `input<{ fullname, shortname, username, profile_image_url } \| null>` | `null`  | Current user details for the profile section (if enabled). |
+| Property   | Type                                                                  | Default | Description                                   |
+| :--------- | :-------------------------------------------------------------------- | :------ | :-------------------------------------------- |
+| `userData` | `input<{ fullname, shortname, username, profile_image_url } \| null>` | `null`  | Current user details for the profile section. |
 
-### Services Used
+### Signals & Computeds
 
-- **`MenuService`**: Provides access to menu data and manages the sidebar's overall visibility state (`isSidebarVisible`).
+- **`isMini`**: Returns `true` if on desktop and the sidebar is collapsed.
+- **`isSidebarExpanded`**: Reflects the current toggle state.
+- **`miniMenuItems`**: A flattened list of all clickable menu items (with URLs) for the icon-only view.
 
 ## 💡 Implementation Details
 
-### Responsiveness
+### Responsive Behavior (Desktop vs Mobile)
 
-The component utilizes a native `window.matchMedia` listener (implemented in `MenuService`) to handle the **1300px breakpoint**. This ensures the UI remains clean on smaller laptops and tablets without additional heavy libraries.
+The `MenuService` manages two primary state signals:
 
-### State Persistence
+1. `isDesktop`: True if screen is > 1300px.
+2. `isSidebarVisible`: Toggles the expanded state.
 
-Menu expansion states are tracked using a `Signal<Set<number>>`, ensuring that UI updates are localized and efficient.
+**Desktop Logic**: Toggling hides the full labels and shrinks the sidebar to an **80px mini strip**.
+**Mobile Logic**: Toggling follows the standard overlay drawer pattern (hides completely when closed).
+
+### Styling System
+
+- **Transition**: Uses `cubic-bezier(0.4, 0, 0.2, 1)` for premium-feeling width shifts.
+- **Tooltip Customization**: Global styles in `styles.css` enhance the tooltip with custom padding (`p-2`), rounded corners, and theme-matching colors.
+- **Mini-Logo Positioning**: Adjusts top padding dynamically (`pt-4` in mini mode) for visual balance.
 
 ### Best Practices:
 
-- **`ChangeDetectionStrategy.OnPush`**: Optimized for performance.
-- **Standalone Architecture**: Easily maintainable and decoupled.
-- **`routerLinkActive`**: Handles visual feedback for navigation automatically.
+- **`ChangeDetectionStrategy.OnPush`**: Ensures minimal re-renders.
+- **Standalone Architecture**: Modular and easy to test.
+- **Z-Index Layering**: Content is layered carefully to ensure tooltips and ripples appear above background elements.
+- **Manual Cleanup**: Ensure `matchMedia` listeners are properly managed to prevent memory leaks in SSR environments.
