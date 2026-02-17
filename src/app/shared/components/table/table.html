@@ -33,7 +33,17 @@
       <tr (click)="onRowSelect.emit(rowData)">
         @for (col of columns; track col.field) {
           <td>
-            {{ rowData[col.field] }}
+            @switch (col.type) {
+              @case ('badge') {
+                <lib-badge
+                  [label]="rowData[col.field]"
+                  [severity]="rowData[col.field + '_severity'] || 'secondary'"
+                />
+              }
+              @default {
+                {{ rowData[col.field] }}
+              }
+            }
           </td>
         }
         @if (actionType() !== 'NONE') {

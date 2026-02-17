@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { TableColumn } from './table.model';
 import { TranslocoPipe } from '@ngneat/transloco';
-import { ButtonComponent } from '../button/button';
+
+import { BadgeComponent } from '../badge/badge';
 
 export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'NONE';
 
 @Component({
   selector: 'lib-table',
   standalone: true,
-  imports: [CommonModule, TableModule, TranslocoPipe, ButtonComponent],
+  imports: [CommonModule, TableModule, TranslocoPipe, BadgeComponent],
   templateUrl: './table.html',
   styleUrl: './table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
