@@ -107,12 +107,12 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.translationLoaded(); // Depend on translation being loaded
     return [
       {
-        label: this.getTranslation('profile.upload_photo'),
+        label: this.translocoService.translate('toast.upload_photo'),
         icon: 'pi pi-upload',
         command: () => this.fileInput()?.nativeElement.click(),
       },
       {
-        label: this.getTranslation('profile.choose_avatar'),
+        label: this.translocoService.translate('toast.choose_avatar'),
         icon: 'pi pi-user',
         command: () => this.avatarDialog()?.open(),
       },
@@ -121,7 +121,7 @@ export class Profile extends BaseFormComponent implements OnInit {
         visible: !!this.profileImageUrl(),
       },
       {
-        label: this.getTranslation('profile.remove_photo'),
+        label: this.translocoService.translate('toast.remove_photo'),
         icon: 'pi pi-trash',
         styleClass: 'text-red-600',
         visible: !!this.profileImageUrl(),
@@ -281,7 +281,7 @@ export class Profile extends BaseFormComponent implements OnInit {
             }
           },
           error: (err: any) => {
-            this.toastService.error('Error', 'Failed to check username availability');
+            this.toastService.fetchFailed(err);
           },
         });
       });
@@ -290,7 +290,10 @@ export class Profile extends BaseFormComponent implements OnInit {
   initFacade() {
     const username = this.authService.currentUser()?.username;
     if (!username) {
-      this.toastService.error('Error', 'User session not found');
+      this.toastService.error(
+        'Error',
+        this.translocoService.translate('toast.user_session_not_found'),
+      );
       return;
     }
 
@@ -303,7 +306,7 @@ export class Profile extends BaseFormComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (err: any) => {
-        this.toastService.error('Error', 'Failed to load profile data');
+        this.toastService.fetchFailed(err);
         this.isLoading.set(false);
       },
     });
@@ -413,7 +416,7 @@ export class Profile extends BaseFormComponent implements OnInit {
     });
 
     if (Object.keys(updateData).length === 0) {
-      this.toastService.info('No changes', 'No modifications were detected.');
+      this.toastService.noChanges();
       return;
     }
 
@@ -422,13 +425,13 @@ export class Profile extends BaseFormComponent implements OnInit {
       this.userService.updateUser(this.userId!, updateData).subscribe({
         next: (response: ApiResponse<UserDetailed>) => {
           if (response.status === 200) {
-            this.toastService.success('Success', 'Profile updated successfully');
-            this.handleUserDataResponse(response.data); // Use the response data directly
+            this.toastService.updateSuccess();
+            this.handleUserDataResponse(response.data);
           }
           this.isSaving.set(false);
         },
         error: (err: any) => {
-          this.toastService.error('Error', 'Failed to update profile');
+          this.toastService.updateFailed(err);
           this.isSaving.set(false);
         },
       });
@@ -451,7 +454,7 @@ export class Profile extends BaseFormComponent implements OnInit {
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     if (file.size > maxSize) {
-      this.toastService.error('Error', this.getTranslation('profile.photo_size_error'));
+      this.toastService.error('Error', this.translocoService.translate('profile.photo_size_error'));
       input.value = ''; // Reset input
       return;
     }
@@ -473,7 +476,10 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.userService.updateProfilePhoto(this.userId, formData).subscribe({
       next: (response: ApiResponse<any>) => {
         if (response.status === 201 || response.status === 200) {
-          this.toastService.success('Success', this.getTranslation('profile.photo_upload_success'));
+          this.toastService.success(
+            'Success',
+            this.translocoService.translate('profile.photo_upload_success'),
+          );
 
           // Try multiple keys for the file path in case of backend naming variations
           const d = response.data || {};
@@ -494,7 +500,10 @@ export class Profile extends BaseFormComponent implements OnInit {
         if (input) input.value = '';
       },
       error: (err: any) => {
-        this.toastService.error('Error', this.getTranslation('profile.photo_upload_error'));
+        this.toastService.error(
+          'Error',
+          this.translocoService.translate('profile.photo_upload_error'),
+        );
         this.isUploadingPhoto.set(false);
         // Reset file input
         const input = this.fileInput()?.nativeElement;
@@ -507,19 +516,19 @@ export class Profile extends BaseFormComponent implements OnInit {
     if (!this.userId) return;
 
     this.confirmService.confirm({
-      message: this.getTranslation('confirm.remove_photo.message'),
-      header: this.getTranslation('confirm.remove_photo.header'),
+      message: this.translocoService.translate('confirm.remove_photo.message'),
+      header: this.translocoService.translate('confirm.remove_photo.header'),
       icon: 'pi pi-exclamation-triangle',
-      rejectLabel: this.getTranslation('confirm.remove_photo.reject'),
-      acceptLabel: this.getTranslation('confirm.remove_photo.accept'),
+      rejectLabel: this.translocoService.translate('confirm.remove_photo.reject'),
+      acceptLabel: this.translocoService.translate('confirm.remove_photo.accept'),
       rejectButtonProps: {
-        label: this.getTranslation('confirm.remove_photo.reject'),
+        label: this.translocoService.translate('confirm.remove_photo.reject'),
         severity: 'secondary',
         outlined: true,
         size: 'small',
       },
       acceptButtonProps: {
-        label: this.getTranslation('confirm.remove_photo.accept'),
+        label: this.translocoService.translate('confirm.remove_photo.accept'),
         severity: 'danger',
         size: 'small',
       },
@@ -531,7 +540,7 @@ export class Profile extends BaseFormComponent implements OnInit {
             if (response.status === 200) {
               this.toastService.success(
                 'Success',
-                this.getTranslation('profile.photo_remove_success'),
+                this.translocoService.translate('profile.photo_remove_success'),
               );
               // Sync with AuthService immediately - this will also trigger a refresh
               this.authService.updateProfileImage(null);
@@ -539,7 +548,10 @@ export class Profile extends BaseFormComponent implements OnInit {
             this.isUploadingPhoto.set(false);
           },
           error: (err: any) => {
-            this.toastService.error('Error', this.getTranslation('profile.photo_remove_error'));
+            this.toastService.error(
+              'Error',
+              this.translocoService.translate('profile.photo_remove_error'),
+            );
             this.isUploadingPhoto.set(false);
           },
         });
@@ -547,9 +559,9 @@ export class Profile extends BaseFormComponent implements OnInit {
     });
   }
 
-  private getTranslation(key: string): string {
-    return this.translocoService.translate(key);
-  }
+  // private getTranslation(key: string): string {
+  //   return this.translocoService.translate(key);
+  // }
 
   onWindowScroll() {
     const scrollPosition =

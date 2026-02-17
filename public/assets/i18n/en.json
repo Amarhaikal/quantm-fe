@@ -43,12 +43,9 @@
         "title": "My Profile",
         "change": "Change",
         "edit": "Edit",
-        "choose_avatar": "Choose Avatar",
         "reset": "Reset",
         "save_changes": "Save Changes",
         "crop_image": "Crop Image",
-        "upload_photo": "Upload Photo",
-        "remove_photo": "Remove Photo",
         "photo_size_error": "Image size must not exceed 5MB",
         "photo_upload_success": "Profile photo updated successfully",
         "photo_remove_success": "Profile photo removed successfully",
@@ -177,5 +174,23 @@
             "one_special_char": "Password must contain at least one special character",
             "contains_username": "Password cannot contain your username"
         }
+    },
+    "toast": {
+        "session_expired": "Session Expired",
+        "session_expired_detail": "Your session has expired. Please login again.",
+        "fetch_failed": "Failed to fetch",
+        "fetch_failed_detail": "Failed to fetch data. Please try again.",
+        "no_changes": "No changes",
+        "no_modifications_detected": "No modifications were detected.",
+        "create_success": "Created Successfully",
+        "create_success_detail": "Record created successfully.",
+        "update_success": "Updated Successfully",
+        "update_success_detail": "Record updated successfully.",
+        "delete_success": "Deleted Successfully",
+        "delete_success_detail": "Record deleted successfully.",
+        "user_session_not_found": "User Session Not Found",
+        "upload_photo": "Upload Photo",
+        "choose_avatar": "Choose Avatar",
+        "remove_photo": "Remove Photo"
     }
 }

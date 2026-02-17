@@ -43,12 +43,9 @@
         "title": "Profil Saya",
         "change": "Tukar",
         "edit": "Kemaskini",
-        "choose_avatar": "Pilih Avatar",
         "reset": "Set Semula",
         "save_changes": "Simpan Perubahan",
         "crop_image": "Potong Imej",
-        "upload_photo": "Muat Naik Foto",
-        "remove_photo": "Buang Foto",
         "photo_size_error": "Saiz imej tidak boleh melebihi 5MB",
         "photo_upload_success": "Foto profil berjaya dikemaskini",
         "photo_remove_success": "Foto profil berjaya dibuang",
@@ -177,5 +174,23 @@
             "one_special_char": "Kata laluan mesti mengandungi sekurang-kurangnya satu aksara khas",
             "contains_username": "Kata laluan tidak boleh mengandungi nama pengguna anda"
         }
+    },
+    "toast": {
+        "session_expired": "Session Tamat",
+        "session_expired_detail": "Sesi anda telah tamat. Sila log masuk semula.",
+        "fetch_failed": "Gagal mengambil data",
+        "fetch_failed_detail": "Gagal mengambil data. Sila cuba lagi.",
+        "no_changes": "Tiada perubahan",
+        "no_modifications_detected": "Tiada perubahan yang dikesan.",
+        "create_success": "Dicipta dengan jayanya",
+        "create_success_detail": "Rekod berjaya dicipta.",
+        "update_success": "Dikemaskini dengan jayanya",
+        "update_success_detail": "Rekod berjaya dikemaskini.",
+        "delete_success": "Dibuang dengan jayanya",
+        "delete_success_detail": "Rekod berjaya dibuang.",
+        "user_session_not_found": "User Session Not Found",
+        "upload_photo": "Muat Naik Foto",
+        "choose_avatar": "Pilih Avatar",
+        "remove_photo": "Buang Foto"
     }
 }
