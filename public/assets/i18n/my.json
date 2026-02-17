@@ -56,7 +56,8 @@
         "photo_remove_error": "Gagal membuang foto profil"
     },
     "users": {
-        "title": "Pengguna"
+        "title": "Pengguna",
+        "new_user_title": "Pendaftaran Pengguna Baru"
     },
     "label": {
         "full_name": "Nama Penuh",
@@ -85,6 +86,7 @@
         "updated_by": "Dikemaskini Oleh",
         "updated_date": "Dikemaskini Pada",
         "updated_at": "Dikemaskini Pada",
+        "password": "Kata Laluan",
         "placeholders": {
             "full_name": "Masukkan nama penuh",
             "short_name": "Masukkan nama pendek",
@@ -102,7 +104,8 @@
             "designation": "Masukkan jawatan",
             "remarks": "Masukkan catatan",
             "username": "Masukkan nama pengguna",
-            "role": "Pilih peranan"
+            "role": "Pilih peranan",
+            "password": "Masukkan kata laluan"
         }
     },
     "option": {
@@ -159,6 +162,14 @@
         "username_taken": "Nama pengguna ini telah diambil",
         "username_pattern": "Nama pengguna hanya boleh mengandungi huruf, nombor, titik, garis bawah dan sempang",
         "name_pattern": "Nama hanya boleh mengandungi huruf, ruang, titik, sempang, dan petikan tunggal",
-        "pattern_error": "Format tidak sah"
+        "pattern_error": "Format tidak sah",
+        "password": {
+            "at_least_12_chars": "Kata laluan mestilah sekurang-kurangnya 12 aksara",
+            "one_uppercase": "Kata laluan mesti mengandungi sekurang-kurangnya satu huruf besar",
+            "one_lowercase": "Kata laluan mesti mengandungi sekurang-kurangnya satu huruf kecil",
+            "one_number": "Kata laluan mesti mengandungi sekurang-kurangnya satu nombor",
+            "one_special_char": "Kata laluan mesti mengandungi sekurang-kurangnya satu aksara khas",
+            "contains_username": "Kata laluan tidak boleh mengandungi nama pengguna anda"
+        }
     }
 }

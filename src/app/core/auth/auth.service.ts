@@ -2,6 +2,7 @@ import { Injectable, signal, inject, computed } from '@angular/core';
 import { catchError, map, Observable, tap } from 'rxjs';
 import { AuthResponse } from '../models/auth.model';
 import { ApiService } from '../services/api.service';
+import { ApiResponse } from '../models/api.model';
 import { environment } from '../../../environments/environment';
 
 import { UserService } from '../services/user.service';
@@ -131,5 +132,9 @@ export class AuthService {
     // Call API to clear cookie
     this.api.post('auth/logout', {}).subscribe();
     this.setUser(null);
+  }
+
+  register(data: any): Observable<ApiResponse<any>> {
+    return this.api.post<ApiResponse<any>>('auth/register', data);
   }
 }

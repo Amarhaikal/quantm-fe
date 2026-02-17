@@ -56,7 +56,8 @@
         "photo_remove_error": "Failed to remove profile photo"
     },
     "users": {
-        "title": "Users"
+        "title": "Users",
+        "new_user_title": "New User Creation"
     },
     "label": {
         "full_name": "Full Name",
@@ -85,6 +86,7 @@
         "updated_date": "Updated Date",
         "updated_at": "Updated At",
         "phone_no": "Phone Number",
+        "password": "Password",
         "placeholders": {
             "full_name": "Enter full name",
             "short_name": "Enter short name",
@@ -102,7 +104,8 @@
             "designation": "Enter designation",
             "remarks": "Enter remarks",
             "username": "Enter username",
-            "role": "Select role"
+            "role": "Select role",
+            "password": "Enter password"
         }
     },
     "option": {
@@ -159,6 +162,14 @@
         "username_taken": "This username is already taken",
         "username_pattern": "Username can only contain letters, numbers, dots, underscores, and hyphens",
         "name_pattern": "Name can only contain letters, spaces, dots, hyphens, and single quotes",
-        "pattern_error": "Invalid format"
+        "pattern_error": "Invalid format",
+        "password": {
+            "at_least_12_chars": "Password must be at least 12 characters long",
+            "one_uppercase": "Password must contain at least one uppercase letter",
+            "one_lowercase": "Password must contain at least one lowercase letter",
+            "one_number": "Password must contain at least one number",
+            "one_special_char": "Password must contain at least one special character",
+            "contains_username": "Password cannot contain your username"
+        }
     }
 }
