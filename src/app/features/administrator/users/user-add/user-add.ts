@@ -52,8 +52,25 @@ export class UserAdd {
   });
 
   registerForm = this.fb.group({
-    fullname: ['', [Validators.required]],
-    username: ['', [Validators.required]],
+    fullname: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(80),
+        Validators.pattern(/^[a-zA-Z\s'. -]+$/),
+      ],
+    ],
+    username: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(20),
+        Validators.pattern(/^[a-zA-Z0-9_.]+$/),
+      ],
+    ],
+    staff_id: ['', [Validators.required, Validators.maxLength(10)]],
     id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, this.passwordValidator()]],
@@ -96,6 +113,8 @@ export class UserAdd {
   }
 
   onSubmit() {
+    console.log('this.registerForm.invalid', this.registerForm.invalid);
+
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
