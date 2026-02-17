@@ -16,4 +16,8 @@ export const ADMINISTRATOR_ROUTES: Routes = [
     loadComponent: () => import('./users/user-add/user-add').then((m) => m.UserAdd),
     canDeactivate: [pendingChangesGuard],
   },
+  {
+    path: 'users/:id',
+    loadComponent: () => import('./users/user-details/user-details').then((m) => m.UserDetails),
+  },
 ];

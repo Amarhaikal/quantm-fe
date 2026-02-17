@@ -57,7 +57,9 @@
     },
     "users": {
         "title": "Pengguna",
-        "new_user_title": "Pendaftaran Pengguna Baru"
+        "new_user_title": "Pendaftaran Pengguna Baru",
+        "details_title": "Butiran Pengguna",
+        "back_to_list": "Kembali ke Senarai"
     },
     "label": {
         "full_name": "Nama Penuh",

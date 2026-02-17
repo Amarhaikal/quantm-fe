@@ -14,6 +14,10 @@ export class UserService {
     return this.api.get<ApiResponse<UserMiniProfile>>('user/mini-profile');
   }
 
+  getUserById(id: number): Observable<ApiResponse<UserDetailed>> {
+    return this.api.get<ApiResponse<UserDetailed>>(`user/${id}`);
+  }
+
   getUserByUsername(username: string): Observable<ApiResponse<UserDetailed>> {
     return this.api.get<ApiResponse<UserDetailed>>(`user/username/${username}`);
   }

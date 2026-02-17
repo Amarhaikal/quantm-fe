@@ -57,7 +57,9 @@
     },
     "users": {
         "title": "Users",
-        "new_user_title": "New User Creation"
+        "new_user_title": "New User Creation",
+        "details_title": "User Details",
+        "back_to_list": "Back to List"
     },
     "label": {
         "full_name": "Full Name",

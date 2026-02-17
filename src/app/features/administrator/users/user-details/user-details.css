@@ -1,0 +1,47 @@
+.scroll-down-btn,
+::ng-deep .p-scrolltop {
+  position: fixed !important;
+  right: 2rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+.scroll-down-btn {
+  bottom: 2rem !important;
+}
+
+::ng-deep .p-scrolltop {
+  bottom: 5.5rem !important;
+}
+
+.scroll-down-btn,
+::ng-deep .p-scrolltop {
+  border-radius: 50% !important;
+  background-color: #252b4d !important;
+  color: #ffffff !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.scroll-down-btn:hover,
+::ng-deep .p-scrolltop:hover {
+  background-color: #252b4d !important;
+  transform: translateY(-2px) !important;
+}
+
+.scroll-down-btn i,
+::ng-deep .p-scrolltop-icon {
+  font-size: 1.25rem !important;
+  color: #ffffff !important;
+}
+
+/* Hide default PrimeNG background if any */
+::ng-deep .p-scrolltop {
+  min-width: 2.5rem !important;
+}
