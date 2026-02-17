@@ -31,6 +31,8 @@
         <p-inputMask
           [id]="id()"
           mask="999999-99-9999"
+          [unmask]="true"
+          [autoClear]="false"
           [ngModel]="displayValue()"
           (ngModelChange)="handleInput($event)"
           (onBlur)="handleBlur()"
@@ -123,6 +125,36 @@
         }
         @if (errors()?.['pattern']) {
           <small class="text-red-500 text-xs ml-1">{{ patternErrorKey() | transloco }}</small>
+        }
+        @if (errors()?.['atLeast12Chars']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.at_least_12_chars' | transloco
+          }}</small>
+        }
+        @if (errors()?.['oneUppercase']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.one_uppercase' | transloco
+          }}</small>
+        }
+        @if (errors()?.['oneLowercase']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.one_lowercase' | transloco
+          }}</small>
+        }
+        @if (errors()?.['oneNumber']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.one_number' | transloco
+          }}</small>
+        }
+        @if (errors()?.['oneSpecialChar']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.one_special_char' | transloco
+          }}</small>
+        }
+        @if (errors()?.['containsUsername']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.password.contains_username' | transloco
+          }}</small>
         }
       </div>
     } @else if (hint()) {
