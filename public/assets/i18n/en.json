@@ -46,6 +46,9 @@
         "reset": "Reset",
         "save_changes": "Save Changes",
         "crop_image": "Crop Image",
+        "upload_photo": "Upload Photo",
+        "choose_avatar": "Choose Avatar",
+        "remove_photo": "Remove Photo",
         "photo_size_error": "Image size must not exceed 5MB",
         "photo_upload_success": "Profile photo updated successfully",
         "photo_remove_success": "Profile photo removed successfully",
@@ -118,8 +121,6 @@
         "save": "Save",
         "page_report_template": "Showing {first} to {last} of {totalRecords} items",
         "no_data_found": "No data found.",
-        "confirm_delete_header": "Confirm Delete",
-        "confirm_delete_message": "Are you sure you want to delete user '{{name}}'?",
         "buttons": {
             "add": "Add",
             "cancel": "Cancel",
@@ -145,7 +146,7 @@
         },
         "delete": {
             "header": "Confirm Delete",
-            "message": "Are you sure you want to delete this record?",
+            "message": "Are you sure you want to delete user '{{name}}'?",
             "accept": "Delete",
             "reject": "Cancel"
         },
@@ -188,9 +189,6 @@
         "update_success_detail": "Record updated successfully.",
         "delete_success": "Deleted Successfully",
         "delete_success_detail": "Record deleted successfully.",
-        "user_session_not_found": "User Session Not Found",
-        "upload_photo": "Upload Photo",
-        "choose_avatar": "Choose Avatar",
-        "remove_photo": "Remove Photo"
+        "user_session_not_found": "User Session Not Found"
     }
 }

@@ -46,6 +46,9 @@
         "reset": "Set Semula",
         "save_changes": "Simpan Perubahan",
         "crop_image": "Potong Imej",
+        "upload_photo": "Muat Naik Foto",
+        "choose_avatar": "Pilih Avatar",
+        "remove_photo": "Buang Foto",
         "photo_size_error": "Saiz imej tidak boleh melebihi 5MB",
         "photo_upload_success": "Foto profil berjaya dikemaskini",
         "photo_remove_success": "Foto profil berjaya dibuang",
@@ -118,8 +121,6 @@
         "save": "Simpan",
         "page_report_template": "Memaparkan {first} hingga {last} daripada {totalRecords} item",
         "no_data_found": "Tiada data dijumpai.",
-        "confirm_delete_header": "Sahkan Padam",
-        "confirm_delete_message": "Adakah anda pasti mahu memadam pengguna '{{name}}'?",
         "buttons": {
             "add": "Tambah",
             "cancel": "Batal",
@@ -145,7 +146,7 @@
         },
         "delete": {
             "header": "Sahkan Padam",
-            "message": "Adakah anda pasti mahu memadam rekod ini?",
+            "message": "Adakah anda pasti mahu memadam pengguna '{{name}}'?",
             "accept": "Padam",
             "reject": "Batal"
         },
@@ -188,9 +189,6 @@
         "update_success_detail": "Rekod berjaya dikemaskini.",
         "delete_success": "Dibuang dengan jayanya",
         "delete_success_detail": "Rekod berjaya dibuang.",
-        "user_session_not_found": "User Session Not Found",
-        "upload_photo": "Muat Naik Foto",
-        "choose_avatar": "Pilih Avatar",
-        "remove_photo": "Buang Foto"
+        "user_session_not_found": "User Session Not Found"
     }
 }
