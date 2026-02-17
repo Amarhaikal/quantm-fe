@@ -112,15 +112,15 @@ export class Users implements OnInit {
   getStatusSeverity(code: string): any {
     console.log('Status code for severity:', code);
     switch (code) {
-      case 'ACTIVE':
+      case 'A':
         return 'success';
-      case 'NEW':
+      case 'N':
         return 'info';
-      case 'INA':
-        return 'secondary';
-      case 'DEL':
+      // case 'I':
+      //   return 'secondary';
+      case 'D':
         return 'danger';
-      case 'PEN':
+      case 'I':
         return 'warning';
       default:
         return 'secondary';
