@@ -148,33 +148,28 @@ export class Users implements OnInit {
   }
 
   handleDelete(user: any) {
-    this.confirmService.confirm({
-      message: this.translocoService.translate('common.confirm_delete_message', {
-        name: user.username,
-      }),
-      header: this.translocoService.translate('common.confirm_delete_header'),
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: this.translocoService.translate('common.buttons.delete'),
-      acceptButtonProps: { severity: 'danger', size: 'small' },
-      rejectButtonProps: { severity: 'secondary', size: 'small', outlined: true },
-      accept: () => {
+    this.confirmService.confirmDelete(
+      () => {
         this.loading.set(true);
         this.userService.deleteUser(user.id).subscribe({
           next: (response) => {
             if (response.status === 200) {
-              this.toastService.success('Success', 'User deleted successfully');
+              this.toastService.deleteSuccess();
               this.fetchUsers();
             } else {
-              this.toastService.error('Error', response.message || 'Failed to delete user');
+              this.toastService.deleteFailed({
+                error: { message: response.message || 'Failed to delete user' },
+              });
               this.loading.set(false);
             }
           },
           error: (error) => {
-            this.toastService.error('Error', error.error?.message || 'Failed to delete user');
+            this.toastService.deleteFailed(error);
             this.loading.set(false);
           },
         });
       },
-    });
+      { name: user.fullname },
+    );
   }
 }

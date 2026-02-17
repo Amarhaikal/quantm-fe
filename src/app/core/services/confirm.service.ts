@@ -34,9 +34,9 @@ export class ConfirmService {
     });
   }
 
-  confirmDelete(callback: () => void) {
+  confirmDelete(callback: () => void, params?: any) {
     this.confirmationService.confirm({
-      message: this.translocoService.translate('confirm.delete.message'),
+      message: this.translocoService.translate('confirm.delete.message', params),
       header: this.translocoService.translate('confirm.delete.header'),
       icon: 'pi pi-exclamation-triangle',
       rejectLabel: this.translocoService.translate('confirm.delete.reject'),
