@@ -19,12 +19,12 @@
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.field) {
-          <th [style.width]="col.width">
+          <th [style.width]="col.width" class="text-center">
             {{ col.header | transloco }}
           </th>
         }
         @if (actionType() !== 'NONE') {
-          <th>{{ 'label.actions' | transloco }}</th>
+          <th class="text-center">{{ 'label.actions' | transloco }}</th>
         }
       </tr>
     </ng-template>
@@ -32,7 +32,7 @@
     <ng-template #body let-rowData let-columns="columns">
       <tr (click)="onRowSelect.emit(rowData)">
         @for (col of columns; track col.field) {
-          <td>
+          <td [class.text-center]="col.type === 'badge'">
             @switch (col.type) {
               @case ('badge') {
                 <lib-badge
@@ -47,13 +47,44 @@
           </td>
         }
         @if (actionType() !== 'NONE') {
-          <td>
-            <!-- @if (actionType() === 'EDIT' || actionType() === 'EDIT_DELETE') {
-              <lib-button (click)="onEdit.emit(rowData)" />
-            }
-            @if (actionType() === 'DELETE' || actionType() === 'EDIT_DELETE') {
-              <lib-button (click)="onDelete.emit(rowData)" />
-            } -->
+          <td class="text-center">
+            <div class="flex items-center justify-center gap-1">
+              @if (
+                actionType() === 'DETAILS' ||
+                actionType() === 'DETAILS_DELETE' ||
+                actionType() === 'EDIT_DELETE'
+              ) {
+                <lib-button
+                  size="sm"
+                  variant="ghost"
+                  icon="pi pi-eye"
+                  (click)="handleView(rowData, $event)"
+                  class="text-indigo-600 hover:bg-indigo-50"
+                />
+              }
+              @if (actionType() === 'EDIT' || actionType() === 'EDIT_DELETE') {
+                <lib-button
+                  size="sm"
+                  variant="ghost"
+                  icon="pi pi-pencil"
+                  (click)="handleEdit(rowData, $event)"
+                  class="text-amber-600 hover:bg-amber-50"
+                />
+              }
+              @if (
+                actionType() === 'DELETE' ||
+                actionType() === 'DETAILS_DELETE' ||
+                actionType() === 'EDIT_DELETE'
+              ) {
+                <lib-button
+                  size="sm"
+                  variant="ghost"
+                  icon="pi pi-trash"
+                  (click)="handleDelete(rowData, $event)"
+                  class="text-rose-600 hover:bg-rose-50"
+                />
+              }
+            </div>
           </td>
         }
       </tr>

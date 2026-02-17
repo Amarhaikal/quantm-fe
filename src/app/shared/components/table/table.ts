@@ -1,17 +1,19 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { TableColumn } from './table.model';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { BadgeComponent } from '../badge/badge';
+import { ButtonComponent } from '../button/button';
 
-export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'NONE';
+export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
 
 @Component({
   selector: 'lib-table',
   standalone: true,
-  imports: [CommonModule, TableModule, TranslocoPipe, BadgeComponent],
+  imports: [CommonModule, TableModule, TranslocoPipe, BadgeComponent, ButtonComponent],
   templateUrl: './table.html',
   styleUrl: './table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,4 +30,27 @@ export class TableComponent {
 
   onRowSelect = output<any>();
   onPageChange = output<any>();
+  onEdit = output<any>();
+  onDelete = output<any>();
+  onView = output<any>();
+
+  private router = inject(Router);
+
+  handleView(rowData: any, event: Event) {
+    event.stopPropagation();
+    // For now, assuming the user list and generic ID usage
+    // The user specifically asked to route to admin/users/:id
+    this.router.navigate(['admin/users', rowData.id || rowData.username]);
+    this.onView.emit(rowData);
+  }
+
+  handleDelete(rowData: any, event: Event) {
+    event.stopPropagation();
+    this.onDelete.emit(rowData);
+  }
+
+  handleEdit(rowData: any, event: Event) {
+    event.stopPropagation();
+    this.onEdit.emit(rowData);
+  }
 }

@@ -87,6 +87,7 @@
         "updated_at": "Updated At",
         "phone_no": "Phone Number",
         "password": "Password",
+        "actions": "Actions",
         "placeholders": {
             "full_name": "Enter full name",
             "short_name": "Enter short name",
