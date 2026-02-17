@@ -56,11 +56,11 @@ export class Users implements OnInit {
 
   searchColumns: TableColumn[] = [
     // { field: 'id', header: 'ID', width: '80px' },
-    { field: 'fullname', header: 'label.full_name' },
     { field: 'username', header: 'label.username' },
+    { field: 'fullname', header: 'label.full_name' },
     { field: 'email', header: 'label.email' },
     { field: 'role', header: 'label.role' },
-    { field: 'status', header: 'label.status' },
+    { field: 'status', header: 'label.status', type: 'badge' },
   ];
 
   ngOnInit() {
@@ -95,6 +95,7 @@ export class Users implements OnInit {
           ...user,
           role: user.role?.description,
           status: user.status?.description,
+          status_severity: this.getStatusSeverity(user.status?.code),
         }));
         this.users.set(mappedData);
         this.totalRecords.set(response.data.total_count);
@@ -108,6 +109,28 @@ export class Users implements OnInit {
     });
   }
 
+  getStatusSeverity(code: string): any {
+    console.log('Status code for severity:', code);
+    switch (code) {
+      case 'ACTIVE':
+        return 'success';
+      case 'NEW':
+        return 'info';
+      case 'INA':
+        return 'secondary';
+      case 'DEL':
+        return 'danger';
+      case 'PEN':
+        return 'warning';
+      default:
+        return 'secondary';
+    }
+  }
+
+  addUser() {
+    this.router.navigate(['users/add'], { relativeTo: this.route.parent });
+  }
+
   handlePageChange(event: any) {
     this.pageNo.set(event.first / event.rows + 1);
     this.pageSize.set(event.rows);
@@ -118,6 +141,5 @@ export class Users implements OnInit {
     this.searchForm.reset();
     this.pageNo.set(1);
     console.log('Search reset');
-    this.fetchUsers();
   }
 }

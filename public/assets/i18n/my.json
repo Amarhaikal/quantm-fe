@@ -116,6 +116,7 @@
         "page_report_template": "Memaparkan {first} hingga {last} daripada {totalRecords} item",
         "no_data_found": "Tiada data dijumpai.",
         "buttons": {
+            "add": "Tambah",
             "cancel": "Batal",
             "save": "Simpan",
             "update": "Kemaskini",

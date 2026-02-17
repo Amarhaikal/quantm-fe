@@ -2,7 +2,7 @@ import { Component, input, computed, ChangeDetectionStrategy } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
 
-export type ButtonType = 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET';
+export type ButtonType = 'ADD' | 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
@@ -41,6 +41,8 @@ export class ButtonComponent {
     if (this.label()) return this.label();
 
     switch (this.type()) {
+      case 'ADD':
+        return 'common.buttons.add';
       case 'CANCEL':
         return 'common.buttons.cancel';
       case 'SAVE':
@@ -61,6 +63,8 @@ export class ButtonComponent {
     if (this.icon()) return this.icon();
 
     switch (this.type()) {
+      case 'ADD':
+        return 'pi pi-plus';
       case 'CANCEL':
         return 'pi pi-times';
       case 'SAVE':

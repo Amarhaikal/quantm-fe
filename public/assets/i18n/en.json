@@ -116,6 +116,7 @@
         "page_report_template": "Showing {first} to {last} of {totalRecords} items",
         "no_data_found": "No data found.",
         "buttons": {
+            "add": "Add",
             "cancel": "Cancel",
             "save": "Save",
             "update": "Update",

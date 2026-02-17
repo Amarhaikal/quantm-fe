@@ -13,7 +13,7 @@ export const ADMINISTRATOR_ROUTES: Routes = [
   },
   {
     path: 'users/add',
-    loadComponent: () => import('./users/add/add').then((m) => m.Add),
+    loadComponent: () => import('./users/user-add/user-add').then((m) => m.UserAdd),
     canDeactivate: [pendingChangesGuard],
   },
 ];
