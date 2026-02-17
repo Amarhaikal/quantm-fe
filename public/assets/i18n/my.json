@@ -121,13 +121,16 @@
         "save": "Simpan",
         "page_report_template": "Memaparkan {first} hingga {last} daripada {totalRecords} item",
         "no_data_found": "Tiada data dijumpai.",
+        "confirm_delete_header": "Sahkan Padam",
+        "confirm_delete_message": "Adakah anda pasti mahu memadam pengguna '{{name}}'?",
         "buttons": {
             "add": "Tambah",
             "cancel": "Batal",
             "save": "Simpan",
             "update": "Kemaskini",
             "save_changes": "Simpan Perubahan",
-            "reset": "Set Semula"
+            "reset": "Set Semula",
+            "delete": "Padam"
         }
     },
     "confirm": {

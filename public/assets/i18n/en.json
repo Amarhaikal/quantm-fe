@@ -121,13 +121,16 @@
         "save": "Save",
         "page_report_template": "Showing {first} to {last} of {totalRecords} items",
         "no_data_found": "No data found.",
+        "confirm_delete_header": "Confirm Delete",
+        "confirm_delete_message": "Are you sure you want to delete user '{{name}}'?",
         "buttons": {
             "add": "Add",
             "cancel": "Cancel",
             "save": "Save",
             "update": "Update",
             "save_changes": "Save Changes",
-            "reset": "Reset"
+            "reset": "Reset",
+            "delete": "Delete"
         }
     },
     "confirm": {

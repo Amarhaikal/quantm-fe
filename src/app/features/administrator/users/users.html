@@ -43,8 +43,8 @@
     [loading]="loading()"
     [totalRecords]="totalRecords()"
     [rows]="pageSize()"
-    [first]="(pageNo() - 1) * pageSize()"
     actionType="DETAILS_DELETE"
     (onPageChange)="handlePageChange($event)"
+    (onDelete)="handleDelete($event)"
   />
 </div>

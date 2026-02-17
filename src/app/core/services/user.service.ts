@@ -34,6 +34,10 @@ export class UserService {
     return this.api.delete<ApiResponse<any>>(`user/${id}/photo`);
   }
 
+  deleteUser(id: number): Observable<ApiResponse<any>> {
+    return this.api.delete<ApiResponse<any>>(`user/${id}`);
+  }
+
   getUsers(params: any): Observable<ApiResponse<any>> {
     return this.api.get<ApiResponse<any>>('user/list', params);
   }
