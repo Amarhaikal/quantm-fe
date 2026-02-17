@@ -221,9 +221,10 @@
               </div>
             </div>
           } @else {
-            <div class="m-4 flex items-center p-4 gap-2 rounded-border bg-white/10 min-h-[72px]">
+            <div class="m-4 flex items-center p-2 gap-2 rounded-border bg-white/10 min-h-[72px]">
               <p-avatar
                 [image]="profileImageUrl()"
+                [icon]="!profileImageUrl() ? 'pi pi-user' : ''"
                 shape="circle"
                 styleClass="!w-10 !h-10 border-2 border-white/20 shrink-0"
               />

@@ -39,6 +39,7 @@
       <div class="relative">
         <p-avatar
           [image]="profileImageUrl()"
+          [icon]="!profileImageUrl() ? 'pi pi-user' : ''"
           shape="circle"
           class="cursor-pointer border border-gray-100 shadow-sm hover:ring-2 hover:ring-primary-500/20 transition-all size-10 shrink-0 overflow-hidden"
           (click)="menu.toggle($event)"
