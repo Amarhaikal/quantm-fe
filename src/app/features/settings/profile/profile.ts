@@ -186,7 +186,7 @@ export class Profile extends BaseFormComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9._-]+$/),
         ],
       ],
-      staff_id: ['', [Validators.maxLength(10)]],
+      staff_id: ['', [Validators.required, Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: ['', { disabled: true }],
       role: ['', [Validators.required]],
