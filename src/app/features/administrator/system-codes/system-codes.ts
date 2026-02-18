@@ -136,10 +136,12 @@ export class SystemCodes extends BaseListDirective implements OnInit {
   }
 
   addSystemCode() {
+    const defaultCodeType = this.searchForm.get('code_type')?.value || '';
+
     this.systemCodes.update((data) => [
       {
         id: 0,
-        code_type: '',
+        code_type: defaultCodeType,
         code: '',
         description: '',
         created_by: null,
