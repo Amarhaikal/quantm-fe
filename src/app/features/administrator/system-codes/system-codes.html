@@ -1,0 +1,28 @@
+<lib-page-container>
+  <lib-page-header title="sidemenu.system codes" />
+  <div class="flex flex-col gap-6">
+    <div class="w-full" [formGroup]="searchForm">
+      <lib-search (reset)="resetSearch()">
+        <lib-dropdown
+          label="label.code_type"
+          formControlName="code_type"
+          [options]="codeTypesOptions()"
+        />
+        <lib-textbox label="label.code" formControlName="code" />
+        <lib-textbox label="label.description" formControlName="description" />
+      </lib-search>
+    </div>
+
+    <div class="w-full">
+      <lib-table
+        [columns]="columns"
+        [data]="systemCodes()"
+        [loading]="loading()"
+        [totalRecords]="totalRecords()"
+        [rows]="pageSize()"
+        actionType="NONE"
+        (onPageChange)="handlePageChange($event)"
+      />
+    </div>
+  </div>
+</lib-page-container>

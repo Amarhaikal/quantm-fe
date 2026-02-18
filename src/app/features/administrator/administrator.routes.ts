@@ -20,4 +20,8 @@ export const ADMINISTRATOR_ROUTES: Routes = [
     path: 'users/:id',
     loadComponent: () => import('./users/user-details/user-details').then((m) => m.UserDetails),
   },
+  {
+    path: 'system-codes',
+    loadComponent: () => import('./system-codes/system-codes').then((m) => m.SystemCodes),
+  },
 ];

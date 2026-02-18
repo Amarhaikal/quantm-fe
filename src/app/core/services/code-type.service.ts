@@ -2,6 +2,8 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { ApiService } from './api.service';
 import { CodeType, CodeTypeResponse, SystemCode } from '../models/code-type.model';
 import { CODE_TYPES, CodeTypeValue } from '../constants/code-types.constants';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '../models/api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -63,5 +65,9 @@ export class CodeTypeService {
 
   getSystemCodeDescription(codeTypeCode: CodeTypeValue | string, systemCode: string): string {
     return this.getSystemCode(codeTypeCode, systemCode)?.description ?? '';
+  }
+
+  getSystemCodesList(params: any): Observable<ApiResponse<any>> {
+    return this.api.get<ApiResponse<any>>('parameter/systemCode', params);
   }
 }

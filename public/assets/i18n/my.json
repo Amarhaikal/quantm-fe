@@ -90,6 +90,10 @@
         "updated_at": "Dikemaskini Pada",
         "password": "Kata Laluan",
         "actions": "Tindakan",
+        "code_types": "Jenis Kod",
+        "code_type": "Jenis Kod",
+        "code": "Kod",
+        "description": "Penerangan",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
