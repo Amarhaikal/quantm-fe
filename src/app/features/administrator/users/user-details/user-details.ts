@@ -201,6 +201,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       username: [
         '',
         [
+          Validators.required,
           Validators.minLength(5),
           Validators.maxLength(20),
           Validators.pattern(/^[a-zA-Z0-9._-]+$/),
@@ -411,13 +412,6 @@ export class UserDetails extends BaseFormComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['admin/users']);
-  }
-
-  resetForm() {
-    if (this.originalData) {
-      this.userDetailsForm.reset(this.originalData);
-      this.cdr.markForCheck();
-    }
   }
 
   onSave() {
