@@ -91,6 +91,8 @@
         "password": "Password",
         "actions": "Actions",
         "placeholders": {
+            "enter": "Enter",
+            "select": "Select",
             "full_name": "Enter Full Name",
             "short_name": "Enter Short Name",
             "staff_id": "Enter Staff ID",

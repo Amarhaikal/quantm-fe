@@ -5,22 +5,9 @@
     <!-- Search Form Section -->
     <div class="w-full" [formGroup]="searchForm">
       <lib-search (reset)="resetSearch()">
-        <lib-textbox
-          label="label.username"
-          formControlName="username"
-          placeholder="label.placeholders.username"
-        />
-        <lib-textbox
-          label="label.full_name"
-          formControlName="fullname"
-          placeholder="label.placeholders.full_name"
-        />
-        <lib-dropdown
-          label="label.role"
-          formControlName="role"
-          [options]="rolesOptions()"
-          placeholder="label.placeholders.role"
-        />
+        <lib-textbox label="label.username" formControlName="username" />
+        <lib-textbox label="label.full_name" formControlName="fullname" />
+        <lib-dropdown label="label.role" formControlName="role" [options]="rolesOptions()" />
       </lib-search>
     </div>
 

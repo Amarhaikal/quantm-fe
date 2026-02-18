@@ -28,7 +28,11 @@
       [options]="options()"
       optionLabel="label"
       optionValue="value"
-      [placeholder]="placeholder() | transloco"
+      [placeholder]="
+        placeholder()
+          ? (placeholder() | transloco)
+          : ('label.placeholders.select' | transloco) + ' ' + (label() | transloco)
+      "
       [ngModel]="displayValue()"
       (ngModelChange)="handleValueChange($event)"
       [filter]="filter"

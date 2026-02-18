@@ -31,7 +31,11 @@
       [hourFormat]="hourFormat()"
       [dateFormat]="dateFormat()"
       [showIcon]="showIcon()"
-      [placeholder]="placeholder() | transloco"
+      [placeholder]="
+        placeholder()
+          ? (placeholder() | transloco)
+          : ('label.placeholders.select' | transloco) + ' ' + (label() | transloco)
+      "
       [disabled]="effectiveDisabled()"
       (onBlur)="handleBlur()"
       [appendTo]="'body'"

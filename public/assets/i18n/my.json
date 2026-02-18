@@ -91,6 +91,8 @@
         "password": "Kata Laluan",
         "actions": "Tindakan",
         "placeholders": {
+            "enter": "Masukkan",
+            "select": "Pilih",
             "full_name": "Masukkan Nama Penuh",
             "short_name": "Masukkan Nama Pendek",
             "staff_id": "Masukkan No. Staf",

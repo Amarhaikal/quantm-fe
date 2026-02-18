@@ -74,7 +74,11 @@
           pInputText
           [id]="id()"
           [type]="type() === 'PHONENO' ? 'text' : type()"
-          [placeholder]="placeholder() | transloco"
+          [placeholder]="
+            placeholder()
+              ? (placeholder() | transloco)
+              : ('label.placeholders.enter' | transloco) + ' ' + (label() | transloco)
+          "
           [ngModel]="displayValue()"
           (ngModelChange)="handleInput($event)"
           [disabled]="effectiveDisabled()"
