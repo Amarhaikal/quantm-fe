@@ -21,12 +21,7 @@
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.field) {
-          <th
-            [style.width]="col.width"
-            [class.text-center]="col.textAlign === 'center'"
-            [class.text-left]="col.textAlign === 'left' || !col.textAlign"
-            [class.text-right]="col.textAlign === 'right'"
-          >
+          <th [style.width]="col.width" [class.text-center]="'center'">
             {{ col.header | transloco }}
           </th>
         }
