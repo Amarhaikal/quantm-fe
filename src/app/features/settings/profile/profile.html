@@ -1,13 +1,10 @@
-<div class="w-full px-4 md:px-0">
-  <!-- Header Section -->
-  <div class="mb-6">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ 'profile.title' | transloco }}</h1>
-  </div>
+<lib-page-container>
+  <lib-page-header title="profile.title" />
 
   <div class="flex flex-col gap-6">
     <!-- Form Section -->
     <div class="w-full">
-      <p-card styleClass="border-none shadow-sm">
+      <lib-card [padding]="true">
         <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-4">
           @if (isLoading()) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -21,14 +18,6 @@
                   <p-skeleton height="2.5rem" borderRadius="6px" />
                 </div>
               }
-              <div class="md:col-span-2">
-                <p-skeleton width="20%" class="mb-2" />
-                <p-skeleton height="2.5rem" borderRadius="6px" />
-              </div>
-              <div class="md:col-span-2">
-                <p-skeleton width="20%" class="mb-2" />
-                <p-skeleton height="2.5rem" borderRadius="6px" />
-              </div>
               <div class="md:col-span-2 flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
                 <p-skeleton width="100px" height="2.5rem" borderRadius="6px" />
                 <p-skeleton width="130px" height="2.5rem" borderRadius="6px" />
@@ -98,7 +87,7 @@
                 </div>
               </div>
 
-              <!-- Full Name (Row 2, Col 1) -->
+              <!-- Full Name -->
               <lib-textbox
                 label="label.full_name"
                 formControlName="fullname"
@@ -108,7 +97,7 @@
                 patternErrorKey="validation.name_pattern"
               />
 
-              <!-- Short Name (Row 2, Col 2) -->
+              <!-- Short Name -->
               <lib-textbox
                 label="label.short_name"
                 formControlName="shortname"
@@ -267,7 +256,7 @@
             </div>
           }
         </form>
-      </p-card>
+      </lib-card>
     </div>
   </div>
 
@@ -289,4 +278,4 @@
       <i class="pi pi-chevron-down"></i>
     </button>
   }
-</div>
+</lib-page-container>

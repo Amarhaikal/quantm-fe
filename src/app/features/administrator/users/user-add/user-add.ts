@@ -16,28 +16,32 @@ import {
   DropdownComponent,
   OptionDropdown,
 } from '../../../../shared/components/form/dropdown/dropdown';
+import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
+import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../../core/services/code-type.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';
 import { CustomValidators } from '../../../../core/utils/validators';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { BaseFormComponent } from '../../../../core/base/base-form.component';
 
 @Component({
   selector: 'app-user-add',
   standalone: true,
   imports: [
     CommonModule,
-    TranslocoPipe,
     ButtonComponent,
     TextboxComponent,
     DropdownComponent,
     ReactiveFormsModule,
+    PageHeaderComponent,
+    PageContainerComponent,
   ],
   templateUrl: './user-add.html',
   styleUrl: './user-add.css',
 })
-export class UserAdd {
+export class UserAdd extends BaseFormComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -45,6 +49,14 @@ export class UserAdd {
   private confirmService = inject(ConfirmService);
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    super();
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.registerForm.dirty;
+  }
 
   loading = signal<boolean>(false);
 

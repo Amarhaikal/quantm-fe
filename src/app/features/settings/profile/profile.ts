@@ -14,7 +14,6 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -46,6 +45,9 @@ import { AvatarSelectionDialog } from '../../../shared/components/form/avatar-se
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { ScrollTopModule } from 'primeng/scrolltop';
+import { PageHeaderComponent } from '../../../shared/components/layout/page-header/page-header';
+import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
+import { CardComponent } from '../../../shared/components/layout/card/card';
 
 const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
@@ -58,7 +60,6 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     CommonModule,
     ReactiveFormsModule,
     InputTextModule,
-    CardModule,
     AvatarModule,
     FileUploadModule,
     TextboxComponent,
@@ -73,6 +74,9 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     AvatarSelectionDialog,
     MenuModule,
     ScrollTopModule,
+    PageHeaderComponent,
+    PageContainerComponent,
+    CardComponent,
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
@@ -366,15 +370,6 @@ export class Profile extends BaseFormComponent implements OnInit {
     };
   }
 
-  private prepareDisplayData(formData: any, apiData: any) {
-    return {
-      ...formData,
-      role_label: apiData.role.description,
-      status_label: apiData.status.description,
-      gender_label: apiData.gender?.description || '',
-    };
-  }
-
   private handleUserDataResponse(data: any) {
     this.userId = data.id;
 
@@ -406,7 +401,6 @@ export class Profile extends BaseFormComponent implements OnInit {
     // Identify changed fields
     const currentValues = this.profileForm.getRawValue();
     const updateData: any = {};
-    let addressUpdated = false;
 
     Object.keys(currentValues).forEach((key) => {
       if (currentValues[key] !== this.originalData[key]) {
@@ -418,7 +412,6 @@ export class Profile extends BaseFormComponent implements OnInit {
           } else {
             updateData.address[key] = currentValues[key];
           }
-          addressUpdated = true;
         } else if (REFERENCE_FIELDS.includes(key)) {
           updateData[key] = { code: currentValues[key] };
         } else {
@@ -570,10 +563,6 @@ export class Profile extends BaseFormComponent implements OnInit {
       },
     });
   }
-
-  // private getTranslation(key: string): string {
-  //   return this.translocoService.translate(key);
-  // }
 
   onWindowScroll() {
     const scrollPosition =

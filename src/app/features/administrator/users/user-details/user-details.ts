@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -48,6 +47,9 @@ import { BaseFormComponent } from '../../../../core/base/base-form.component';
 import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
 import { ImageCropDialog } from '../../../../shared/components/form/image-crop-dialog/image-crop-dialog';
 import { AvatarSelectionDialog } from '../../../../shared/components/form/avatar-selection-dialog/avatar-selection-dialog';
+import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
+import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
+import { CardComponent } from '../../../../shared/components/layout/card/card';
 
 const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
@@ -60,7 +62,6 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     CommonModule,
     ReactiveFormsModule,
     InputTextModule,
-    CardModule,
     AvatarModule,
     FileUploadModule,
     TextboxComponent,
@@ -75,6 +76,9 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     AvatarSelectionDialog,
     MenuModule,
     ScrollTopModule,
+    PageHeaderComponent,
+    PageContainerComponent,
+    CardComponent,
   ],
   templateUrl: './user-details.html',
   styleUrl: './user-details.css',

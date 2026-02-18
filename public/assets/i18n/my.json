@@ -91,24 +91,24 @@
         "password": "Kata Laluan",
         "actions": "Tindakan",
         "placeholders": {
-            "full_name": "Masukkan nama penuh",
-            "short_name": "Masukkan nama pendek",
-            "staff_id": "Masukkan no. staf",
+            "full_name": "Masukkan Nama Penuh",
+            "short_name": "Masukkan Nama Pendek",
+            "staff_id": "Masukkan No. Staf",
             "id_no": "000000-00-0000",
-            "email": "Masukkan emel",
-            "phone_no": "Masukkan nombor telefon",
-            "joined_date": "Pilih tarikh menyertai",
-            "address": "Masukkan alamat",
-            "city": "Masukkan bandar",
-            "state": "Pilih negeri",
-            "postcode": "Masukkan poskod",
-            "country": "Pilih negara",
-            "department": "Pilih jabatan",
-            "designation": "Masukkan jawatan",
-            "remarks": "Masukkan catatan",
-            "username": "Masukkan nama pengguna",
-            "role": "Pilih peranan",
-            "password": "Masukkan kata laluan"
+            "email": "Masukkan Emel",
+            "phone_no": "Masukkan Nombor Telefon",
+            "joined_date": "Pilih Tarikh Menyertai",
+            "address": "Masukkan Alamat",
+            "city": "Masukkan Bandar",
+            "state": "Pilih Negeri",
+            "postcode": "Masukkan Poskod",
+            "country": "Pilih Negara",
+            "department": "Pilih Jabatan",
+            "designation": "Masukkan Jawatan",
+            "remarks": "Masukkan Catatan",
+            "username": "Masukkan Nama Pengguna",
+            "role": "Pilih Peranan",
+            "password": "Masukkan Kata Laluan"
         }
     },
     "option": {
@@ -128,7 +128,8 @@
             "update": "Kemaskini",
             "save_changes": "Simpan Perubahan",
             "reset": "Set Semula",
-            "delete": "Padam"
+            "delete": "Padam",
+            "search": "Cari"
         }
     },
     "confirm": {

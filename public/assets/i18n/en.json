@@ -91,24 +91,24 @@
         "password": "Password",
         "actions": "Actions",
         "placeholders": {
-            "full_name": "Enter full name",
-            "short_name": "Enter short name",
-            "staff_id": "Enter staff ID",
+            "full_name": "Enter Full Name",
+            "short_name": "Enter Short Name",
+            "staff_id": "Enter Staff ID",
             "id_no": "000000-00-0000",
-            "email": "Enter email",
-            "phone_no": "Enter phone number",
-            "joined_date": "Select joined date",
-            "address": "Enter address",
-            "city": "Enter city",
-            "state": "Select state",
-            "postcode": "Enter postcode",
-            "country": "Select country",
-            "department": "Select department",
-            "designation": "Enter designation",
-            "remarks": "Enter remarks",
-            "username": "Enter username",
-            "role": "Select role",
-            "password": "Enter password"
+            "email": "Enter Email",
+            "phone_no": "Enter Phone Number",
+            "joined_date": "Select Joined Date",
+            "address": "Enter Address",
+            "city": "Enter City",
+            "state": "Select State",
+            "postcode": "Enter Postcode",
+            "country": "Select Country",
+            "department": "Select Department",
+            "designation": "Enter Designation",
+            "remarks": "Enter Remarks",
+            "username": "Enter Username",
+            "role": "Select Role",
+            "password": "Enter Password"
         }
     },
     "option": {
@@ -128,7 +128,8 @@
             "update": "Update",
             "save_changes": "Save Changes",
             "reset": "Reset",
-            "delete": "Delete"
+            "delete": "Delete",
+            "search": "Search"
         }
     },
     "confirm": {
