@@ -59,7 +59,7 @@ export class Users extends BaseListDirective implements OnInit {
     }));
   });
 
-  searchColumns: TableColumn[] = [
+  columns: TableColumn[] = [
     { field: 'username', header: 'label.username' },
     { field: 'fullname', header: 'label.full_name' },
     { field: 'email', header: 'label.email' },
@@ -115,7 +115,6 @@ export class Users extends BaseListDirective implements OnInit {
   resetSearch() {
     this.searchForm.reset();
     this.pageNo.set(1);
-    this.fetchData();
   }
 
   handleDelete(user: any) {
