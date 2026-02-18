@@ -2,5 +2,6 @@ export interface TableColumn {
   field: string;
   header: string;
   width?: string;
-  type?: 'text' | 'date' | 'badge' | 'action';
+  textAlign?: 'left' | 'center' | 'right';
+  type?: 'text' | 'date' | 'datetime' | 'badge' | 'action';
 }

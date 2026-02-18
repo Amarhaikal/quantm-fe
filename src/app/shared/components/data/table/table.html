@@ -8,6 +8,8 @@
     [rows]="rows()"
     [totalRecords]="totalRecords()"
     [first]="first()"
+    [lazy]="true"
+    [lazyLoadOnInit]="false"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
     [paginatorDropdownAppendTo]="'body'"
@@ -19,7 +21,12 @@
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.field) {
-          <th [style.width]="col.width" class="text-center">
+          <th
+            [style.width]="col.width"
+            [class.text-center]="col.textAlign === 'center'"
+            [class.text-left]="col.textAlign === 'left' || !col.textAlign"
+            [class.text-right]="col.textAlign === 'right'"
+          >
             {{ col.header | transloco }}
           </th>
         }
@@ -32,16 +39,34 @@
     <ng-template #body let-rowData let-columns="columns">
       <tr (click)="onRowSelect.emit(rowData)">
         @for (col of columns; track col.field) {
-          <td [class.text-center]="col.type === 'badge'">
-            @switch (col.type) {
-              @case ('badge') {
-                <lib-badge
-                  [label]="rowData[col.field]"
-                  [severity]="rowData[col.field + '_severity'] || 'secondary'"
-                />
-              }
-              @default {
-                {{ rowData[col.field] }}
+          <td
+            [class.text-center]="col.textAlign === 'center' || col.type === 'badge'"
+            [class.text-left]="col.textAlign === 'left' || (!col.textAlign && col.type !== 'badge')"
+            [class.text-right]="col.textAlign === 'right'"
+          >
+            @if (
+              rowData[col.field] === null ||
+              rowData[col.field] === undefined ||
+              rowData[col.field] === ''
+            ) {
+              -
+            } @else {
+              @switch (col.type) {
+                @case ('badge') {
+                  <lib-badge
+                    [label]="rowData[col.field]"
+                    [severity]="rowData[col.field + '_severity'] || 'secondary'"
+                  />
+                }
+                @case ('date') {
+                  {{ rowData[col.field] | date: 'dd/MM/yyyy' }}
+                }
+                @case ('datetime') {
+                  {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm:ss' }}
+                }
+                @default {
+                  {{ rowData[col.field] }}
+                }
               }
             }
           </td>

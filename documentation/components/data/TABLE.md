@@ -67,7 +67,8 @@ export interface TableColumn {
   field: string;
   header: string; // Transloco key
   width?: string; // e.g., '100px'
-  type?: 'text' | 'date' | 'badge' | 'action';
+  textAlign?: 'left' | 'center' | 'right';
+  type?: 'text' | 'date' | 'datetime' | 'badge' | 'action';
 }
 ```
 
@@ -78,6 +79,17 @@ export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAIL
 ```
 
 ## Features
+
+### Automatic Empty State
+
+If a field value is `null`, `undefined`, or an empty string `''`, the component will automatically display a hyphen `-` instead of an empty cell. This applies to all column types.
+
+### Date Formatting
+
+The component supports automatic date formatting:
+
+- `date`: Formats the value as `dd/MM/yyyy` (e.g., `18/02/2026`).
+- `datetime`: Formats the value as `dd/MM/yyyy HH:mm:ss` (e.g., `18/02/2026 23:30:00`).
 
 ### Badge Support
 

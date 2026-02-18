@@ -37,6 +37,10 @@
   @apply text-sm! font-medium;
 }
 
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page-selected {
+  @apply bg-indigo-600! text-white! rounded-full! w-8! h-8! min-w-8!;
+}
+
 /* Reduce navigation buttons size */
 :host ::ng-deep .p-paginator .p-paginator-nav-link {
   @apply w-8 h-8 min-w-8!;
