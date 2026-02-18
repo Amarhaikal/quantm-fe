@@ -58,7 +58,15 @@
           (ngModelChange)="handleInput($event)"
           (onBlur)="handleBlur()"
           (onFocus)="handleFocus()"
-          [placeholder]="(placeholder() | transloco) || '01x-xxxx xxxx'"
+          [placeholder]="
+            placeholder()
+              ? (placeholder() | transloco) + ' ' + '(e.g. 01x-xxxx xxxx)'
+              : ('label.placeholders.enter' | transloco) +
+                ' ' +
+                (label() | transloco) +
+                ' ' +
+                '(e.g. 01x-xxxx xxxx)'
+          "
           [disabled]="effectiveDisabled()"
           [styleClass]="
             'w-full rounded-lg! border h-9 transition-all text-sm! px-3 focus:ring-indigo-500! focus:border-indigo-500! ' +
@@ -75,9 +83,16 @@
           [id]="id()"
           [type]="type() === 'PHONENO' ? 'text' : type()"
           [placeholder]="
-            placeholder()
-              ? (placeholder() | transloco)
-              : ('label.placeholders.enter' | transloco) + ' ' + (label() | transloco)
+            type() === 'email'
+              ? placeholder()
+                ? (placeholder() | transloco) + ' (e.g. user@example.com)'
+                : ('label.placeholders.enter' | transloco) +
+                  ' ' +
+                  (label() | transloco) +
+                  ' (e.g. user@example.com)'
+              : placeholder()
+                ? (placeholder() | transloco)
+                : ('label.placeholders.enter' | transloco) + ' ' + (label() | transloco)
           "
           [ngModel]="displayValue()"
           (ngModelChange)="handleInput($event)"
