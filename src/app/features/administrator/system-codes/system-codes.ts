@@ -60,7 +60,7 @@ export class SystemCodes extends BaseListDirective implements OnInit {
     {
       field: 'code_type',
       header: 'label.code_type',
-      width: '360px',
+      width: '280px',
       editable: true,
       inputType: 'dropdown',
       options: this.codeTypesOptions(),
