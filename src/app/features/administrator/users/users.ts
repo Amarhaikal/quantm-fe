@@ -73,7 +73,6 @@ export class Users implements OnInit {
     this.searchForm.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((value) => {
-        console.log('Searching with criteria:', value);
         this.fetchUsers(value);
       });
   }
@@ -94,7 +93,6 @@ export class Users implements OnInit {
 
     this.userService.getUsers(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        console.log('User list API response:', response);
         const mappedData = response.data.data.map((user: any) => ({
           ...user,
           role: user.role?.description,
@@ -103,7 +101,6 @@ export class Users implements OnInit {
         }));
         this.users.set(mappedData);
         this.totalRecords.set(response.data.total_count);
-        console.log('Mapped user data:', this.users());
         this.loading.set(false);
       },
       error: (error: unknown) => {
@@ -114,7 +111,6 @@ export class Users implements OnInit {
   }
 
   getStatusSeverity(code: string): any {
-    console.log('Status code for severity:', code);
     switch (code) {
       case 'A':
         return 'success';
@@ -144,7 +140,6 @@ export class Users implements OnInit {
   resetSearch() {
     this.searchForm.reset();
     this.pageNo.set(1);
-    console.log('Search reset');
   }
 
   handleDelete(user: any) {
