@@ -27,7 +27,9 @@
           </th>
         }
         @if (actionType() !== 'NONE') {
-          <th class="text-center">{{ 'label.actions' | transloco }}</th>
+          <th class="text-center" pFrozenColumn alignFrozen="right">
+            {{ 'label.actions' | transloco }}
+          </th>
         }
       </tr>
     </ng-template>
@@ -86,7 +88,7 @@
           </td>
         }
         @if (actionType() !== 'NONE') {
-          <td class="text-center">
+          <td class="text-center" pFrozenColumn alignFrozen="right">
             <div class="flex items-center justify-center gap-1">
               @if (rowData.isEditing) {
                 <lib-button

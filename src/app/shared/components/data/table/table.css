@@ -10,16 +10,25 @@
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: var(--primary-color) !important;
-  @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none!;
+  @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none! whitespace-nowrap;
 }
 
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  @apply text-sm py-4 px-6 border-b border-gray-50 text-gray-700;
+  @apply text-sm py-4 px-6 border-b border-gray-50 text-gray-700 whitespace-nowrap;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child > td {
   @apply border-b-0;
+}
+
+:host ::ng-deep .p-datatable .p-frozen-column {
+  background-color: inherit !important;
+  @apply shadow-[-4px_0_12px_-4px_rgba(0,0,0,0.1)];
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-frozen-column {
+  background-color: var(--primary-color) !important;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
