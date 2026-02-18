@@ -3,11 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { TextboxComponent } from '../../../shared/components/textbox/textbox';
-import { DropdownComponent, OptionDropdown } from '../../../shared/components/dropdown/dropdown';
+import { TextboxComponent } from '../../../shared/components/form/textbox/textbox';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../shared/components/form/dropdown/dropdown';
 import { ButtonComponent } from '../../../shared/components/button/button';
-import { TableComponent } from '../../../shared/components/table/table';
-import { TableColumn } from '../../../shared/components/table/table.model';
+import { TableComponent } from '../../../shared/components/data/table/table';
+import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { UserService } from '../../../core/services/user.service';
 import { ApiResponse } from '../../../core/models/api.model';
 import { CodeTypeService } from '../../../core/services/code-type.service';

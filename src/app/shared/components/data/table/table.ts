@@ -6,7 +6,7 @@ import { TableColumn } from './table.model';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 import { BadgeComponent } from '../badge/badge';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent } from '../../button/button';
 
 export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
 

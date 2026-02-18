@@ -90,7 +90,6 @@ export class ButtonComponent {
   });
 
   finalHtmlType = computed((): ButtonHtmlType => {
-    if (this.type() === 'RESET') return 'reset';
     return this.htmlType();
   });
 

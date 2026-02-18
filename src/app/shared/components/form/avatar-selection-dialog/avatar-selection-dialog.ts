@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent } from '../../button/button';
 import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({

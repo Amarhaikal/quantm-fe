@@ -4,42 +4,39 @@ import {
   signal,
   inject,
   ChangeDetectionStrategy,
-  output,
   computed,
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
-import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
-
-export interface OptionRadio {
-  value: string;
-  label: string;
-}
+import { AppearanceService, LabelPosition } from '../../../../core/services/appearance.service';
 
 @Component({
-  selector: 'lib-radiobutton',
+  selector: 'lib-datepicker',
   standalone: true,
-  imports: [CommonModule, RadioButtonModule, ReactiveFormsModule, FormsModule, TranslocoPipe],
-  templateUrl: './radiobutton.html',
-  styleUrl: './radiobutton.css',
+  imports: [CommonModule, DatePickerModule, ReactiveFormsModule, FormsModule, TranslocoPipe],
+  templateUrl: './datepicker.html',
+  styleUrl: './datepicker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioButtonComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class DatePickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private appearanceService = inject(AppearanceService);
   private cdr = inject(ChangeDetectorRef);
 
   label = input<string>('');
   required = input<boolean>(false);
-  options = input<OptionRadio[]>([]);
-  id = input<string>(`rb-${Math.random().toString(36).substring(2, 11)}`);
-  name = input<string>(`group-${Math.random().toString(36).substring(2, 11)}`);
+  placeholder = input<string>('');
   hint = input<string>('');
+  id = input<string>(`dp-${Math.random().toString(36).substring(2, 11)}`);
+  showTime = input<boolean>(false);
+  hourFormat = input<'12' | '24'>('24');
+  dateFormat = input<string>('dd/mm/yy'); // PrimeNG format
+  showIcon = input<boolean>(true);
   labelPosition = input<LabelPosition | undefined>(undefined);
 
   /**
@@ -51,10 +48,7 @@ export class RadioButtonComponent implements ControlValueAccessor, OnInit, OnDes
 
   isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
-  onChange = output<any>();
-  onBlur = output<FocusEvent>();
-
-  value = signal<any>(null);
+  value = signal<Date | null>(null);
   private _disabled = signal<boolean>(false);
 
   /**
@@ -113,7 +107,13 @@ export class RadioButtonComponent implements ControlValueAccessor, OnInit, OnDes
   private onModelTouched: () => void = () => {};
 
   writeValue(value: any): void {
-    this.value.set(value);
+    if (value) {
+      // Handle string to Date conversion
+      const date = new Date(value);
+      this.value.set(isNaN(date.getTime()) ? null : date);
+    } else {
+      this.value.set(null);
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -128,14 +128,28 @@ export class RadioButtonComponent implements ControlValueAccessor, OnInit, OnDes
     this._disabled.set(isDisabled);
   }
 
-  handleValueChange(value: any): void {
-    this.value.set(value);
-    this.onModelChange(value);
-    this.onChange.emit(value);
+  handleValueChange(date: Date | null): void {
+    this.value.set(date);
+
+    if (!date) {
+      this.onModelChange(null);
+      return;
+    }
+
+    // Format for backend
+    if (this.showTime()) {
+      // ISO format: 2024-02-12T08:30:00Z
+      this.onModelChange(date.toISOString());
+    } else {
+      // Date only: 2024-02-12
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      this.onModelChange(`${year}-${month}-${day}`);
+    }
   }
 
-  handleBlur(event: any): void {
+  handleBlur(): void {
     this.onModelTouched();
-    this.onBlur.emit(event);
   }
 }

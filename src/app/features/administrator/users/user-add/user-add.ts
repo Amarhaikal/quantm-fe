@@ -11,8 +11,11 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { ButtonComponent } from '../../../../shared/components/button/button';
-import { TextboxComponent } from '../../../../shared/components/textbox/textbox';
-import { DropdownComponent, OptionDropdown } from '../../../../shared/components/dropdown/dropdown';
+import { TextboxComponent } from '../../../../shared/components/form/textbox/textbox';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../../shared/components/form/dropdown/dropdown';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../../core/services/code-type.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';

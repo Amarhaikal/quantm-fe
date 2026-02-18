@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TranslocoPipe } from '@ngneat/transloco';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent } from '../../button/button';
 
 @Component({
   selector: 'lib-image-crop-dialog',

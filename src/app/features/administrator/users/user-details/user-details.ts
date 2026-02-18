@@ -29,22 +29,25 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { ApiResponse } from '../../../../core/models/api.model';
 import { UserDetailed } from '../../../../core/models/user.model';
 import { environment } from '../../../../../environments/environment';
-import { TextboxComponent } from '../../../../shared/components/textbox/textbox';
+import { TextboxComponent } from '../../../../shared/components/form/textbox/textbox';
 import { ButtonComponent } from '../../../../shared/components/button/button';
-import { DropdownComponent, OptionDropdown } from '../../../../shared/components/dropdown/dropdown';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../../shared/components/form/dropdown/dropdown';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { CodeTypeService } from '../../../../core/services/code-type.service';
 import { CustomValidators } from '../../../../core/utils/validators';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { DatePickerComponent } from '../../../../shared/components/datepicker/datepicker';
-import { RadioButtonComponent } from '../../../../shared/components/radiobutton/radiobutton';
+import { DatePickerComponent } from '../../../../shared/components/form/datepicker/datepicker';
+import { RadioButtonComponent } from '../../../../shared/components/form/radiobutton/radiobutton';
 import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { BaseFormComponent } from '../../../../core/base/base-form.component';
-import { AuditInfoComponent } from '../../../../shared/components/audit-info/audit-info';
-import { ImageCropDialog } from '../../../../shared/components/image-crop-dialog/image-crop-dialog';
-import { AvatarSelectionDialog } from '../../../../shared/components/avatar-selection-dialog/avatar-selection-dialog';
+import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
+import { ImageCropDialog } from '../../../../shared/components/form/image-crop-dialog/image-crop-dialog';
+import { AvatarSelectionDialog } from '../../../../shared/components/form/avatar-selection-dialog/avatar-selection-dialog';
 
 const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];

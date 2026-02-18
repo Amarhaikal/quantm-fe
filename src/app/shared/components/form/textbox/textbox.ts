@@ -4,50 +4,48 @@ import {
   signal,
   inject,
   ChangeDetectionStrategy,
-  output,
   computed,
+  ChangeDetectorRef,
   OnInit,
   OnDestroy,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
-import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
+import { AppearanceService, LabelPosition } from '../../../../core/services/appearance.service';
 
-export interface OptionDropdown {
-  value: string;
-  label: string;
-}
+export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO' | 'password';
 
 @Component({
-  selector: 'lib-dropdown',
+  selector: 'lib-textbox',
   standalone: true,
-  imports: [CommonModule, SelectModule, ReactiveFormsModule, FormsModule, TranslocoPipe],
-  templateUrl: './dropdown.html',
-  styleUrl: './dropdown.css',
+  imports: [
+    CommonModule,
+    InputTextModule,
+    InputMaskModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslocoPipe,
+  ],
+  templateUrl: './textbox.html',
+  styleUrl: './textbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private appearanceService = inject(AppearanceService);
-  private cdr = inject(ChangeDetectorRef);
 
   label = input<string>('');
   required = input<boolean>(false);
-  options = input<OptionDropdown[]>([]);
   placeholder = input<string>('');
   hint = input<string>('');
-  id = input<string>(`dd-${Math.random().toString(36).substring(2, 11)}`);
-  filter = true;
-  loading = input<boolean>(false);
-  isFocused = signal(false);
-  isOpen = signal(false);
-
-  // Show clear button when focused or when the panel is open
-  protected shouldShowClear = computed(() => this.isFocused() || this.isOpen());
-
+  type = input<TextboxType>('text');
+  id = input<string>(`txt-${Math.random().toString(36).substring(2, 11)}`);
+  icon = input<string>('');
+  maxLength = input<number | undefined>(undefined);
+  patternErrorKey = input<string>('validation.pattern_error');
   labelPosition = input<LabelPosition | undefined>(undefined);
 
   /**
@@ -58,25 +56,24 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
   );
 
   // Support for non-form usage (read-only/one-way binding)
-  externalValue = input<any>(undefined, { alias: 'value' });
+  externalValue = input<string | null | undefined>(undefined, { alias: 'value' });
   isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 
-  onChange = output<any>();
-  onBlur = output<FocusEvent>();
-
-  private _value = signal<any>(null);
+  private _value = signal<string>('');
   private _disabled = signal<boolean>(false);
 
   // Use external input if provided, otherwise fallback to internal signal (from ControlValueAccessor)
-  protected displayValue = computed(() =>
-    this.externalValue() !== undefined ? this.externalValue() : this._value(),
+  protected displayValue = computed(
+    () => (this.externalValue() !== undefined ? this.externalValue() : this._value()) || '',
   );
   protected effectiveDisabled = computed(
     () => !!(this.isDisabled() !== undefined ? this.isDisabled() : this._disabled()),
   );
+  protected isFocused = signal<boolean>(false);
 
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
+  private cdr = inject(ChangeDetectorRef);
 
   // Signal to track control state changes
   private controlState = signal<number>(0);
@@ -89,11 +86,17 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
 
   protected showError = computed(() => {
     this.controlState(); // Dependency
+    const focused = this.isFocused();
     const control = this.ngControl?.control;
 
     if (!control) return false;
 
-    return !!(control.invalid && (control.dirty || control.touched));
+    // Special case: Always show 'notAvailable' error immediately
+    if (control.hasError('notAvailable')) {
+      return true;
+    }
+
+    return !!(control.invalid && (control.dirty || control.touched || focused));
   });
 
   constructor() {
@@ -120,49 +123,62 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
   }
 
   // ControlValueAccessor methods
-  private onModelChange: (value: any) => void = () => {};
-  private onModelTouched: () => void = () => {};
+  onChange: (value: any) => void = () => {};
+  onTouched: () => void = () => {};
 
   writeValue(value: any): void {
-    this._value.set(value);
+    this._value.set(value || '');
   }
 
   registerOnChange(fn: any): void {
-    this.onModelChange = fn;
+    this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {
-    this.onModelTouched = fn;
+    this.onTouched = fn;
   }
 
   setDisabledState(isDisabled: boolean): void {
     this._disabled.set(isDisabled);
   }
 
-  handleValueChange(value: any): void {
-    this._value.set(value);
-    this.onModelChange(value);
-    this.onChange.emit(value);
+  handleInput(event: any): void {
+    let val = event.target ? event.target.value : event.value ? event.value : event;
+    const max = this.maxLength();
+
+    if (max !== undefined && val.length > max + 1) {
+      val = val.substring(0, max + 1);
+      if (event.target) {
+        event.target.value = val;
+      }
+    }
+
+    this._value.set(val);
+    this.onChange(val);
+  }
+
+  handleBlur(): void {
+    this.isFocused.set(false);
+    this.onTouched();
+    this.trimValueIfExceeds();
+    this.ngControl?.control?.markAsTouched();
+    this.cdr.detectChanges();
   }
 
   handleFocus(): void {
     this.isFocused.set(true);
+    this.trimValueIfExceeds();
+    this.cdr.detectChanges();
   }
 
-  handleBlur(event: any): void {
-    // Delay hiding the clear button to allow click events to process
-    setTimeout(() => {
-      this.isFocused.set(false);
-    }, 200);
-    this.onModelTouched();
-    this.onBlur.emit(event);
-  }
+  private trimValueIfExceeds(): void {
+    const max = this.maxLength();
+    const currentVal = this._value();
 
-  handleShow(): void {
-    this.isOpen.set(true);
-  }
-
-  handleHide(): void {
-    this.isOpen.set(false);
+    if (max !== undefined && currentVal.length > max) {
+      const trimmed = currentVal.substring(0, max);
+      this._value.set(trimmed);
+      this.onChange(trimmed);
+    }
   }
 }
