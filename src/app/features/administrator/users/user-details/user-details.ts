@@ -421,7 +421,18 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   }
 
   onSave() {
-    if (this.userDetailsForm.invalid || !this.userId) return;
+    if (this.userDetailsForm.invalid) {
+      // Mark all controls as touched and trigger validation updates to notify child components
+      Object.values(this.userDetailsForm.controls).forEach((control) => {
+        control.markAllAsTouched();
+        control.updateValueAndValidity({ emitEvent: true });
+      });
+      this.toastService.invalidForm();
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (!this.userId) return;
 
     const currentValues = this.userDetailsForm.getRawValue();
     const updateData: any = {};

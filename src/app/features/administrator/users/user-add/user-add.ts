@@ -113,17 +113,21 @@ export class UserAdd {
   }
 
   onSubmit() {
-    console.log('this.registerForm.invalid', this.registerForm.invalid);
-
     if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+      // Mark all controls as touched and trigger validation updates to notify child components
+      Object.values(this.registerForm.controls).forEach((control) => {
+        control.markAllAsTouched();
+        control.updateValueAndValidity({ emitEvent: true });
+      });
+      this.toastService.invalidForm();
+      this.cdr.detectChanges();
       return;
     }
 
     this.confirmService.confirmSave(() => {
       this.loading.set(true);
       this.authService.register(this.registerForm.value).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           if (response.status === 201 || response.status === 200) {
             this.toastService.success('Success', 'User registration successful');
             this.loading.set(false);
@@ -133,7 +137,7 @@ export class UserAdd {
             this.loading.set(false);
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           this.toastService.error('Error', error.error?.message || 'Registration failed');
           this.loading.set(false);
         },

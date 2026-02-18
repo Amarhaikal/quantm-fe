@@ -189,6 +189,8 @@
         "update_success_detail": "Rekod berjaya dikemaskini.",
         "delete_success": "Dibuang dengan jayanya",
         "delete_success_detail": "Rekod berjaya dibuang.",
-        "user_session_not_found": "User Session Not Found"
+        "user_session_not_found": "User Session Not Found",
+        "invalid_form": "Borang Tidak Sah",
+        "invalid_form_detail": "Sila isi semua ruangan yang wajib dengan betul."
     }
 }

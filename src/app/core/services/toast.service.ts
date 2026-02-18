@@ -133,4 +133,12 @@ export class ToastService {
       life: 4000,
     });
   }
+  invalidForm() {
+    this.messageService.add({
+      severity: 'error',
+      summary: this.translateService.translate('toast.invalid_form'),
+      detail: this.translateService.translate('toast.invalid_form_detail'),
+      life: 4000,
+    });
+  }
 }
