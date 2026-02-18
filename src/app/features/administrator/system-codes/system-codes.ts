@@ -166,20 +166,35 @@ export class SystemCodes extends BaseListDirective implements OnInit {
         description: rowData.description,
       };
 
-      this.codeTypeService.createSystemCode(payload).subscribe({
+      const request =
+        rowData.id === 0
+          ? this.codeTypeService.createSystemCode(payload)
+          : this.codeTypeService.updateSystemCode(rowData.id, payload);
+
+      request.subscribe({
         next: (response) => {
           if (response.status === 200 || response.status === 201) {
-            this.toastService.createSuccess();
+            if (rowData.id === 0) {
+              this.toastService.createSuccess();
+            } else {
+              this.toastService.updateSuccess();
+            }
             this.fetchData();
           } else {
-            console.log('response', response);
-            this.toastService.createFailed(response);
+            if (rowData.id === 0) {
+              this.toastService.createFailed(response);
+            } else {
+              this.toastService.updateFailed(response);
+            }
             this.loading.set(false);
           }
         },
         error: (error) => {
-          console.log('error', error);
-          this.toastService.createFailed(error);
+          if (rowData.id === 0) {
+            this.toastService.createFailed(error);
+          } else {
+            this.toastService.updateFailed(error);
+          }
           this.loading.set(false);
         },
       });
@@ -191,9 +206,17 @@ export class SystemCodes extends BaseListDirective implements OnInit {
       // Remove the new unsaved row
       this.systemCodes.update((data) => data.filter((item) => item !== rowData));
     } else {
-      // Revert editing state for existing row (not implemented yet for edit existing)
-      rowData.isEditing = false;
+      // Revert editing state and re-fetch to discard changes
+      this.fetchData();
     }
+  }
+
+  onEdit(rowData: any) {
+    // If it's an existing row, we might need to extract the code from the formatted "CODE - DESCRIPTION"
+    if (rowData.code_type && rowData.code_type.includes(' - ')) {
+      rowData.code_type = rowData.code_type.split(' - ')[0];
+    }
+    rowData.isEditing = true;
   }
 
   onDelete(rowData: any) {
