@@ -107,12 +107,12 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.translationLoaded(); // Depend on translation being loaded
     return [
       {
-        label: this.translocoService.translate('toast.upload_photo'),
+        label: this.translocoService.translate('profile.upload_photo'),
         icon: 'pi pi-upload',
         command: () => this.fileInput()?.nativeElement.click(),
       },
       {
-        label: this.translocoService.translate('toast.choose_avatar'),
+        label: this.translocoService.translate('profile.choose_avatar'),
         icon: 'pi pi-user',
         command: () => this.avatarDialog()?.open(),
       },
@@ -121,7 +121,7 @@ export class Profile extends BaseFormComponent implements OnInit {
         visible: !!this.profileImageUrl(),
       },
       {
-        label: this.translocoService.translate('toast.remove_photo'),
+        label: this.translocoService.translate('profile.remove_photo'),
         icon: 'pi pi-trash',
         styleClass: 'text-red-600',
         visible: !!this.profileImageUrl(),
@@ -379,13 +379,18 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.profileForm.patchValue(formData);
     this.profileForm.markAsPristine();
 
-    this.originalData = this.prepareDisplayData(formData, data);
+    // Store a clean copy of the full form state (including disabled fields)
+    this.originalData = {
+      ...this.profileForm.getRawValue(),
+    };
+    this.cdr.markForCheck();
   }
 
   resetForm() {
-    this.profileForm.reset();
-    this.profileForm.patchValue(this.originalData);
-    this.profileForm.markAsPristine();
+    if (this.originalData) {
+      this.profileForm.reset(this.originalData);
+      this.cdr.markForCheck();
+    }
   }
 
   onSave() {

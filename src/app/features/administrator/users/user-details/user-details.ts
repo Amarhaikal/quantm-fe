@@ -342,7 +342,11 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userDetailsForm.patchValue(formData);
     this.userDetailsForm.markAsPristine();
 
-    this.originalData = this.prepareDisplayData(formData, data);
+    // Store a clean copy of the full form state (including disabled fields)
+    this.originalData = {
+      ...this.userDetailsForm.getRawValue(),
+    };
+    this.cdr.markForCheck();
   }
 
   private patchForm(data: any) {
@@ -410,9 +414,10 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   }
 
   resetForm() {
-    this.userDetailsForm.reset();
-    this.userDetailsForm.patchValue(this.originalData);
-    this.userDetailsForm.markAsPristine();
+    if (this.originalData) {
+      this.userDetailsForm.reset(this.originalData);
+      this.cdr.markForCheck();
+    }
   }
 
   onSave() {
