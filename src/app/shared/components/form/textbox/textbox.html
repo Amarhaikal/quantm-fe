@@ -99,7 +99,7 @@
           [disabled]="effectiveDisabled()"
           (focus)="effectiveDisabled() ? null : handleFocus()"
           (blur)="handleBlur()"
-          class="w-full h-9 rounded-lg! border pr-10 transition-colors shadow-none! px-3 text-sm!"
+          class="w-full h-9 rounded-lg! border pr-10 transition-colors shadow-none! px-3 text-sm! bg-white!"
           [class.border-gray-300!]="!showError()"
           [class.border-red-500!]="showError()"
           [class.pl-10]="icon()"
