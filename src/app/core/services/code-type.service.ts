@@ -70,4 +70,12 @@ export class CodeTypeService {
   getSystemCodesList(params: any): Observable<ApiResponse<any>> {
     return this.api.get<ApiResponse<any>>('parameter/systemCode', params);
   }
+
+  createSystemCode(data: any): Observable<ApiResponse<any>> {
+    return this.api.post<ApiResponse<any>>('parameter/systemCode', data);
+  }
+
+  deleteSystemCode(id: string): Observable<ApiResponse<any>> {
+    return this.api.delete<ApiResponse<any>>(`parameter/systemCode/${id}`);
+  }
 }

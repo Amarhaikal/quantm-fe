@@ -153,7 +153,7 @@
         },
         "delete": {
             "header": "Sahkan Padam",
-            "message": "Adakah anda pasti mahu memadam pengguna '{{name}}'?",
+            "message": "Adakah anda pasti mahu memadam data ini?",
             "accept": "Padam",
             "reject": "Batal"
         },
@@ -192,10 +192,13 @@
         "no_modifications_detected": "Tiada perubahan yang dikesan.",
         "create_success": "Dicipta dengan jayanya",
         "create_success_detail": "Rekod berjaya dicipta.",
+        "create_failed": "Gagal mencipta",
         "update_success": "Dikemaskini dengan jayanya",
         "update_success_detail": "Rekod berjaya dikemaskini.",
+        "update_failed": "Gagal mengemaskini",
         "delete_success": "Dibuang dengan jayanya",
         "delete_success_detail": "Rekod berjaya dibuang.",
+        "delete_failed": "Gagal membuang",
         "user_session_not_found": "User Session Not Found",
         "invalid_form": "Borang Tidak Sah",
         "invalid_form_detail": "Sila isi semua ruangan yang wajib dengan betul."

@@ -87,9 +87,7 @@ export class ToastService {
     this.messageService.add({
       severity: 'error',
       summary: this.translateService.translate('toast.create_failed'),
-      detail: this.translateService.translate('toast.create_failed_detail', {
-        message: err.error.message,
-      }),
+      detail: this.translateService.translate(`${err.error.message}`),
       life: 4000,
     });
   }

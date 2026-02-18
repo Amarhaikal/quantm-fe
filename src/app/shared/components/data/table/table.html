@@ -17,6 +17,7 @@
     [currentPageReportTemplate]="'common.page_report_template' | transloco"
     (onPage)="onPageChange.emit($event)"
     styleClass="p-datatable-sm p-datatable-striped"
+    [scrollable]="true"
   >
     <ng-template #header let-columns>
       <tr>
@@ -39,28 +40,46 @@
             [class.text-left]="col.textAlign === 'left' || (!col.textAlign && col.type !== 'badge')"
             [class.text-right]="col.textAlign === 'right'"
           >
-            @if (
-              rowData[col.field] === null ||
-              rowData[col.field] === undefined ||
-              rowData[col.field] === ''
-            ) {
-              -
-            } @else {
-              @switch (col.type) {
-                @case ('badge') {
-                  <lib-badge
-                    [label]="rowData[col.field]"
-                    [severity]="rowData[col.field + '_severity'] || 'secondary'"
+            @if (rowData.isEditing && col.editable) {
+              @switch (col.inputType) {
+                @case ('dropdown') {
+                  <lib-dropdown
+                    [(ngModel)]="rowData[col.field]"
+                    [options]="col.options || []"
+                    [placeholder]="col.header | transloco"
                   />
                 }
-                @case ('date') {
-                  {{ rowData[col.field] | date: 'dd/MM/yyyy' }}
-                }
-                @case ('datetime') {
-                  {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm:ss' }}
-                }
                 @default {
-                  {{ rowData[col.field] }}
+                  <lib-textbox
+                    [(ngModel)]="rowData[col.field]"
+                    [placeholder]="col.header | transloco"
+                  />
+                }
+              }
+            } @else {
+              @if (
+                rowData[col.field] === null ||
+                rowData[col.field] === undefined ||
+                rowData[col.field] === ''
+              ) {
+                -
+              } @else {
+                @switch (col.type) {
+                  @case ('badge') {
+                    <lib-badge
+                      [label]="rowData[col.field]"
+                      [severity]="rowData[col.field + '_severity'] || 'secondary'"
+                    />
+                  }
+                  @case ('date') {
+                    {{ rowData[col.field] | date: 'dd/MM/yyyy' }}
+                  }
+                  @case ('datetime') {
+                    {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm:ss' }}
+                  }
+                  @default {
+                    {{ rowData[col.field] }}
+                  }
                 }
               }
             }
@@ -69,40 +88,53 @@
         @if (actionType() !== 'NONE') {
           <td class="text-center">
             <div class="flex items-center justify-center gap-1">
-              @if (
-                actionType() === 'DETAILS' ||
-                actionType() === 'DETAILS_DELETE' ||
-                actionType() === 'EDIT_DELETE'
-              ) {
+              @if (rowData.isEditing) {
                 <lib-button
                   size="sm"
                   variant="ghost"
-                  icon="pi pi-eye"
-                  (click)="handleView(rowData, $event)"
-                  class="text-indigo-600 hover:bg-indigo-50"
+                  icon="pi pi-check"
+                  (click)="onSave.emit(rowData); $event.stopPropagation()"
+                  class="text-emerald-600 hover:bg-emerald-50"
                 />
-              }
-              @if (actionType() === 'EDIT' || actionType() === 'EDIT_DELETE') {
                 <lib-button
                   size="sm"
                   variant="ghost"
-                  icon="pi pi-pencil"
-                  (click)="handleEdit(rowData, $event)"
-                  class="text-amber-600 hover:bg-amber-50"
-                />
-              }
-              @if (
-                actionType() === 'DELETE' ||
-                actionType() === 'DETAILS_DELETE' ||
-                actionType() === 'EDIT_DELETE'
-              ) {
-                <lib-button
-                  size="sm"
-                  variant="ghost"
-                  icon="pi pi-trash"
-                  (click)="handleDelete(rowData, $event)"
+                  icon="pi pi-times"
+                  (click)="onCancel.emit(rowData); $event.stopPropagation()"
                   class="text-rose-600 hover:bg-rose-50"
                 />
+              } @else {
+                @if (actionType() === 'DETAILS' || actionType() === 'DETAILS_DELETE') {
+                  <lib-button
+                    size="sm"
+                    variant="ghost"
+                    icon="pi pi-eye"
+                    (click)="handleView(rowData, $event)"
+                    class="text-indigo-600 hover:bg-indigo-50"
+                  />
+                }
+                @if (actionType() === 'EDIT' || actionType() === 'EDIT_DELETE') {
+                  <lib-button
+                    size="sm"
+                    variant="ghost"
+                    icon="pi pi-pencil"
+                    (click)="handleEdit(rowData, $event)"
+                    class="text-amber-600 hover:bg-amber-50"
+                  />
+                }
+                @if (
+                  actionType() === 'DELETE' ||
+                  actionType() === 'DETAILS_DELETE' ||
+                  actionType() === 'EDIT_DELETE'
+                ) {
+                  <lib-button
+                    size="sm"
+                    variant="ghost"
+                    icon="pi pi-trash"
+                    (click)="handleDelete(rowData, $event)"
+                    class="text-rose-600 hover:bg-rose-50"
+                  />
+                }
               }
             </div>
           </td>

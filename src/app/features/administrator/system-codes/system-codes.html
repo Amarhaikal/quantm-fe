@@ -13,15 +13,22 @@
       </lib-search>
     </div>
 
+    <div class="flex justify-end">
+      <lib-button type="ADD" (click)="addSystemCode()" />
+    </div>
+
     <div class="w-full">
       <lib-table
-        [columns]="columns"
+        [columns]="columns()"
         [data]="systemCodes()"
         [loading]="loading()"
         [totalRecords]="totalRecords()"
         [rows]="pageSize()"
-        actionType="NONE"
+        actionType="EDIT_DELETE"
         (onPageChange)="handlePageChange($event)"
+        (onSave)="onSave($event)"
+        (onCancel)="onCancel($event)"
+        (onDelete)="onDelete($event)"
       />
     </div>
   </div>

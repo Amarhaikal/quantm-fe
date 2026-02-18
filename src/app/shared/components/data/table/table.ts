@@ -7,13 +7,25 @@ import { TranslocoPipe } from '@ngneat/transloco';
 
 import { BadgeComponent } from '../badge/badge';
 import { ButtonComponent } from '../../button/button';
+import { TextboxComponent } from '../../form/textbox/textbox';
+import { DropdownComponent } from '../../form/dropdown/dropdown';
+import { FormsModule } from '@angular/forms';
 
 export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
 
 @Component({
   selector: 'lib-table',
   standalone: true,
-  imports: [CommonModule, TableModule, TranslocoPipe, BadgeComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    TableModule,
+    TranslocoPipe,
+    BadgeComponent,
+    ButtonComponent,
+    TextboxComponent,
+    DropdownComponent,
+    FormsModule,
+  ],
   templateUrl: './table.html',
   styleUrl: './table.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +45,8 @@ export class TableComponent {
   onEdit = output<any>();
   onDelete = output<any>();
   onView = output<any>();
+  onSave = output<any>();
+  onCancel = output<any>();
 
   private router = inject(Router);
 
