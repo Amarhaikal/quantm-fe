@@ -96,6 +96,7 @@
                     pRipple
                     [routerLink]="item.url"
                     routerLinkActive="!bg-white/10 !text-indigo-400"
+                    [routerLinkActiveOptions]="{ exact: item.url === '/' }"
                     [pTooltip]="'sidemenu.' + item.name.toLowerCase() | transloco"
                     tooltipPosition="right"
                     class="flex items-center justify-center cursor-pointer p-3 rounded-lg text-white/60 hover:bg-white/5 hover:text-white transition-all duration-200 p-ripple w-12 h-12"
