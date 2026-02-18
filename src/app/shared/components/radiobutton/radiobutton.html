@@ -32,7 +32,7 @@
             [ngModel]="value()"
             (ngModelChange)="handleValueChange($event)"
             [disabled]="effectiveDisabled()"
-            [class.ng-invalid]="ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)"
+            [class.ng-invalid]="showError()"
             [class.ng-dirty]="ngControl?.dirty"
           ></p-radioButton>
           <label
@@ -45,10 +45,10 @@
       }
     </div>
 
-    @if (ngControl?.invalid && (ngControl?.dirty || ngControl?.touched)) {
+    @if (showError()) {
       <div class="flex flex-col gap-1">
-        @if (ngControl?.errors?.['required']) {
-          <small class="text-red-500 text-xs ml-1">This field is required</small>
+        @if (errors()?.['required']) {
+          <small class="text-red-500 text-xs ml-1">{{ 'validation.required' | transloco }}</small>
         }
       </div>
     } @else if (hint()) {

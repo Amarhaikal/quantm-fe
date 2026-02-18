@@ -1,23 +1,20 @@
 import {
   Component,
-  forwardRef,
   input,
   signal,
   inject,
   ChangeDetectionStrategy,
   output,
   computed,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-  FormsModule,
-} from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
 import { TranslocoPipe } from '@ngneat/transloco';
+import { Subscription } from 'rxjs';
 import { AppearanceService, LabelPosition } from '../../../core/services/appearance.service';
 
 export interface OptionDropdown {
@@ -33,8 +30,9 @@ export interface OptionDropdown {
   styleUrl: './dropdown.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DropdownComponent implements ControlValueAccessor {
+export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private appearanceService = inject(AppearanceService);
+  private cdr = inject(ChangeDetectorRef);
 
   label = input<string>('');
   required = input<boolean>(false);
@@ -80,10 +78,45 @@ export class DropdownComponent implements ControlValueAccessor {
   // Inject NgControl to access validation state
   protected ngControl = inject(NgControl, { optional: true, self: true });
 
+  // Signal to track control state changes
+  private controlState = signal<number>(0);
+  private statusSub?: Subscription;
+
+  protected errors = computed(() => {
+    this.controlState(); // Dependency
+    return this.ngControl?.control?.errors || null;
+  });
+
+  protected showError = computed(() => {
+    this.controlState(); // Dependency
+    const control = this.ngControl?.control;
+
+    if (!control) return false;
+
+    return !!(control.invalid && (control.dirty || control.touched));
+  });
+
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  ngOnInit() {
+    // Wait for the next tick to ensure control is bound
+    setTimeout(() => {
+      const control = this.ngControl?.control;
+      if (control) {
+        this.statusSub = control.statusChanges.subscribe(() => {
+          this.controlState.update((n) => n + 1);
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.statusSub?.unsubscribe();
   }
 
   // ControlValueAccessor methods

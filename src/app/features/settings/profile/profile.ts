@@ -386,13 +386,6 @@ export class Profile extends BaseFormComponent implements OnInit {
     this.cdr.markForCheck();
   }
 
-  resetForm() {
-    if (this.originalData) {
-      this.profileForm.reset(this.originalData);
-      this.cdr.markForCheck();
-    }
-  }
-
   onSave() {
     if (this.profileForm.invalid) {
       // Mark all controls as touched and trigger validation updates to notify child components

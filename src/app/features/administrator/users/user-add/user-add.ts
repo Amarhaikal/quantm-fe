@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslocoPipe } from '@ngneat/transloco';
@@ -41,11 +41,12 @@ export class UserAdd {
   private codeTypeService = inject(CodeTypeService);
   private confirmService = inject(ConfirmService);
   private toastService = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   loading = signal<boolean>(false);
 
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role: any) => ({
       value: role.code,
       label: role.description,
     }));
