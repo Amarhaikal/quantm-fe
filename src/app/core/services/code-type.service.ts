@@ -92,6 +92,6 @@ export class CodeTypeService {
   }
 
   deleteSystemCodes(ids: string[]): Observable<ApiResponse<any>> {
-    return this.api.post<ApiResponse<any>>(`parameter/systemCodes`, ids);
+    return this.api.post<ApiResponse<any>>(`parameter/systemCodes/delete`, ids);
   }
 }
