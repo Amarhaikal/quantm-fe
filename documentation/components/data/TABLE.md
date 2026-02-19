@@ -50,13 +50,17 @@ searchColumns: TableColumn[] = [
 
 ### Outputs
 
-| Event          | Type  | Description                                             |
-| :------------- | :---- | :------------------------------------------------------ |
-| `onRowSelect`  | `any` | Emitted when a row is clicked.                          |
-| `onPageChange` | `any` | Emitted when the page changes or rows per page changes. |
-| `onEdit`       | `any` | Emitted when the individual edit button is clicked.     |
-| `onDelete`     | `any` | Emitted when the individual delete button is clicked.   |
-| `onView`       | `any` | Emitted when the individual view button is clicked.     |
+| Event          | Type    | Description                                                           |
+| :------------- | :------ | :-------------------------------------------------------------------- |
+| `onRowSelect`  | `any`   | Emitted when a row is clicked.                                        |
+| `onPageChange` | `any`   | Emitted when the page changes or rows per page changes.               |
+| `onEdit`       | `any`   | Emitted when the individual edit button is clicked.                   |
+| `onDelete`     | `any`   | Emitted when the individual delete button is clicked.                 |
+| `onView`       | `any`   | Emitted when the individual view button is clicked.                   |
+| `onSave`       | `any`   | Emitted when ✔ is clicked on an editing row.                          |
+| `onCancel`     | `any`   | Emitted when ✗ is clicked on an editing, draft, or modified row.      |
+| `onRowsCreate` | `any[]` | Emitted with all current draft rows when a new row is saved.          |
+| `onRowsUpdate` | `any[]` | Emitted with all current modified rows when an existing row is saved. |
 
 ## Interfaces
 
@@ -69,6 +73,10 @@ export interface TableColumn {
   width?: string; // e.g., '100px'
   textAlign?: 'left' | 'center' | 'right';
   type?: 'text' | 'date' | 'datetime' | 'badge' | 'action';
+  editable?: boolean; // Enables inline editing for this column
+  required?: boolean; // Shows required validation in table mode
+  inputType?: 'text' | 'dropdown' | 'date' | 'number'; // Input type when editing
+  options?: any[]; // Options for dropdown inputType (OptionDropdown[])
 }
 ```
 
@@ -118,9 +126,35 @@ Buttons are automatically rendered based on the `actionType` input:
 
 When no data is provided, a standard "No data found" message is displayed with an icon.
 
+### Inline Editing
+
+The table supports inline editing for columns marked with `editable: true`. When the edit button is clicked, the row switches to editing mode and renders the appropriate input component (`lib-textbox` or `lib-dropdown`) based on the column's `inputType`.
+
+- Inputs are rendered with `[isTable]="true"` for compact styling (`h-8`, reduced padding).
+- Columns with `required: true` will show immediate validation for empty fields.
+- Pre-filled fields (editing existing data) will **not** show false validation errors on initial render.
+
+### Draft Rows (Bulk Create)
+
+New rows added via an "Add" button start in **editing mode** with `id: 0`. When confirmed (✔), they become **draft rows**:
+
+- Draft rows are highlighted with an **indigo** background (`bg-indigo-50`).
+- Draft rows are tracked via the `onRowsCreate` output.
+- A cancel button (✗) removes the draft.
+- All drafts can be saved in bulk using the parent component's save logic.
+
+### Modified Rows (Bulk Update)
+
+When an existing row is edited and confirmed (✔), it becomes a **modified row**:
+
+- Modified rows are highlighted with an **amber** background (`bg-amber-50`).
+- Modified rows are tracked via the `onRowsUpdate` output.
+- A cancel button (✗) reverts the modification and re-fetches data.
+- All modifications can be saved in bulk using the parent component's save logic.
+
 ## Advanced Example
 
-Implementation in a feature component:
+### Basic Table with Pagination
 
 ```typescript
 // users.ts
@@ -135,4 +169,47 @@ handleDelete(item: any) {
     this.service.delete(item.id).subscribe(...);
   }, { name: item.name });
 }
+```
+
+### Inline Editing with Bulk Create & Update
+
+```html
+<lib-table
+  [columns]="columns()"
+  [data]="systemCodes()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  [rows]="pageSize()"
+  actionType="EDIT_DELETE"
+  (onPageChange)="handlePageChange($event)"
+  (onSave)="onSave($event)"
+  (onCancel)="onCancel($event)"
+  (onDelete)="onDelete($event)"
+  (onEdit)="onEdit($event)"
+  (onRowsCreate)="onRowsCreate($event)"
+  (onRowsUpdate)="onRowsUpdate($event)"
+/>
+```
+
+```typescript
+// Editable column definitions
+columns = computed<TableColumn[]>(() => [
+  {
+    field: 'code_type',
+    header: 'label.code_type',
+    width: '300px',
+    editable: true,
+    required: true,
+    inputType: 'dropdown',
+    options: this.codeTypesOptions(),
+  },
+  {
+    field: 'code',
+    header: 'label.code',
+    width: '180px',
+    editable: true,
+    required: true,
+    inputType: 'text',
+  },
+]);
 ```

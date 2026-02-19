@@ -49,17 +49,19 @@ export interface OptionDropdown {
 
 ### Inputs
 
-| Property        | Type                      | Default          | Description                                   |
-| :-------------- | :------------------------ | :--------------- | :-------------------------------------------- |
-| `label`         | `input<string>`           | `''`             | Key for translation (e.g., `label.city`).     |
-| `options`       | `input<OptionDropdown[]>` | `[]`             | Array of options to display.                  |
-| `placeholder`   | `input<string>`           | `''`             | Key for translation.                          |
-| `hint`          | `input<string>`           | `''`             | Helper/Hint text displayed below the field.   |
-| `id`            | `input<string>`           | _Auto-generated_ | Unique identifier for the dropdown and label. |
-| `filter`        | `input<boolean>`          | `false`          | Whether to display a filter input.            |
-| `showClear`     | `input<boolean>`          | `false`          | Whether a clear icon is displayed.            |
-| `labelPosition` | `'left' \| 'top'`         | _Global Default_ | Override the default label positioning.       |
-| `disabled`      | `input<boolean>`          | `false`          | Manually toggle the disabled state.           |
+| Property        | Type                      | Default          | Description                                            |
+| :-------------- | :------------------------ | :--------------- | :----------------------------------------------------- |
+| `label`         | `input<string>`           | `''`             | Key for translation (e.g., `label.city`).              |
+| `options`       | `input<OptionDropdown[]>` | `[]`             | Array of options to display.                           |
+| `placeholder`   | `input<string>`           | `''`             | Key for translation.                                   |
+| `hint`          | `input<string>`           | `''`             | Helper/Hint text displayed below the field.            |
+| `id`            | `input<string>`           | _Auto-generated_ | Unique identifier for the dropdown and label.          |
+| `filter`        | `input<boolean>`          | `false`          | Whether to display a filter input.                     |
+| `showClear`     | `input<boolean>`          | `false`          | Whether a clear icon is displayed.                     |
+| `labelPosition` | `'left' \| 'top'`         | _Global Default_ | Override the default label positioning.                |
+| `disabled`      | `input<boolean>`          | `false`          | Manually toggle the disabled state.                    |
+| `required`      | `input<boolean>`          | `false`          | Marks the field as required for validation.            |
+| `isTable`       | `input<boolean>`          | `false`          | Enables compact table mode (reduced height & padding). |
 
 ### Outputs
 
@@ -70,7 +72,24 @@ export interface OptionDropdown {
 
 ## 💡 Implementation Details
 
-This component wraps the PrimeNG `p-dropdown` and follows the same pattern as `TextboxComponent`.
+This component wraps the PrimeNG `p-select` and follows the same pattern as `TextboxComponent`.
+
+### Table Mode (`isTable`)
+
+When `isTable` is set to `true`, the dropdown applies compact styling optimized for inline table editing:
+
+- **Height**: Reduced to `h-8` (from `h-9`).
+- **Padding**: `px-0` on the outer `p-select`, and `8px` padding on the inner `.p-select-label` (from `14px`).
+- **Host Class**: Adds `table-mode` class to the host element for CSS scoping.
+
+### Smart Validation in Table Mode
+
+The `showError` logic is designed to avoid false-positive error messages when editing existing data:
+
+- **Empty fields**: Errors are shown immediately (e.g., on newly added rows).
+- **Pre-filled fields**: Errors are only shown after user interaction (`dirty` or `touched`). This prevents "This field is required" from flashing when a row with existing data enters edit mode.
+
+> The `controlState` signal is explicitly updated after the `statusChanges` subscription is established in `ngOnInit`, ensuring `showError` re-evaluates with the correct control state after the initial value is written.
 
 ### Best Practices Followed:
 

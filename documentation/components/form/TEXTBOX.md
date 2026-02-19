@@ -53,6 +53,8 @@ By default, the component follows the global settings in `AppearanceService`. Yo
 | `icon`          | `input<string>`         | `''`             | PrimeNG icon class (e.g., `pi pi-search`).             |
 | `labelPosition` | `'left' \| 'top'`       | _Global Default_ | Override the default label positioning.                |
 | `disabled`      | `input<boolean>`        | `false`          | Manually toggle the disabled state.                    |
+| `required`      | `input<boolean>`        | `false`          | Marks the field as required for validation.            |
+| `isTable`       | `input<boolean>`        | `false`          | Enables compact table mode (reduced height & padding). |
 
 ### Outputs
 
@@ -63,6 +65,22 @@ By default, the component follows the global settings in `AppearanceService`. Yo
 ## 💡 Implementation Details
 
 This component avoids manual `controlName` input by using the standard `NG_VALUE_ACCESSOR` provider. This ensures a clean API for the consumer.
+
+### Table Mode (`isTable`)
+
+When `isTable` is set to `true`, the textbox applies compact styling optimized for inline table editing:
+
+- **Height**: Reduced to `h-8` (from `h-9`).
+- **Padding**: `px-2` and `pr-2` (from `px-3` and `pr-10`), removing the extra right padding used for icons in normal mode.
+
+### Smart Validation in Table Mode
+
+The `showError` logic is designed to avoid false-positive error messages when editing existing data:
+
+- **Empty fields**: Errors are shown immediately (e.g., on newly added rows).
+- **Pre-filled fields**: Errors are only shown after user interaction (`dirty` or `touched`). This prevents "This field is required" from flashing when a row with existing data enters edit mode.
+
+> The `controlState` signal is explicitly updated after the `statusChanges` subscription is established in `ngOnInit`, ensuring `showError` re-evaluates with the correct control state after the initial value is written.
 
 ### Best Practices Followed:
 
