@@ -3,12 +3,13 @@ import {
   ChangeDetectionStrategy,
   inject,
   signal,
+  NgZone,
   OnInit,
-  computed,
   DestroyRef,
   viewChild,
   ElementRef,
   ChangeDetectorRef,
+  computed,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -98,6 +99,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private dateService = inject(DateService);
   private translocoService = inject(TranslocoService);
   private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -107,22 +109,9 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   isUploadingPhoto = signal<boolean>(false);
 
   private fetchedUser = signal<UserDetailed | null>(null);
-  private refreshSig = signal<number>(0);
 
-  profileImageUrl = computed(() => {
-    this.refreshSig(); // Dependency for forcing reload
-    const user = this.fetchedUser();
-    if (!user?.profile_image_url) return undefined;
-
-    const baseUrl = environment.apiUrl.endsWith('/')
-      ? environment.apiUrl.slice(0, -1)
-      : environment.apiUrl;
-    const path = user.profile_image_url.startsWith('/')
-      ? user.profile_image_url
-      : `/${user.profile_image_url}`;
-
-    return `${baseUrl}${path}?t=${new Date().getTime()}`;
-  });
+  // Plain writable signal — .set() always triggers OnPush re-render
+  profileImageUrl = signal<string | undefined>(undefined);
 
   fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   cropDialog = viewChild<ImageCropDialog>('cropDialog');
@@ -345,6 +334,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private handleUserDataResponse(data: UserDetailed) {
     this.userId = data.id;
     this.fetchedUser.set(data);
+    this.profileImageUrl.set(this.buildImageUrl(data.profile_image_url));
 
     const formData = this.patchForm(data);
     this.userDetailsForm.patchValue(formData);
@@ -355,6 +345,21 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       ...this.userDetailsForm.getRawValue(),
     };
     this.cdr.markForCheck();
+  }
+
+  private buildImageUrl(rawPath: string | null | undefined): string | undefined {
+    if (!rawPath) return undefined;
+
+    const baseUrl = environment.apiUrl.endsWith('/')
+      ? environment.apiUrl.slice(0, -1)
+      : environment.apiUrl;
+
+    if (rawPath.startsWith('http')) {
+      return `${rawPath}${rawPath.includes('?') ? '&' : '?'}t=${Date.now()}`;
+    }
+
+    const formattedPath = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+    return `${baseUrl}${formattedPath}?t=${Date.now()}`;
   }
 
   private patchForm(data: any) {
@@ -514,8 +519,36 @@ export class UserDetails extends BaseFormComponent implements OnInit {
           const path = d.FilePath || d.filePath || d.FileUrl || d.fileUrl || d.Path || d.path;
 
           if (path) {
+            // Path returned directly — update local signal immediately
+            this.profileImageUrl.set(this.buildImageUrl(path));
             this.fetchedUser.update((user) => (user ? { ...user, profile_image_url: path } : null));
-            this.refreshSig.update((n) => n + 1);
+
+            // Always sync AuthService if editing self so header + sidemenu refresh
+            const currentUser = this.authService.currentUser();
+            if (currentUser && currentUser.id === this.userId) {
+              this.authService.updateProfileImage(path);
+            }
+            this.cdr.markForCheck();
+          } else {
+            // Path not returned by API — re-fetch the user to get the latest image URL
+            setTimeout(() => {
+              this.userService.getUserById(this.userId!).subscribe({
+                next: (refetchResponse: ApiResponse<UserDetailed>) => {
+                  if (refetchResponse.status === 200) {
+                    const newPath = refetchResponse.data.profile_image_url;
+                    // Use NgZone.run() to ensure OnPush components (header, sidemenu) are notified
+                    this.ngZone.run(() => {
+                      this.profileImageUrl.set(this.buildImageUrl(newPath));
+                      this.fetchedUser.update((user) =>
+                        user ? { ...user, profile_image_url: newPath } : null,
+                      );
+                      // Always update AuthService so header + sidemenu avatar refresh
+                      this.authService.updateProfileImage(newPath);
+                    });
+                  }
+                },
+              });
+            }, 500);
           }
         }
         this.isUploadingPhoto.set(false);
@@ -560,10 +593,17 @@ export class UserDetails extends BaseFormComponent implements OnInit {
                 'Success',
                 this.getTranslation('profile.photo_remove_success'),
               );
+              // Directly set the writable signal — guaranteed to trigger OnPush re-render
+              this.profileImageUrl.set(undefined);
               this.fetchedUser.update((user) =>
                 user ? { ...user, profile_image_url: null } : null,
               );
-              this.refreshSig.update((n) => n + 1);
+
+              // Sync with AuthService if it's the current user
+              const currentUser = this.authService.currentUser();
+              if (currentUser && currentUser.id === this.userId) {
+                this.authService.updateProfileImage(null);
+              }
             }
             this.isUploadingPhoto.set(false);
           },

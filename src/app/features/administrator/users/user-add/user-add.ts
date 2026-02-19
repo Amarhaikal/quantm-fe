@@ -146,6 +146,7 @@ export class UserAdd extends BaseFormComponent {
         next: (response: any) => {
           if (response.status === 201 || response.status === 200) {
             this.toastService.success('Success', 'User registration successful');
+            this.registerForm.markAsPristine();
             this.loading.set(false);
             this.goBack();
           } else {

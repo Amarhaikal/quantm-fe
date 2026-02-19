@@ -26,8 +26,7 @@ export class AuthService {
   refreshCounter = this.refreshSig.asReadonly();
 
   profileImageUrl = computed(() => {
-    // Depend on refreshCounter to force re-evaluation
-    this.refreshCounter();
+    const counter = this.refreshCounter();
     const user = this.currentUser();
     if (!user?.profile_image_url) return undefined;
 
@@ -39,7 +38,8 @@ export class AuthService {
       : `/${user.profile_image_url}`;
 
     // Add timestamp to force browser to reload image if path is same
-    return `${baseUrl}${path}?t=${new Date().getTime()}`;
+    // Using counter to ensure uniqueness on every refresh
+    return `${baseUrl}${path}?t=${Date.now()}_${counter}`;
   });
 
   login(credentials: { username: string; password: string }): Observable<AuthResponse> {
