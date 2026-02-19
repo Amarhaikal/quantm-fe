@@ -37,10 +37,11 @@
     <ng-template #body let-rowData let-columns="columns">
       <tr
         (click)="onRowSelect.emit(rowData)"
-        [class.bg-indigo-50!]="rowData.isDraft"
-        [class.hover:bg-indigo-100!]="rowData.isDraft"
-        [class.bg-amber-50!]="rowData.isModified"
-        [class.hover:bg-amber-100!]="rowData.isModified"
+        [class.bg-indigo-100!]="rowData.isDraft"
+        [class.bg-amber-100!]="rowData.isModified"
+        [class.bg-rose-100!]="rowData.isMarkedForDeletion"
+        [class.opacity-60]="rowData.isMarkedForDeletion"
+        [class.line-through]="rowData.isMarkedForDeletion"
       >
         @for (col of columns; track col.field) {
           <td
@@ -122,6 +123,14 @@
                   icon="pi pi-times"
                   (click)="onCancel.emit(rowData); $event.stopPropagation()"
                   class="text-rose-600 hover:bg-rose-50"
+                />
+              } @else if (rowData.isMarkedForDeletion) {
+                <lib-button
+                  size="sm"
+                  variant="ghost"
+                  icon="pi pi-undo"
+                  (click)="handleDelete(rowData, $event)"
+                  class="text-indigo-600 hover:bg-indigo-50"
                 />
               } @else {
                 @if (actionType() === 'DETAILS' || actionType() === 'DETAILS_DELETE') {

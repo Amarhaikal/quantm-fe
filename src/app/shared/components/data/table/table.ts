@@ -49,6 +49,7 @@ export class TableComponent {
   onCancel = output<any>();
   onRowsCreate = output<any[]>();
   onRowsUpdate = output<any[]>();
+  onRowsDelete = output<any[]>();
 
   private router = inject(Router);
 
@@ -62,7 +63,11 @@ export class TableComponent {
 
   handleDelete(rowData: any, event: Event) {
     event.stopPropagation();
-    this.onDelete.emit(rowData);
+    // Toggle mark for deletion
+    rowData.isMarkedForDeletion = !rowData.isMarkedForDeletion;
+    // Collect all currently marked rows
+    const allMarked = this.data().filter((r) => r.isMarkedForDeletion);
+    this.onRowsDelete.emit(allMarked);
   }
 
   handleEdit(rowData: any, event: Event) {

@@ -50,17 +50,18 @@ searchColumns: TableColumn[] = [
 
 ### Outputs
 
-| Event          | Type    | Description                                                           |
-| :------------- | :------ | :-------------------------------------------------------------------- |
-| `onRowSelect`  | `any`   | Emitted when a row is clicked.                                        |
-| `onPageChange` | `any`   | Emitted when the page changes or rows per page changes.               |
-| `onEdit`       | `any`   | Emitted when the individual edit button is clicked.                   |
-| `onDelete`     | `any`   | Emitted when the individual delete button is clicked.                 |
-| `onView`       | `any`   | Emitted when the individual view button is clicked.                   |
-| `onSave`       | `any`   | Emitted when ✔ is clicked on an editing row.                          |
-| `onCancel`     | `any`   | Emitted when ✗ is clicked on an editing, draft, or modified row.      |
-| `onRowsCreate` | `any[]` | Emitted with all current draft rows when a new row is saved.          |
-| `onRowsUpdate` | `any[]` | Emitted with all current modified rows when an existing row is saved. |
+| Event          | Type    | Description                                                              |
+| :------------- | :------ | :----------------------------------------------------------------------- |
+| `onRowSelect`  | `any`   | Emitted when a row is clicked.                                           |
+| `onPageChange` | `any`   | Emitted when the page changes or rows per page changes.                  |
+| `onEdit`       | `any`   | Emitted when the individual edit button is clicked.                      |
+| `onDelete`     | `any`   | Emitted when the individual delete button is clicked.                    |
+| `onView`       | `any`   | Emitted when the individual view button is clicked.                      |
+| `onSave`       | `any`   | Emitted when ✔ is clicked on an editing row.                             |
+| `onCancel`     | `any`   | Emitted when ✗ is clicked on an editing, draft, or modified row.         |
+| `onRowsCreate` | `any[]` | Emitted with all current draft rows when a new row is saved.             |
+| `onRowsUpdate` | `any[]` | Emitted with all current modified rows when an existing row is saved.    |
+| `onRowsDelete` | `any[]` | Emitted with all current marked-for-deletion rows when a row is toggled. |
 
 ## Interfaces
 
@@ -138,7 +139,7 @@ The table supports inline editing for columns marked with `editable: true`. When
 
 New rows added via an "Add" button start in **editing mode** with `id: 0`. When confirmed (✔), they become **draft rows**:
 
-- Draft rows are highlighted with an **indigo** background (`bg-indigo-50`).
+- Draft rows are highlighted with an **indigo** background (`bg-indigo-100`).
 - Draft rows are tracked via the `onRowsCreate` output.
 - A cancel button (✗) removes the draft.
 - All drafts can be saved in bulk using the parent component's save logic.
@@ -147,10 +148,19 @@ New rows added via an "Add" button start in **editing mode** with `id: 0`. When 
 
 When an existing row is edited and confirmed (✔), it becomes a **modified row**:
 
-- Modified rows are highlighted with an **amber** background (`bg-amber-50`).
+- Modified rows are highlighted with an **amber** background (`bg-amber-100`).
 - Modified rows are tracked via the `onRowsUpdate` output.
 - A cancel button (✗) reverts the modification and re-fetches data.
 - All modifications can be saved in bulk using the parent component's save logic.
+
+### Marked for Deletion (Bulk Delete)
+
+When the delete button (🗑) is clicked on an existing row, it enters a **marked for deletion** state:
+
+- Rows are highlighted with a **rose** background (`bg-rose-100`), have **strikethrough** text, and **reduced opacity**.
+- The delete button is replaced by an **undo** button (↩).
+- Marked rows are tracked via the `onRowsDelete` output.
+- All marked rows can be deleted in bulk using the parent component's save logic (via `deleteSystemCodes` API).
 
 ## Advanced Example
 
@@ -188,6 +198,7 @@ handleDelete(item: any) {
   (onEdit)="onEdit($event)"
   (onRowsCreate)="onRowsCreate($event)"
   (onRowsUpdate)="onRowsUpdate($event)"
+  (onRowsDelete)="onRowsDelete($event)"
 />
 ```
 

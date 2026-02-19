@@ -19,7 +19,7 @@ import { SystemCode } from '../../../core/models/code-type.model';
 import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { CrudUtils } from '../../../core/utils/crud.utils';
 import { ApiResponse } from '../../../core/models/api.model';
-import { debounceTime, distinctUntilChanged, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-system-codes',
@@ -44,7 +44,13 @@ export class SystemCodes extends BaseListDirective implements OnInit {
   systemCodes = signal<SystemCode[]>([]);
   draftRows = signal<any[]>([]);
   modifiedRows = signal<any[]>([]);
-  hasPendingChanges = computed(() => this.draftRows().length > 0 || this.modifiedRows().length > 0);
+  deletedRows = signal<any[]>([]);
+  hasPendingChanges = computed(
+    () =>
+      this.draftRows().length > 0 ||
+      this.modifiedRows().length > 0 ||
+      this.deletedRows().length > 0,
+  );
 
   searchForm = this.fb.group({
     code_type: [''],
@@ -203,14 +209,20 @@ export class SystemCodes extends BaseListDirective implements OnInit {
     this.modifiedRows.set(modified);
   }
 
-  /** Save all draft and modified rows to the API in bulk. */
+  /** Called by lib-table whenever a row's deletion mark is toggled (onRowsDelete event). */
+  onRowsDelete(marked: any[]) {
+    this.deletedRows.set(marked);
+  }
+
+  /** Save all draft, modified, and deleted rows to the API in bulk. */
   saveAllPending() {
     const drafts = this.draftRows();
     const modified = this.modifiedRows();
+    const deleted = this.deletedRows();
 
-    if (!drafts.length && !modified.length) return;
+    if (!drafts.length && !modified.length && !deleted.length) return;
 
-    // Validation
+    // Validation for create/update rows
     const allPending = [...drafts, ...modified];
     const invalid = allPending.find((r) => !r.code_type || !r.code || !r.description);
     if (invalid) {
@@ -221,43 +233,48 @@ export class SystemCodes extends BaseListDirective implements OnInit {
     this.confirmService.confirmSave(() => {
       this.loading.set(true);
 
-      const creationPayload = drafts.map((r) => ({
-        code_type: r.code_type,
-        code: r.code,
-        description: r.description,
-      }));
-
-      const updatePayload = modified.map((r) => ({
-        id: r.id,
-        code_type: r.code_type,
-        code: r.code,
-        description: r.description,
-      }));
-
-      // We combine creation and update if both exist
       const requests: Observable<ApiResponse<any>>[] = [];
-      if (creationPayload.length) {
+
+      // Bulk create
+      if (drafts.length) {
+        const creationPayload = drafts.map((r) => ({
+          code_type: r.code_type,
+          code: r.code,
+          description: r.description,
+        }));
         requests.push(this.codeTypeService.createSystemCodes(creationPayload));
       }
-      if (updatePayload.length) {
+
+      // Bulk update
+      if (modified.length) {
+        const updatePayload = modified.map((r) => ({
+          id: r.id,
+          code_type: r.code_type,
+          code: r.code,
+          description: r.description,
+        }));
         requests.push(this.codeTypeService.updateSystemCodes(updatePayload));
       }
 
-      // Execute all requests
-      import('rxjs').then(({ forkJoin }) => {
-        forkJoin(requests).subscribe({
-          next: () => {
-            this.toastService.success('Success', 'All changes saved successfully');
-            this.draftRows.set([]);
-            this.modifiedRows.set([]);
-            this.fetchData();
-          },
-          error: (error) => {
-            this.toastService.error('Error', 'Failed to save some changes');
-            console.error(error);
-            this.loading.set(false);
-          },
-        });
+      // Bulk delete
+      if (deleted.length) {
+        const deleteIds = deleted.map((r) => r.id);
+        requests.push(this.codeTypeService.deleteSystemCodes(deleteIds));
+      }
+
+      forkJoin(requests).subscribe({
+        next: () => {
+          this.toastService.success('Success', 'All changes saved successfully');
+          this.draftRows.set([]);
+          this.modifiedRows.set([]);
+          this.deletedRows.set([]);
+          this.fetchData();
+        },
+        error: (error) => {
+          this.toastService.error('Error', 'Failed to save some changes');
+          console.error(error);
+          this.loading.set(false);
+        },
       });
     });
   }
@@ -274,6 +291,7 @@ export class SystemCodes extends BaseListDirective implements OnInit {
       // Revert editing/modified state and re-fetch to discard changes
       rowData.isEditing = false;
       rowData.isModified = false;
+      rowData.isMarkedForDeletion = false;
       this.fetchData();
     }
   }
@@ -287,6 +305,8 @@ export class SystemCodes extends BaseListDirective implements OnInit {
   }
 
   onDelete(rowData: any) {
+    // Legacy single-delete handler — kept for backward compatibility
+    // Bulk delete is now handled via onRowsDelete + saveAllPending
     this.confirmService.confirmDelete(
       () => {
         this.loading.set(true);
