@@ -47,6 +47,8 @@ export class TableComponent {
   onView = output<any>();
   onSave = output<any>();
   onCancel = output<any>();
+  onRowsCreate = output<any[]>();
+  onRowsUpdate = output<any[]>();
 
   private router = inject(Router);
 
@@ -66,5 +68,37 @@ export class TableComponent {
   handleEdit(rowData: any, event: Event) {
     event.stopPropagation();
     this.onEdit.emit(rowData);
+  }
+
+  /**
+   * For new rows (id === 0): mark as draft (no API call), emit onRowsCreate with current draft list.
+   * For existing rows: emit onSave as before.
+   */
+  handleSave(rowData: any, event: Event) {
+    event.stopPropagation();
+    if (rowData.id === 0) {
+      // For dropdown columns, store the display label so the draft row renders correctly
+      for (const col of this.columns()) {
+        if (col.inputType === 'dropdown' && col.options?.length) {
+          const match = col.options.find((o) => o.value === rowData[col.field]);
+          if (match) {
+            rowData[col.field + '_display'] = match.label;
+          }
+        }
+      }
+      // Mark as a committed draft — remove editing state
+      rowData.isEditing = false;
+      rowData.isDraft = true;
+      // Collect all current draft rows from the data list
+      const allDrafts = this.data().filter((r) => r.isDraft);
+      this.onRowsCreate.emit(allDrafts);
+    } else {
+      // For existing rows: mark as modified (bulk update draft)
+      rowData.isEditing = false;
+      rowData.isModified = true;
+      // Collect all current modified rows from the data list
+      const allModified = this.data().filter((r) => r.isModified);
+      this.onRowsUpdate.emit(allModified);
+    }
   }
 }

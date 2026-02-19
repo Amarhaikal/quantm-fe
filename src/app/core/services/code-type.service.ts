@@ -75,8 +75,16 @@ export class CodeTypeService {
     return this.api.post<ApiResponse<any>>('parameter/systemCode', data);
   }
 
+  createSystemCodes(data: any): Observable<ApiResponse<any>> {
+    return this.api.post<ApiResponse<any>>('parameter/systemCodes', data);
+  }
+
   updateSystemCode(id: string, data: any): Observable<ApiResponse<any>> {
     return this.api.put<ApiResponse<any>>(`parameter/systemCode/${id}`, data);
+  }
+
+  updateSystemCodes(data: any): Observable<ApiResponse<any>> {
+    return this.api.put<ApiResponse<any>>(`parameter/systemCodes`, data);
   }
 
   deleteSystemCode(id: string): Observable<ApiResponse<any>> {

@@ -35,7 +35,13 @@
     </ng-template>
 
     <ng-template #body let-rowData let-columns="columns">
-      <tr (click)="onRowSelect.emit(rowData)">
+      <tr
+        (click)="onRowSelect.emit(rowData)"
+        [class.bg-indigo-50!]="rowData.isDraft"
+        [class.hover:bg-indigo-100!]="rowData.isDraft"
+        [class.bg-amber-50!]="rowData.isModified"
+        [class.hover:bg-amber-100!]="rowData.isModified"
+      >
         @for (col of columns; track col.field) {
           <td
             [class.text-center]="col.textAlign === 'center' || col.type === 'badge'"
@@ -49,12 +55,16 @@
                     [(ngModel)]="rowData[col.field]"
                     [options]="col.options || []"
                     [placeholder]="col.header | transloco"
+                    [required]="col.required ?? false"
+                    [isTable]="true"
                   />
                 }
                 @default {
                   <lib-textbox
                     [(ngModel)]="rowData[col.field]"
                     [placeholder]="col.header | transloco"
+                    [required]="col.required ?? false"
+                    [isTable]="true"
                   />
                 }
               }
@@ -80,7 +90,7 @@
                     {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm:ss' }}
                   }
                   @default {
-                    {{ rowData[col.field] }}
+                    {{ rowData[col.field + '_display'] ?? rowData[col.field] }}
                   }
                 }
               }
@@ -95,9 +105,17 @@
                   size="sm"
                   variant="ghost"
                   icon="pi pi-check"
-                  (click)="onSave.emit(rowData); $event.stopPropagation()"
+                  (click)="handleSave(rowData, $event)"
                   class="text-emerald-600 hover:bg-emerald-50"
                 />
+                <lib-button
+                  size="sm"
+                  variant="ghost"
+                  icon="pi pi-times"
+                  (click)="onCancel.emit(rowData); $event.stopPropagation()"
+                  class="text-rose-600 hover:bg-rose-50"
+                />
+              } @else if (rowData.isDraft || rowData.isModified) {
                 <lib-button
                   size="sm"
                   variant="ghost"
