@@ -8,7 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { environment } from '../../../../environments/environment';
 import { Avatar } from 'primeng/avatar';
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
@@ -22,10 +21,33 @@ import { Router } from '@angular/router';
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Badge } from 'primeng/badge';
+import { Popover } from 'primeng/popover';
+import { DividerModule } from 'primeng/divider';
+
+export interface AppNotification {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  icon: string;
+  iconColor: string;
+  read: boolean;
+  type: 'loan_approved' | 'loan_rejected' | 'payment_due' | 'new_application' | 'document_required';
+}
 
 @Component({
   selector: 'app-header',
-  imports: [Avatar, Menu, ButtonModule, ToggleSwitch, FormsModule, CommonModule, Badge],
+  imports: [
+    Avatar,
+    Menu,
+    ButtonModule,
+    ToggleSwitch,
+    FormsModule,
+    CommonModule,
+    Badge,
+    Popover,
+    DividerModule,
+  ],
   templateUrl: './header.component.html',
   styles: [
     `
@@ -87,7 +109,70 @@ export class HeaderComponent {
   });
 
   isMalay = computed(() => this.activeLang() === 'my');
-  notificationCount = signal(3); // Dummy count for now
+
+  notifications = signal<AppNotification[]>([
+    {
+      id: 1,
+      title: 'Loan Application Approved',
+      message: "Ahmad Razif's loan application #LN-2024-001 has been approved for RM 50,000.",
+      time: '5 min ago',
+      icon: 'pi-check-circle',
+      iconColor: 'text-green-500',
+      read: false,
+      type: 'loan_approved',
+    },
+    {
+      id: 2,
+      title: 'Payment Due Reminder',
+      message: 'Loan #LN-2023-087 payment of RM 1,250 is due in 3 days.',
+      time: '1 hour ago',
+      icon: 'pi-clock',
+      iconColor: 'text-amber-500',
+      read: false,
+      type: 'payment_due',
+    },
+    {
+      id: 3,
+      title: 'New Loan Application',
+      message: 'Siti Norsham submitted a new loan application of RM 25,000.',
+      time: '2 hours ago',
+      icon: 'pi-file',
+      iconColor: 'text-blue-500',
+      read: false,
+      type: 'new_application',
+    },
+    {
+      id: 4,
+      title: 'Document Required',
+      message: 'Loan #LN-2024-015: Supporting documents are needed for verification.',
+      time: 'Yesterday',
+      icon: 'pi-exclamation-triangle',
+      iconColor: 'text-orange-500',
+      read: true,
+      type: 'document_required',
+    },
+    {
+      id: 5,
+      title: 'Loan Application Rejected',
+      message:
+        "Mohd Faizal's loan application #LN-2024-009 has been rejected. Reason: Insufficient income.",
+      time: '2 days ago',
+      icon: 'pi-times-circle',
+      iconColor: 'text-red-500',
+      read: true,
+      type: 'loan_rejected',
+    },
+  ]);
+
+  notificationCount = computed(() => this.notifications().filter((n) => !n.read).length);
+
+  markAsRead(id: number) {
+    this.notifications.update((list) => list.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }
+
+  markAllRead() {
+    this.notifications.update((list) => list.map((n) => ({ ...n, read: true })));
+  }
 
   userData = input<{
     fullname: string;
