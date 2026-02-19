@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { TranslocoService } from '@ngneat/transloco';
+import { take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -46,95 +47,146 @@ export class ToastService {
   }
 
   sessionExpired() {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.session_expired'),
-      detail: this.translateService.translate('toast.session_expired_detail'),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate(['toast.session_expired', 'toast.session_expired_detail'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: translations[0],
+          detail: translations[1],
+          life: 4000,
+        });
+      });
   }
 
   fetchFailed(err: any) {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.fetch_failed'),
-      detail: this.translateService.translate('toast.fetch_failed_detail', {
-        message: err.error.message,
-      }),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate(['toast.fetch_failed', 'toast.fetch_failed_detail'], {
+        message: err.error?.message || 'Unknown error',
+      })
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: translations[0],
+          detail: translations[1],
+          life: 4000,
+        });
+      });
   }
 
   noChanges() {
-    this.messageService.add({
-      severity: 'info',
-      summary: this.translateService.translate('toast.no_changes'),
-      detail: this.translateService.translate('toast.no_modifications_detected'),
-      life: 3000,
-    });
+    this.translateService
+      .selectTranslate(['toast.no_changes', 'toast.no_modifications_detected'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'info',
+          summary: translations[0],
+          detail: translations[1],
+          life: 3000,
+        });
+      });
   }
 
   createSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.translate('toast.create_success'),
-      detail: this.translateService.translate('toast.create_success_detail'),
-      life: 3000,
-    });
+    this.translateService
+      .selectTranslate(['toast.create_success', 'toast.create_success_detail'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: translations[0],
+          detail: translations[1],
+          life: 3000,
+        });
+      });
   }
 
   createFailed(err: any) {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.create_failed'),
-      detail: this.translateService.translate(`${err.error.message}`),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate('toast.create_failed')
+      .pipe(take(1))
+      .subscribe((summary) => {
+        this.messageService.add({
+          severity: 'error',
+          summary,
+          detail: this.translateService.translate(`${err.error?.message || 'Unknown error'}`),
+          life: 4000,
+        });
+      });
   }
 
   updateSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.translate('toast.update_success'),
-      detail: this.translateService.translate('toast.update_success_detail'),
-      life: 3000,
-    });
+    this.translateService
+      .selectTranslate(['toast.update_success', 'toast.update_success_detail'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: translations[0],
+          detail: translations[1],
+          life: 3000,
+        });
+      });
   }
 
   updateFailed(err: any) {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.update_failed'),
-      detail: this.translateService.translate(`${err.error.message}`),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate('toast.update_failed')
+      .pipe(take(1))
+      .subscribe((summary) => {
+        this.messageService.add({
+          severity: 'error',
+          summary,
+          detail: this.translateService.translate(`${err.error?.message || 'Unknown error'}`),
+          life: 4000,
+        });
+      });
   }
 
   deleteSuccess() {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.translate('toast.delete_success'),
-      detail: this.translateService.translate('toast.delete_success_detail'),
-      life: 3000,
-    });
+    this.translateService
+      .selectTranslate(['toast.delete_success', 'toast.delete_success_detail'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: translations[0],
+          detail: translations[1],
+          life: 3000,
+        });
+      });
   }
 
   deleteFailed(err: any) {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.delete_failed'),
-      detail: this.translateService.translate('toast.delete_failed_detail', {
-        message: err.error.message,
-      }),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate(['toast.delete_failed', 'toast.delete_failed_detail'], {
+        message: err.error?.message || 'Unknown error',
+      })
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: translations[0],
+          detail: translations[1],
+          life: 4000,
+        });
+      });
   }
+
   invalidForm() {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.translate('toast.invalid_form'),
-      detail: this.translateService.translate('toast.invalid_form_detail'),
-      life: 4000,
-    });
+    this.translateService
+      .selectTranslate(['toast.invalid_form', 'toast.invalid_form_detail'])
+      .pipe(take(1))
+      .subscribe((translations) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: translations[0],
+          detail: translations[1],
+          life: 4000,
+        });
+      });
   }
 }
