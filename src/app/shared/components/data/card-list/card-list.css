@@ -1,0 +1,48 @@
+@reference "../../../../../styles.css";
+
+/* Pagination Styling - copied from table.css to ensure consistency */
+:host ::ng-deep .p-paginator,
+:host ::ng-deep .p-paginator-current,
+:host ::ng-deep .p-paginator-pages .p-paginator-page,
+:host ::ng-deep .p-select .p-select-label {
+  @apply text-sm! font-medium;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page-selected {
+  @apply bg-indigo-600! text-white! rounded-full! w-8! h-8! min-w-8!;
+}
+
+/* Reduce navigation buttons size */
+:host ::ng-deep .p-paginator .p-paginator-nav-link {
+  @apply w-8 h-8 min-w-8!;
+}
+
+/* Disabled state styling */
+:host ::ng-deep .p-paginator button.p-disabled {
+  @apply text-gray-300! opacity-60!;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .p-paginator button.p-disabled svg {
+  @apply text-gray-300!;
+}
+
+/* Reduce icons size */
+:host ::ng-deep .p-paginator .p-paginator-icon {
+  @apply text-xs!;
+}
+
+/* Reduce dropdown size and add specific padding */
+:host ::ng-deep .p-paginator .p-select {
+  @apply h-auto min-w-[65px]! border-gray-200!;
+  padding: 6px 0px 6px 8px !important;
+}
+
+:host ::ng-deep .p-paginator .p-select .p-select-label {
+  @apply p-0! leading-none;
+}
+
+:host ::ng-deep .p-paginator {
+  @apply justify-end px-4 border-t border-gray-50 bg-white py-1.5 rounded-b-xl border-x border-b border-gray-200;
+  overflow: visible !important;
+}

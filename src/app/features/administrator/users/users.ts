@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AvatarModule } from 'primeng/avatar';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TextboxComponent } from '../../../shared/components/form/textbox/textbox';
 import {
@@ -20,6 +21,8 @@ import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { BaseListDirective } from '../../../core/base/base-list.directive';
 import { CrudUtils } from '../../../core/utils/crud.utils';
+import { environment } from '../../../../environments/environment';
+import { CardListComponent } from '../../../shared/components/data/card-list/card-list';
 
 @Component({
   selector: 'app-users',
@@ -33,6 +36,8 @@ import { CrudUtils } from '../../../core/utils/crud.utils';
     PageHeaderComponent,
     PageContainerComponent,
     SearchComponent,
+    CardListComponent,
+    AvatarModule,
   ],
   templateUrl: './users.html',
   styleUrl: './users.css',
@@ -45,6 +50,15 @@ export class Users extends BaseListDirective implements OnInit {
   private confirmService = inject(ConfirmService);
 
   users = signal<any[]>([]);
+  viewMode = signal<'table' | 'card'>('table'); // Default to table view
+
+  readonly severityClasses: Record<string, string> = {
+    success: 'bg-green-100 text-green-800',
+    info: 'bg-blue-100 text-blue-800',
+    warning: 'bg-yellow-100 text-yellow-800',
+    danger: 'bg-red-100 text-red-800',
+    secondary: 'bg-gray-100 text-gray-800',
+  };
 
   searchForm = this.fb.group({
     username: [''],
@@ -93,6 +107,9 @@ export class Users extends BaseListDirective implements OnInit {
           role: user.role?.description,
           status: user.status?.description,
           status_severity: CrudUtils.getStatusSeverity(user.status?.code),
+          profile_image_url: user.profile_image_url
+            ? `${environment.apiUrl}${user.profile_image_url}`
+            : null,
         }));
         this.users.set(mappedData);
         this.totalRecords.set(response.data.total_count);
@@ -141,5 +158,9 @@ export class Users extends BaseListDirective implements OnInit {
       },
       { name: user.fullname },
     );
+  }
+
+  toggleView(mode: 'table' | 'card') {
+    this.viewMode.set(mode);
   }
 }
