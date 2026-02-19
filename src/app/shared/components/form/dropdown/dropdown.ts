@@ -29,6 +29,9 @@ export interface OptionDropdown {
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.table-mode]': 'isTable()',
+  },
 })
 export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private appearanceService = inject(AppearanceService);
@@ -42,6 +45,7 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
   id = input<string>(`dd-${Math.random().toString(36).substring(2, 11)}`);
   filter = true;
   loading = input<boolean>(false);
+  isTable = input<boolean>(false);
   isFocused = signal(false);
   isOpen = signal(false);
 
@@ -93,6 +97,13 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
 
     if (!control) return false;
 
+    // In table mode, show errors immediately if invalid AND (is empty OR has been interacted with)
+    if (this.isTable()) {
+      const value = control.value;
+      const isEmpty = value === null || value === undefined || value === '';
+      return !!(control.invalid && (isEmpty || control.dirty || control.touched));
+    }
+
     return !!(control.invalid && (control.dirty || control.touched));
   });
 
@@ -111,6 +122,8 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
           this.controlState.update((n) => n + 1);
           this.cdr.detectChanges();
         });
+        // Force re-evaluation of showError with the current control state
+        this.controlState.update((n) => n + 1);
       }
     });
   }

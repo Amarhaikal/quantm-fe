@@ -44,7 +44,11 @@
       (onShow)="handleShow()"
       (onHide)="handleHide()"
       [appendTo]="'body'"
-      styleClass="w-full h-9 rounded-lg! border border-gray-300! flex items-center shadow-none! text-sm!"
+      [styleClass]="
+        isTable()
+          ? 'w-full h-8 rounded-lg! border border-gray-300! flex items-center shadow-none! text-sm! px-0!'
+          : 'w-full h-9 rounded-lg! border border-gray-300! flex items-center shadow-none! text-sm!'
+      "
       panelStyleClass="lib-dropdown-panel"
       [class.bg-gray-100!]="effectiveDisabled()"
       [class.text-gray-500!]="effectiveDisabled()"

@@ -47,6 +47,7 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   maxLength = input<number | undefined>(undefined);
   patternErrorKey = input<string>('validation.pattern_error');
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isTable = input<boolean>(false);
 
   /**
    * Effective label position based on explicit property or global appearance setting.
@@ -96,6 +97,13 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
       return true;
     }
 
+    // In table mode, show errors immediately if invalid AND (is empty OR has been interacted with)
+    if (this.isTable()) {
+      const value = control.value;
+      const isEmpty = value === null || value === undefined || value === '';
+      return !!(control.invalid && (isEmpty || control.dirty || control.touched));
+    }
+
     return !!(control.invalid && (control.dirty || control.touched || focused));
   });
 
@@ -114,6 +122,8 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
           this.controlState.update((n) => n + 1);
           this.cdr.detectChanges();
         });
+        // Force re-evaluation of showError with the current control state
+        this.controlState.update((n) => n + 1);
       }
     });
   }
