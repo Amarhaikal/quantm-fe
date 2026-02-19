@@ -65,6 +65,8 @@
                     [(ngModel)]="rowData[col.field]"
                     [placeholder]="col.header | transloco"
                     [required]="col.required ?? false"
+                    [minLength]="col.minlength"
+                    [maxLength]="col.maxlength"
                     [isTable]="true"
                   />
                 }

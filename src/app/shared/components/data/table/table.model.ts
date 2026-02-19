@@ -8,4 +8,6 @@ export interface TableColumn {
   required?: boolean;
   inputType?: 'text' | 'dropdown' | 'date' | 'number';
   options?: any[];
+  minlength?: number;
+  maxlength?: number;
 }

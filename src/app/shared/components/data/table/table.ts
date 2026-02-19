@@ -10,6 +10,7 @@ import { ButtonComponent } from '../../button/button';
 import { TextboxComponent } from '../../form/textbox/textbox';
 import { DropdownComponent } from '../../form/dropdown/dropdown';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../../core/services/toast.service';
 
 export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
 
@@ -52,6 +53,7 @@ export class TableComponent {
   onRowsDelete = output<any[]>();
 
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   handleView(rowData: any, event: Event) {
     event.stopPropagation();
@@ -82,6 +84,12 @@ export class TableComponent {
   handleSave(rowData: any, event: Event) {
     event.stopPropagation();
 
+    // Validate row data against column constraints before saving
+    if (this.hasRowErrors(rowData)) {
+      this.toastService.error('Validation Error', 'Please fix all errors before saving');
+      return;
+    }
+
     // For dropdown columns, store the display label so the row renders correctly
     for (const col of this.columns()) {
       if (col.inputType === 'dropdown' && col.options?.length) {
@@ -107,5 +115,34 @@ export class TableComponent {
       const allModified = this.data().filter((r) => r.isModified);
       this.onRowsUpdate.emit(allModified);
     }
+  }
+
+  /**
+   * Checks if a row has any validation errors based on column constraints.
+   * Returns true if the row has errors and should not be saved.
+   */
+  private hasRowErrors(rowData: any): boolean {
+    for (const col of this.columns()) {
+      if (!col.editable) continue;
+
+      const value = rowData[col.field];
+      const strValue = value ? String(value) : '';
+
+      // Required check
+      if (col.required && !strValue) {
+        return true;
+      }
+
+      // MinLength check
+      if (col.minlength && strValue && strValue.length < col.minlength) {
+        return true;
+      }
+
+      // MaxLength check
+      if (col.maxlength && strValue && strValue.length > col.maxlength) {
+        return true;
+      }
+    }
+    return false;
   }
 }

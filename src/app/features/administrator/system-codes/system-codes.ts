@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextboxComponent } from '../../../shared/components/form/textbox/textbox';
 import {
   DropdownComponent,
@@ -52,8 +52,8 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   // ─── Search ───────────────────────────────────────────────────────────
   searchForm = this.fb.group({
     code_type: [''],
-    code: [''],
-    description: [''],
+    code: ['', [Validators.maxLength(10)]],
+    description: ['', [Validators.minLength(3), Validators.maxLength(60)]],
   });
 
   codeTypesOptions = computed<OptionDropdown[]>(() => {
@@ -82,6 +82,7 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
       editable: true,
       required: true,
       inputType: 'text',
+      maxlength: 10,
     },
     {
       field: 'description',
@@ -90,6 +91,8 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
       editable: true,
       required: true,
       inputType: 'text',
+      minlength: 3,
+      maxlength: 60,
     },
     { field: 'created_by', header: 'label.created_by', width: '180px' },
     {

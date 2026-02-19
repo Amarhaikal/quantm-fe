@@ -9,7 +9,13 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NgControl,
+  ReactiveFormsModule,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CommonModule } from '@angular/common';
@@ -30,6 +36,7 @@ export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO' | 'password';
     FormsModule,
     TranslocoPipe,
   ],
+
   templateUrl: './textbox.html',
   styleUrl: './textbox.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,6 +51,7 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   type = input<TextboxType>('text');
   id = input<string>(`txt-${Math.random().toString(36).substring(2, 11)}`);
   icon = input<string>('');
+  minLength = input<number | undefined>(undefined);
   maxLength = input<number | undefined>(undefined);
   patternErrorKey = input<string>('validation.pattern_error');
   labelPosition = input<LabelPosition | undefined>(undefined);
@@ -118,6 +126,19 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
     setTimeout(() => {
       const control = this.ngControl?.control;
       if (control) {
+        // Dynamically add minLength/maxLength validators based on inputs
+        const extraValidators = [];
+        if (this.minLength() !== undefined) {
+          extraValidators.push(Validators.minLength(this.minLength()!));
+        }
+        if (this.maxLength() !== undefined) {
+          extraValidators.push(Validators.maxLength(this.maxLength()!));
+        }
+        if (extraValidators.length) {
+          control.addValidators(extraValidators);
+          control.updateValueAndValidity();
+        }
+
         this.statusSub = control.statusChanges.subscribe(() => {
           this.controlState.update((n) => n + 1);
           this.cdr.detectChanges();
