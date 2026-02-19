@@ -81,16 +81,18 @@ export class TableComponent {
    */
   handleSave(rowData: any, event: Event) {
     event.stopPropagation();
-    if (rowData.id === 0) {
-      // For dropdown columns, store the display label so the draft row renders correctly
-      for (const col of this.columns()) {
-        if (col.inputType === 'dropdown' && col.options?.length) {
-          const match = col.options.find((o) => o.value === rowData[col.field]);
-          if (match) {
-            rowData[col.field + '_display'] = match.label;
-          }
+
+    // For dropdown columns, store the display label so the row renders correctly
+    for (const col of this.columns()) {
+      if (col.inputType === 'dropdown' && col.options?.length) {
+        const match = col.options.find((o) => o.value === rowData[col.field]);
+        if (match) {
+          rowData[col.field + '_display'] = match.label;
         }
       }
+    }
+
+    if (rowData.id === 0) {
       // Mark as a committed draft — remove editing state
       rowData.isEditing = false;
       rowData.isDraft = true;
