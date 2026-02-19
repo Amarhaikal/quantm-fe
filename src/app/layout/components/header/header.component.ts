@@ -1,4 +1,12 @@
-import { Component, computed, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+  ChangeDetectionStrategy,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../environments/environment';
 import { Avatar } from 'primeng/avatar';
@@ -13,10 +21,11 @@ import { MenuService } from '../../../core/services/menu.service';
 import { Router } from '@angular/router';
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
 import { AuthService } from '../../../core/auth/auth.service';
+import { Badge } from 'primeng/badge';
 
 @Component({
   selector: 'app-header',
-  imports: [Avatar, Menu, ButtonModule, ToggleSwitch, FormsModule, CommonModule],
+  imports: [Avatar, Menu, ButtonModule, ToggleSwitch, FormsModule, CommonModule, Badge],
   templateUrl: './header.component.html',
   styles: [
     `
@@ -78,6 +87,7 @@ export class HeaderComponent {
   });
 
   isMalay = computed(() => this.activeLang() === 'my');
+  notificationCount = signal(3); // Dummy count for now
 
   userData = input<{
     fullname: string;

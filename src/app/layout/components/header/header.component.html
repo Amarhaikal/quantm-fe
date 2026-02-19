@@ -32,6 +32,29 @@
         </ng-template>
       </p-toggleswitch>
 
+      <!-- Notifications -->
+      <div class="relative">
+        <p-button
+          [rounded]="true"
+          [text]="true"
+          aria-label="Notifications"
+          styleClass="!h-10 !w-10"
+        >
+          <ng-template pTemplate="content">
+            <div class="relative">
+              <i class="pi pi-bell text-xl text-gray-600"></i>
+              @if (notificationCount() > 0) {
+                <p-badge
+                  [value]="notificationCount()"
+                  severity="danger"
+                  styleClass="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] text-[10px] flex items-center justify-center border-2 border-white"
+                />
+              }
+            </div>
+          </ng-template>
+        </p-button>
+      </div>
+
       <div class="hidden sm:flex flex-col items-end">
         <p class="text-md text-gray-500 font-medium">@{{ userData()?.username }}</p>
       </div>
