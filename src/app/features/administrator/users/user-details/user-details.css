@@ -1,7 +1,7 @@
 .scroll-down-btn,
 ::ng-deep .p-scrolltop {
   position: fixed !important;
-  right: 2rem !important;
+  right: 1.3rem !important;
   width: 2.5rem !important;
   height: 2.5rem !important;
 }
@@ -11,7 +11,7 @@
 }
 
 ::ng-deep .p-scrolltop {
-  bottom: 5.5rem !important;
+  bottom: 6.5rem !important;
 }
 
 .scroll-down-btn,
@@ -44,4 +44,202 @@
 /* Hide default PrimeNG background if any */
 ::ng-deep .p-scrolltop {
   min-width: 2.5rem !important;
+}
+
+/* =====================
+   Profile Card
+   ===================== */
+.profile-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(120deg, #3730a3 0%, #4338ca 50%, #4f46e5 100%);
+  padding: 1.5rem 1.5rem;
+  box-shadow:
+    0 20px 40px -8px rgba(55, 48, 163, 0.4),
+    0 4px 12px -2px rgba(55, 48, 163, 0.15);
+}
+
+/* Subtle diagonal stripe texture */
+.profile-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  pointer-events: none;
+}
+
+.profile-card__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.profile-card__back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.profile-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Inner layout */
+.profile-card__content {
+  position: relative;
+  z-index: 1; /* Above the diagonal stripe overlay */
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-card__actions {
+  z-index: 10;
+}
+
+/* Avatar wrapper */
+.profile-card__avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Avatar circle */
+.profile-card__avatar-ring {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    0 0 0 6px rgba(255, 255, 255, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card__avatar-wrapper:hover .profile-card__avatar-ring {
+  transform: scale(1.05);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* Hover edit overlay on avatar */
+.profile-card__avatar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.profile-card__avatar-wrapper:hover .profile-card__avatar-overlay {
+  opacity: 1;
+}
+
+/* Text block */
+.profile-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.profile-card__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.profile-card__username {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.01em;
+}
+
+.profile-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.profile-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.01em;
+  transition: background 0.2s ease;
+}
+
+.profile-card__badge:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Status badge */
+.profile-card__badge--status {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.profile-card__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+.profile-card__status-dot--active {
+  background: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.3);
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.3); }
+  50%       { box-shadow: 0 0 0 5px rgba(74, 222, 128, 0); }
+}
+
+/* Skeleton variant */
+.profile-card--skeleton {
+  background: linear-gradient(120deg, #3730a3 0%, #4338ca 100%);
+  opacity: 0.65;
 }

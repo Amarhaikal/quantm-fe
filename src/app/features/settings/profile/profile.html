@@ -5,7 +5,7 @@
     <!-- Form Section -->
     <div class="w-full">
       <lib-card [padding]="true">
-        <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-4">
+        <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="p-2">
           @if (isLoading()) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <!-- Avatar Skeleton -->

@@ -1,17 +1,146 @@
 <lib-page-container>
-  <lib-page-header title="users.details_title" [showBack]="true" />
-
   <div class="flex flex-col gap-6">
+    <!-- Hidden file input (outside card, shared by card avatar and form) -->
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
+
+    <!-- Profile Card -->
+    @if (!isLoading()) {
+      <div class="profile-card">
+        <div class="profile-card__content">
+          <!-- Editable Avatar -->
+          <div
+            class="profile-card__avatar-wrapper"
+            (click)="menu.toggle($event)"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="'profile.edit' | transloco"
+            (keydown.enter)="menu.toggle($event)"
+            (keydown.space)="menu.toggle($event)"
+          >
+            @if (isUploadingPhoto()) {
+              <div class="profile-card__avatar-ring flex items-center justify-center bg-indigo-800">
+                <i class="pi pi-spin pi-spinner text-3xl text-white"></i>
+              </div>
+            } @else {
+              @if (profileImageUrl()) {
+                <img
+                  [src]="profileImageUrl()"
+                  alt="Profile photo"
+                  class="profile-card__avatar-ring object-cover"
+                />
+              } @else {
+                <div
+                  class="profile-card__avatar-ring flex items-center justify-center bg-indigo-700"
+                >
+                  <i class="pi pi-user text-4xl text-white/80"></i>
+                </div>
+              }
+              <!-- Hover overlay -->
+              <div class="profile-card__avatar-overlay">
+                <i class="pi pi-pencil text-white text-xl"></i>
+                <span class="text-white text-[10px] font-semibold uppercase tracking-widest">
+                  {{ 'profile.edit' | transloco }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <p-menu
+            #menu
+            [model]="menuItems()"
+            [popup]="true"
+            appendTo="body"
+            styleClass="lib-profile-menu"
+          />
+
+          <!-- Header & Actions Block (Top Right) -->
+          <div
+            class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4"
+          >
+            <h1 class="profile-card__title hidden md:block">
+              {{ 'users.details_title' | transloco }}
+            </h1>
+            <button
+              type="button"
+              (click)="goBack()"
+              class="profile-card__back-btn"
+              aria-label="Go back"
+            >
+              <i class="pi pi-arrow-left"></i>
+            </button>
+          </div>
+
+          <!-- User info -->
+          <div class="profile-card__info">
+            <h2 class="profile-card__name">
+              {{ originalData?.fullname || ('common.new_user' | transloco) }}
+            </h2>
+
+            <p class="profile-card__username">&#64;{{ originalData?.username }}</p>
+
+            <div class="profile-card__badges">
+              @if (originalData?.staff_id) {
+                <span class="profile-card__badge">
+                  <i class="pi pi-id-card"></i>
+                  {{ originalData?.staff_id }}
+                </span>
+              }
+              @if (originalData?.designation) {
+                <span class="profile-card__badge">
+                  <i class="pi pi-briefcase"></i>
+                  {{ originalData?.designation }}
+                </span>
+              }
+              @if (originalData?.status) {
+                <span class="profile-card__badge profile-card__badge--status">
+                  <span
+                    class="profile-card__status-dot"
+                    [class.profile-card__status-dot--active]="originalData?.status === 'Active'"
+                  ></span>
+                  {{ originalData?.status }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Skeleton for profile card -->
+      <div class="profile-card profile-card--skeleton">
+        <div class="profile-card__content">
+          <!-- Skeleton Header Actions (Top Right) -->
+          <div
+            class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4"
+          >
+            <p-skeleton width="200px" height="2rem" borderRadius="6px" class="hidden md:block" />
+            <p-skeleton width="2.5rem" height="2.5rem" borderRadius="0.75rem" />
+          </div>
+
+          <p-skeleton shape="circle" size="7rem" />
+          <div class="profile-card__info">
+            <p-skeleton width="180px" height="1.6rem" borderRadius="6px" class="mb-2" />
+            <p-skeleton width="120px" height="1rem" borderRadius="6px" class="mb-3" />
+            <div class="flex gap-2">
+              <p-skeleton width="90px" height="1.8rem" borderRadius="999px" />
+              <p-skeleton width="120px" height="1.8rem" borderRadius="999px" />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
     <!-- Form Section -->
     <div class="w-full">
       <lib-card [padding]="true">
-        <form [formGroup]="userDetailsForm" (ngSubmit)="onSave()" class="p-4">
+        <form [formGroup]="userDetailsForm" (ngSubmit)="onSave()" class="p-2">
           @if (isLoading()) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <!-- Avatar Skeleton -->
-              <div class="md:col-span-2 flex justify-center mb-6">
-                <p-skeleton shape="circle" size="9rem" />
-              </div>
               @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
                 <div>
                   <p-skeleton width="40%" class="mb-2" />
@@ -25,68 +154,6 @@
             </div>
           } @else {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <!-- Profile Photo (Row 1) -->
-              <div class="md:col-span-2 flex flex-col items-center justify-center mb-2 py-2">
-                <!-- Hidden file input -->
-                <input
-                  #fileInput
-                  type="file"
-                  accept="image/*"
-                  class="hidden"
-                  (change)="onFileSelected($event)"
-                />
-
-                <div class="relative group cursor-pointer" (click)="menu.toggle($event)">
-                  @if (isUploadingPhoto()) {
-                    <div
-                      class="w-32 h-32 rounded-full border-4 border-white shadow-xl flex items-center justify-center bg-gray-100"
-                    >
-                      <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
-                    </div>
-                  } @else {
-                    @if (profileImageUrl()) {
-                      <img
-                        [src]="profileImageUrl()"
-                        alt="Profile photo"
-                        class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl transition-all duration-300 group-hover:scale-105"
-                      />
-                    } @else {
-                      <p-avatar
-                        icon="pi pi-user"
-                        size="xlarge"
-                        shape="circle"
-                        styleClass="w-32! h-32! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
-                      ></p-avatar>
-                    }
-                    <div
-                      class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]"
-                    >
-                      <div class="flex flex-col items-center gap-1">
-                        <i class="pi pi-pencil text-white text-2xl"></i>
-                        <span class="text-white text-[10px] font-medium uppercase tracking-wider">{{
-                          'profile.edit' | transloco
-                        }}</span>
-                      </div>
-                    </div>
-                  }
-                </div>
-
-                <p-menu
-                  #menu
-                  [model]="menuItems()"
-                  [popup]="true"
-                  appendTo="body"
-                  styleClass="lib-profile-menu"
-                />
-
-                <div class="text-center mt-4">
-                  <h2 class="text-xl font-bold text-gray-900 leading-tight">
-                    {{ originalData?.fullname || ('common.new_user' | transloco) }}
-                  </h2>
-                  <p class="text-gray-500 font-medium text-sm">@{{ originalData?.username }}</p>
-                </div>
-              </div>
-
               <!-- Full Name -->
               <lib-textbox
                 label="label.full_name"
