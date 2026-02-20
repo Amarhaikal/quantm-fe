@@ -135,7 +135,7 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
 
     this.codeTypeService.getSystemCodesList(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const data = response.data.data.map((item: any) => {
+        const data = response.data.list.map((item: any) => {
           return {
             ...item,
             code_type: item.code_type.code + ' - ' + item.code_type.description,

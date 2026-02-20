@@ -43,7 +43,7 @@ export class MyComponent extends BaseBulkCrudDirective implements OnInit {
     this.loading.set(true);
     this.myService.getList(params).subscribe({
       next: (response) => {
-        this.items.set(response.data.data);
+        this.items.set(response.data.list);
         this.totalRecords.set(response.data.total_count);
         this.loading.set(false);
       },

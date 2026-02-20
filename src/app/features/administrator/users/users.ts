@@ -102,7 +102,7 @@ export class Users extends BaseListDirective implements OnInit {
 
     this.userService.getUsers(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const mappedData = response.data.data.map((user: any) => ({
+        const mappedData = response.data.list.map((user: any) => ({
           ...user,
           role: user.role?.description,
           status: user.status?.description,
