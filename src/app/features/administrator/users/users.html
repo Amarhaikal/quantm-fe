@@ -67,43 +67,54 @@
             >
               <!-- Card Content -->
               <div class="p-5 flex flex-col gap-4 flex-1">
-                <!-- Header: Avatar + Name + Status -->
-                <div class="flex items-start justify-between gap-3">
-                  <div class="flex items-center gap-3">
+                <div class="flex items-start gap-4">
+                  <!-- Avatar -->
+                  <div class="shrink-0">
                     <p-avatar
                       [image]="user.profile_image_url"
                       [icon]="!user.profile_image_url ? 'pi pi-user' : ''"
-                      size="large"
+                      size="xlarge"
                       shape="circle"
-                      [styleClass]="!user.profile_image_url ? 'bg-gray-100 text-gray-600' : ''"
+                      [styleClass]="
+                        !user.profile_image_url
+                          ? 'bg-gray-100 text-gray-600 !w-16 !h-16 text-2xl'
+                          : '!w-16 !h-16 text-2xl'
+                      "
                     />
-                    <div>
-                      <h3
-                        class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors"
-                      >
-                        {{ user.fullname }}
-                      </h3>
-                      <p class="text-sm text-gray-500">{{ user.username }}</p>
-                    </div>
                   </div>
-                  <span
-                    class="px-2.5 py-1 rounded-full text-xs font-medium border"
-                    [class]="severityClasses[user.status_severity]"
-                    [class.border-transparent]="true"
-                  >
-                    {{ user.status }}
-                  </span>
-                </div>
 
-                <!-- Body: Details -->
-                <div class="space-y-2 mt-2">
-                  <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <i class="pi pi-envelope text-gray-400"></i>
-                    <span class="truncate">{{ user.email }}</span>
-                  </div>
-                  <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <i class="pi pi-briefcase text-gray-400"></i>
-                    <span>{{ user.role }}</span>
+                  <!-- Info Container -->
+                  <div class="flex flex-col flex-1 min-w-0">
+                    <!-- Name & Status -->
+                    <div class="flex justify-between items-start gap-2">
+                      <div class="flex flex-col min-w-0">
+                        <h3
+                          class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors truncate"
+                        >
+                          {{ user.fullname }}
+                        </h3>
+                        <p class="text-sm text-gray-500 truncate">{{ user.username }}</p>
+                      </div>
+                      <span
+                        class="shrink-0 px-2.5 py-1 rounded-full text-xs font-medium border"
+                        [class]="severityClasses[user.status_severity]"
+                        [class.border-transparent]="true"
+                      >
+                        {{ user.status }}
+                      </span>
+                    </div>
+
+                    <!-- Email & Role -->
+                    <div class="space-y-2 mt-3 text-sm text-gray-600">
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-envelope text-gray-400 shrink-0"></i>
+                        <span class="truncate">{{ user.email }}</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-briefcase text-gray-400 shrink-0"></i>
+                        <span class="truncate">{{ user.role }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
