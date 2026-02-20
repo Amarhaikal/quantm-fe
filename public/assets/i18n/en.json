@@ -37,7 +37,8 @@
         "logout": "Logout",
         "appearance": "Appearance",
         "search": "Search menus...",
-        "no_results": "No menus found"
+        "no_results": "No menus found",
+        "session activities": "Session Activity"
     },
     "profile": {
         "title": "My Profile",

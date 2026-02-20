@@ -24,4 +24,9 @@ export const ADMINISTRATOR_ROUTES: Routes = [
     path: 'system-codes',
     loadComponent: () => import('./system-codes/system-codes').then((m) => m.SystemCodes),
   },
+  {
+    path: 'session-activities',
+    loadComponent: () =>
+      import('./session-activities/session-activities').then((m) => m.SessionActivities),
+  },
 ];
