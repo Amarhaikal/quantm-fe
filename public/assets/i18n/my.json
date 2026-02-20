@@ -102,6 +102,8 @@
         "device_type": "Jenis Peranti",
         "last_activity_at": "Aktiviti Terakhir Pada",
         "expires_at": "Tamat Pada",
+        "logged_in_date": "Tarikh Log Masuk",
+        "last_activity_date": "Tarikh Aktiviti Terakhir",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",

@@ -102,6 +102,8 @@
         "last_activity_at": "Last Activity At",
         "device_type": "Device Type",
         "expires_at": "Expires At",
+        "logged_in_date": "Logged In Date",
+        "last_activity_date": "Last Activity Date",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",

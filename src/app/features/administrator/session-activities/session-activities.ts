@@ -6,7 +6,6 @@ import {
   DropdownComponent,
   OptionDropdown,
 } from '../../../shared/components/form/dropdown/dropdown';
-import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { CrudUtils } from '../../../core/utils/crud.utils';
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
@@ -17,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TableComponent } from '../../../shared/components/data/table/table';
 import { ConfirmService } from '../../../core/services/confirm.service';
+import { DateRangePickerComponent } from '../../../shared/components/form/date-range-picker/date-range-picker';
+import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
 @Component({
   selector: 'app-session-activities',
   imports: [
@@ -24,7 +25,9 @@ import { ConfirmService } from '../../../core/services/confirm.service';
     PageHeaderComponent,
     SearchComponent,
     TextboxComponent,
+    DatePickerComponent,
     DropdownComponent,
+    DateRangePickerComponent,
     ReactiveFormsModule,
     TableComponent,
   ],
@@ -54,16 +57,9 @@ export class SessionActivities implements OnInit {
 
   searchForm = this.fb.group({
     username: [''],
-    fullname: [''],
-    role: [''],
+    range_date: [null as [string, string] | null],
+    last_activity_date: null,
     status: [''],
-  });
-
-  rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
-      value: role.code,
-      label: role.description,
-    }));
   });
 
   statusOptions = computed<OptionDropdown[]>(() => {
@@ -77,10 +73,6 @@ export class SessionActivities implements OnInit {
     {
       field: 'username',
       header: 'label.username',
-    },
-    {
-      field: 'role',
-      header: 'label.role',
     },
     {
       field: 'created_at',
@@ -121,15 +113,27 @@ export class SessionActivities implements OnInit {
   fetchData(params: any = this.searchForm.value) {
     this.loading.set(true);
 
+    const range_date: [string, string] | null = params.range_date ?? null;
+
     let apiParams = {
       is_active: params.status === 'ACTIVE' ? true : params.status === 'INACTIVE' ? false : null,
-      ...CrudUtils.filterApiParams(params),
+      from_date: range_date?.[0] ?? null,
+      to_date: range_date?.[1] ?? null,
+      ...CrudUtils.filterApiParams({ ...params, range_date: null }),
       page_no: this.pageNo(),
       page_size: this.pageSize(),
     };
 
     if (apiParams.is_active === null) {
       delete apiParams.is_active;
+    }
+
+    if (apiParams.from_date === null) {
+      delete apiParams.from_date;
+    }
+
+    if (apiParams.to_date === null) {
+      delete apiParams.to_date;
     }
 
     this.sessionActivityService.getSessionActivities(apiParams).subscribe({
@@ -148,8 +152,7 @@ export class SessionActivities implements OnInit {
     return data.map((item: any) => ({
       ...item,
       username: item.user?.username,
-      fullname: item.user?.fullname,
-      role: item.user?.role?.description,
+      // role: item.user?.role?.description,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
     }));
