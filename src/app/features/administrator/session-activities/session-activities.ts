@@ -18,6 +18,7 @@ import { TableComponent } from '../../../shared/components/data/table/table';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { DateRangePickerComponent } from '../../../shared/components/form/date-range-picker/date-range-picker';
 import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-session-activities',
   imports: [
@@ -73,6 +74,8 @@ export class SessionActivities implements OnInit {
     {
       field: 'username',
       header: 'label.username',
+      type: 'avatarText',
+      imageField: 'profile_image_url',
     },
     {
       field: 'created_at',
@@ -152,6 +155,9 @@ export class SessionActivities implements OnInit {
     return data.map((item: any) => ({
       ...item,
       username: item.user?.username,
+      profile_image_url: item.user?.profile_image_url
+        ? `${environment.apiUrl}${item.user.profile_image_url}`
+        : null,
       // role: item.user?.role?.description,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
