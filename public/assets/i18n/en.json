@@ -95,6 +95,13 @@
         "code_type": "Code Type",
         "code": "Code",
         "description": "Description",
+        "logged_in_at": "Logged In At",
+        "logged_out_at": "Logged Out At",
+        "logout_reason": "Logout Reason",
+        "ip_address": "IP Address",
+        "last_activity_at": "Last Activity At",
+        "device_type": "Device Type",
+        "expires_at": "Expires At",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
@@ -162,6 +169,12 @@
             "header": "Remove Profile Photo",
             "message": "Are you sure you want to remove your profile photo?",
             "accept": "Remove",
+            "reject": "Cancel"
+        },
+        "end_session": {
+            "header": "End Session",
+            "message": "Are you sure you want to end this session?",
+            "accept": "End",
             "reject": "Cancel"
         }
     },

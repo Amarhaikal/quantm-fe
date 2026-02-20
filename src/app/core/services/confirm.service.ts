@@ -58,6 +58,30 @@ export class ConfirmService {
     });
   }
 
+  confirmEndSession(callback: () => void, params?: any) {
+    this.confirmationService.confirm({
+      message: this.translocoService.translate('confirm.end_session.message', params),
+      header: this.translocoService.translate('confirm.end_session.header'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: this.translocoService.translate('confirm.end_session.reject'),
+      acceptLabel: this.translocoService.translate('confirm.end_session.accept'),
+      rejectButtonProps: {
+        label: this.translocoService.translate('confirm.end_session.reject'),
+        severity: 'secondary',
+        outlined: true,
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: this.translocoService.translate('confirm.delete.accept'),
+        severity: 'danger',
+        size: 'small',
+      },
+      accept: () => {
+        callback();
+      },
+    });
+  }
+
   confirm(options: any) {
     this.confirmationService.confirm(options);
   }

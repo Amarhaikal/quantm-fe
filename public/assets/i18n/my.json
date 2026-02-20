@@ -95,6 +95,13 @@
         "code_type": "Jenis Kod",
         "code": "Kod",
         "description": "Penerangan",
+        "logged_in_at": "Log Masuk Pada",
+        "logged_out_at": "Log Keluar Pada",
+        "logout_reason": "Sebab Log Keluar",
+        "ip_address": "Alamat IP",
+        "device_type": "Jenis Peranti",
+        "last_activity_at": "Aktiviti Terakhir Pada",
+        "expires_at": "Tamat Pada",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
@@ -162,6 +169,12 @@
             "header": "Buang Foto Profil",
             "message": "Adakah anda pasti mahu membuang foto profil anda?",
             "accept": "Buang",
+            "reject": "Batal"
+        },
+        "end_session": {
+            "header": "Tamatkan Sesi",
+            "message": "Adakah anda pasti mahu menamatkan sesi ini?",
+            "accept": "Tamatkan",
             "reject": "Batal"
         }
     },
