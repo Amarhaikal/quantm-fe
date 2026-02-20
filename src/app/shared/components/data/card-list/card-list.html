@@ -7,7 +7,7 @@
         </div>
       }
     </div>
-  } @else {
+  } @else if (data().length > 0) {
     <!-- Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
       @for (item of data(); track $index) {
@@ -26,5 +26,14 @@
       (onPageChange)="onPageChange.emit($event)"
       styleClass=""
     />
+  } @else {
+    <div
+      class="flex items-center justify-center p-8 bg-white border border-gray-200 rounded-xl my-4"
+    >
+      <div class="flex flex-col items-center gap-2 text-gray-500">
+        <i class="pi pi-inbox text-4xl mb-2 text-gray-300"></i>
+        <span class="font-medium">{{ 'common.no_data_found' | transloco }}</span>
+      </div>
+    </div>
   }
 </div>

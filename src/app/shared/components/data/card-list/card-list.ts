@@ -9,11 +9,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
+import { TranslocoPipe } from '@ngneat/transloco';
 
 @Component({
   selector: 'lib-card-list',
   standalone: true,
-  imports: [CommonModule, PaginatorModule, SkeletonModule],
+  imports: [CommonModule, PaginatorModule, SkeletonModule, TranslocoPipe],
   templateUrl: './card-list.html',
   styleUrl: './card-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
