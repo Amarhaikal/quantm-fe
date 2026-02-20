@@ -150,7 +150,7 @@ export class SessionActivities implements OnInit {
       username: item.user?.username,
       fullname: item.user?.fullname,
       role: item.user?.role?.description,
-      status_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
+      is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
     }));
   }
