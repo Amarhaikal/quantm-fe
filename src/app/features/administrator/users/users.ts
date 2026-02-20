@@ -74,7 +74,12 @@ export class Users extends BaseListDirective implements OnInit {
   });
 
   columns: TableColumn[] = [
-    { field: 'username', header: 'label.username' },
+    {
+      field: 'username',
+      header: 'label.username',
+      type: 'avatarText',
+      imageField: 'profile_image_url',
+    },
     { field: 'fullname', header: 'label.full_name' },
     { field: 'email', header: 'label.email' },
     { field: 'role', header: 'label.role' },

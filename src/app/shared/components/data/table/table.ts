@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
+import { AvatarModule } from 'primeng/avatar';
 import { TableColumn } from './table.model';
 import { TranslocoPipe } from '@ngneat/transloco';
 
@@ -35,6 +36,7 @@ export type ActionType =
     TextboxComponent,
     DropdownComponent,
     FormsModule,
+    AvatarModule,
   ],
   templateUrl: './table.html',
   styleUrl: './table.css',

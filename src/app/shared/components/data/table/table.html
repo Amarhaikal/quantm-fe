@@ -86,6 +86,21 @@
                       [severity]="rowData[col.field + '_severity'] || 'secondary'"
                     />
                   }
+                  @case ('avatarText') {
+                    <div class="flex items-center gap-3">
+                      <p-avatar
+                        [image]="col.imageField ? rowData[col.imageField] || null : null"
+                        [icon]="!col.imageField || !rowData[col.imageField] ? 'pi pi-user' : ''"
+                        shape="circle"
+                        [styleClass]="
+                          !col.imageField || !rowData[col.imageField]
+                            ? 'bg-gray-100 text-gray-600'
+                            : ''
+                        "
+                      />
+                      <span>{{ rowData[col.field + '_display'] ?? rowData[col.field] }}</span>
+                    </div>
+                  }
                   @case ('date') {
                     {{ rowData[col.field] | date: 'dd/MM/yyyy' }}
                   }
