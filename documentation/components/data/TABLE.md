@@ -75,16 +75,27 @@ export interface TableColumn {
   textAlign?: 'left' | 'center' | 'right';
   type?: 'text' | 'date' | 'datetime' | 'badge' | 'action';
   editable?: boolean; // Enables inline editing for this column
-  required?: boolean; // Shows required validation in table mode
+  required?: boolean; // Marks the field as required during inline editing
   inputType?: 'text' | 'dropdown' | 'date' | 'number'; // Input type when editing
   options?: any[]; // Options for dropdown inputType (OptionDropdown[])
+  minlength?: number; // Minimum character length for text inputs
+  maxlength?: number; // Maximum character length for text inputs
 }
 ```
 
 ### ActionType
 
 ```typescript
-export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
+export type ActionType =
+  | 'EDIT' // Edit button only
+  | 'DELETE' // Single-delete button (confirm dialog)
+  | 'DELETES' // Bulk-delete button (mark for deletion)
+  | 'EDIT_DELETE' // Edit + single-delete button
+  | 'EDIT_DELETES' // Edit + bulk-delete button
+  | 'DETAILS' // View button only
+  | 'DETAILS_DELETE' // View + single-delete button
+  | 'DETAILS_DELETES' // View + bulk-delete button
+  | 'NONE'; // No action buttons
 ```
 
 ## Features
@@ -115,13 +126,29 @@ Example data structure for a badge column `status`:
 
 ### Standard Actions
 
-Buttons are automatically rendered based on the `actionType` input:
+Buttons are automatically rendered based on the `actionType` input. There are two delete modes:
 
-- `DETAILS` / `DETAILS_DELETE`: Shows an eye icon (View).
-- `EDIT` / `EDIT_DELETE`: Shows a pencil icon (Edit).
-- `DELETE` / `DETAILS_DELETE` / `EDIT_DELETE`: Shows a trash icon (Delete).
+#### Single Delete (`DELETE` / `EDIT_DELETE` / `DETAILS_DELETE`)
 
-> **Note**: The "View" action currently navigates to `admin/users/:id` by default if an ID is present, while also emitting the `onView` event.
+Clicking the trash icon immediately emits `onDelete` to the parent, which handles a confirm-dialog flow.
+
+#### Bulk Delete (`DELETES` / `EDIT_DELETES` / `DETAILS_DELETES`)
+
+Clicking the trash icon **marks the row** for deletion (rose background, strikethrough, undo button). Rows are actually deleted only when the parent calls `saveAllPending()`.
+
+| `actionType`      | View (👁) | Edit (✏) | Delete (🗑) | Delete Mode |
+| :---------------- | :-------: | :------: | :---------: | :---------- |
+| `NONE`            |           |          |             | —           |
+| `EDIT`            |           |    ✅    |             | —           |
+| `DELETE`          |           |          |     ✅      | Single      |
+| `DELETES`         |           |          |     ✅      | Bulk        |
+| `EDIT_DELETE`     |           |    ✅    |     ✅      | Single      |
+| `EDIT_DELETES`    |           |    ✅    |     ✅      | Bulk        |
+| `DETAILS`         |    ✅     |          |             | —           |
+| `DETAILS_DELETE`  |    ✅     |          |     ✅      | Single      |
+| `DETAILS_DELETES` |    ✅     |          |     ✅      | Bulk        |
+
+> **Note**: The "View" action navigates to `admin/users/:id` by default if an ID is present, while also emitting the `onView` event.
 
 ### Empty State
 
@@ -155,12 +182,16 @@ When an existing row is edited and confirmed (✔), it becomes a **modified row*
 
 ### Marked for Deletion (Bulk Delete)
 
-When the delete button (🗑) is clicked on an existing row, it enters a **marked for deletion** state:
+Only available when using a `*_DELETES` action type (`DELETES`, `EDIT_DELETES`, `DETAILS_DELETES`).
 
-- Rows are highlighted with a **rose** background (`bg-rose-100`), have **strikethrough** text, and **reduced opacity**.
-- The delete button is replaced by an **undo** button (↩).
+When the delete button (🗑) is clicked on a row, it enters a **marked for deletion** state:
+
+- Row is highlighted with a **rose** background (`bg-rose-100`), **strikethrough** text, and **reduced opacity**.
+- The trash button is replaced by an **undo** button (↩) to reverse the mark.
 - Marked rows are tracked via the `onRowsDelete` output.
-- All marked rows can be deleted in bulk using the parent component's save logic (via `deleteSystemCodes` API).
+- Rows are **not** deleted immediately — the parent collects all marked rows and sends a bulk delete API request when the Save button is clicked.
+
+> Use `DELETE` / `EDIT_DELETE` / `DETAILS_DELETE` for screens that require an immediate single-row confirm-and-delete dialog.
 
 ## Advanced Example
 
@@ -190,11 +221,9 @@ handleDelete(item: any) {
   [loading]="loading()"
   [totalRecords]="totalRecords()"
   [rows]="pageSize()"
-  actionType="EDIT_DELETE"
+  actionType="EDIT_DELETES"
   (onPageChange)="handlePageChange($event)"
-  (onSave)="onSave($event)"
   (onCancel)="onCancel($event)"
-  (onDelete)="onDelete($event)"
   (onEdit)="onEdit($event)"
   (onRowsCreate)="onRowsCreate($event)"
   (onRowsUpdate)="onRowsUpdate($event)"
@@ -203,7 +232,7 @@ handleDelete(item: any) {
 ```
 
 ```typescript
-// Editable column definitions
+// Editable column definitions with validation constraints
 columns = computed<TableColumn[]>(() => [
   {
     field: 'code_type',
@@ -221,6 +250,40 @@ columns = computed<TableColumn[]>(() => [
     editable: true,
     required: true,
     inputType: 'text',
+    maxlength: 10,
+  },
+  {
+    field: 'description',
+    header: 'label.description',
+    width: '240px',
+    editable: true,
+    required: true,
+    inputType: 'text',
+    minlength: 3,
+    maxlength: 60,
   },
 ]);
+```
+
+### Single Delete (Users screen)
+
+```html
+<lib-table
+  [columns]="columns"
+  [data]="users()"
+  [loading]="loading()"
+  [totalRecords]="totalRecords()"
+  [rows]="pageSize()"
+  actionType="DETAILS_DELETE"
+  (onPageChange)="handlePageChange($event)"
+  (onDelete)="handleDelete($event)"
+/>
+```
+
+```typescript
+handleDelete(item: any) {
+  this.confirmService.confirmDelete(() => {
+    this.service.delete(item.id).subscribe(...);
+  }, { name: item.name });
+}
 ```

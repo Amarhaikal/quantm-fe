@@ -12,7 +12,16 @@ import { DropdownComponent } from '../../form/dropdown/dropdown';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../core/services/toast.service';
 
-export type ActionType = 'EDIT' | 'DELETE' | 'EDIT_DELETE' | 'DETAILS' | 'DETAILS_DELETE' | 'NONE';
+export type ActionType =
+  | 'EDIT'
+  | 'DELETE'
+  | 'DELETES'
+  | 'EDIT_DELETE'
+  | 'EDIT_DELETES'
+  | 'DETAILS'
+  | 'DETAILS_DELETE'
+  | 'DETAILS_DELETES'
+  | 'NONE';
 
 @Component({
   selector: 'lib-table',
@@ -65,11 +74,18 @@ export class TableComponent {
 
   handleDelete(rowData: any, event: Event) {
     event.stopPropagation();
-    // Toggle mark for deletion
-    rowData.isMarkedForDeletion = !rowData.isMarkedForDeletion;
-    // Collect all currently marked rows
-    const allMarked = this.data().filter((r) => r.isMarkedForDeletion);
-    this.onRowsDelete.emit(allMarked);
+    const type = this.actionType();
+    const isBulk = type === 'DELETES' || type === 'EDIT_DELETES' || type === 'DETAILS_DELETES';
+
+    if (isBulk) {
+      // Toggle mark-for-deletion state (bulk delete flow)
+      rowData.isMarkedForDeletion = !rowData.isMarkedForDeletion;
+      const allMarked = this.data().filter((r) => r.isMarkedForDeletion);
+      this.onRowsDelete.emit(allMarked);
+    } else {
+      // Single delete — emit to parent to handle with confirm dialog
+      this.onDelete.emit(rowData);
+    }
   }
 
   handleEdit(rowData: any, event: Event) {
