@@ -139,9 +139,9 @@ export abstract class BaseBulkCrudDirective extends BaseListDirective {
         requests.push(this.bulkCrudApi.bulkCreate(payload));
       }
 
-      // Bulk update
+      // Bulk update — send only changed fields + id per row
       if (modified.length && this.bulkCrudApi.bulkUpdate) {
-        const payload = modified.map((r) => ({ id: r.id, ...this.extractPayload(r) }));
+        const payload = modified.map((r) => ({ id: r.id, ...this.extractUpdatePayload(r) }));
         requests.push(this.bulkCrudApi.bulkUpdate(payload));
       }
 
@@ -180,10 +180,24 @@ export abstract class BaseBulkCrudDirective extends BaseListDirective {
     dataSignal.update((data) => [{ id: 0, isEditing: true, ...defaults } as any, ...data]);
   }
 
-  /** Extracts only the editable fields from a row for API payloads. */
+  /** Extracts only the editable fields from a row for CREATE payloads. */
   private extractPayload(row: any): Record<string, any> {
     const payload: Record<string, any> = {};
     for (const field of this.editableFields) {
+      payload[field] = row[field];
+    }
+    return payload;
+  }
+
+  /**
+   * Extracts only the CHANGED fields from a row for UPDATE payloads.
+   * Uses _changedFields set by TableComponent during handleSave.
+   * Falls back to all editableFields if _changedFields is not available.
+   */
+  private extractUpdatePayload(row: any): Record<string, any> {
+    const fields: string[] = row._changedFields ?? this.editableFields;
+    const payload: Record<string, any> = {};
+    for (const field of fields) {
       payload[field] = row[field];
     }
     return payload;

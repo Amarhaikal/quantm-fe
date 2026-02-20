@@ -74,7 +74,15 @@ export class TableComponent {
 
   handleEdit(rowData: any, event: Event) {
     event.stopPropagation();
+    // Emit first so the parent can transform field values (e.g. "CTRY - Country" → "CTRY")
     this.onEdit.emit(rowData);
+    // Snapshot AFTER transformation so the diff is accurate
+    rowData._originalValues = {};
+    for (const col of this.columns()) {
+      if (col.editable) {
+        rowData._originalValues[col.field] = rowData[col.field];
+      }
+    }
   }
 
   /**
@@ -108,7 +116,18 @@ export class TableComponent {
       const allDrafts = this.data().filter((r) => r.isDraft);
       this.onRowsCreate.emit(allDrafts);
     } else {
-      // For existing rows: mark as modified (bulk update draft)
+      // For existing rows: compute which fields actually changed
+      const changedFields: string[] = [];
+      if (rowData._originalValues) {
+        for (const col of this.columns()) {
+          if (col.editable && rowData[col.field] !== rowData._originalValues[col.field]) {
+            changedFields.push(col.field);
+          }
+        }
+      }
+      rowData._changedFields = changedFields.length > 0 ? changedFields : null;
+
+      // Mark as modified (bulk update draft)
       rowData.isEditing = false;
       rowData.isModified = true;
       // Collect all current modified rows from the data list
