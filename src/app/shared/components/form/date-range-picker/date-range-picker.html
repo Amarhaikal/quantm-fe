@@ -1,0 +1,76 @@
+<div
+  class="flex gap-2 w-full"
+  [class.flex-col]="effectiveLabelPosition() === 'top'"
+  [class.flex-row]="effectiveLabelPosition() === 'left'"
+  [class.items-start]="effectiveLabelPosition() === 'left'"
+>
+  @if (label()) {
+    <label
+      [for]="id()"
+      class="text-sm font-medium text-gray-600 select-none"
+      [class.w-1/3]="effectiveLabelPosition() === 'left'"
+      [class.pt-2]="effectiveLabelPosition() === 'left'"
+    >
+      {{ label() | transloco }}
+      @if (required()) {
+        <span class="text-red-500 ml-0.5">*</span>
+      }
+    </label>
+  }
+
+  <div
+    class="flex flex-col gap-2"
+    [class.flex-1]="effectiveLabelPosition() === 'left'"
+    [class.w-full]="effectiveLabelPosition() === 'top'"
+  >
+    <div class="relative w-full">
+      <p-datepicker
+        [id]="id()"
+        [ngModel]="value()"
+        (ngModelChange)="handleValueChange($event)"
+        selectionMode="range"
+        [showTime]="showTime()"
+        [hourFormat]="hourFormat()"
+        [dateFormat]="dateFormat()"
+        [showIcon]="showIcon()"
+        [placeholder]="
+          placeholder()
+            ? (placeholder() | transloco)
+            : ('label.placeholders.select' | transloco) + ' ' + (label() | transloco)
+        "
+        [disabled]="effectiveDisabled()"
+        (onBlur)="handleBlur()"
+        [appendTo]="'body'"
+        styleClass="w-full h-9 rounded-lg! border border-gray-300! flex items-center shadow-none! text-sm!"
+        [class.bg-gray-100!]="effectiveDisabled()"
+        [class.text-gray-500!]="effectiveDisabled()"
+        [class.ng-invalid]="showError()"
+        [class.border-red-500!]="showError()"
+        [class.ng-dirty]="ngControl?.dirty"
+      ></p-datepicker>
+
+      @if (value() && !effectiveDisabled()) {
+        <button
+          type="button"
+          class="absolute right-9 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 flex items-center justify-center w-5 h-5 rounded-full hover:bg-gray-100 transition-colors"
+          (click)="clearRange()"
+          [attr.aria-label]="'label.clear' | transloco"
+        >
+          <i class="pi pi-times text-xs"></i>
+        </button>
+      }
+    </div>
+
+    @if (showError()) {
+      <div class="flex flex-col gap-1">
+        @if (errors()?.['required']) {
+          <small class="text-red-500 text-xs ml-1">{{ 'validation.required' | transloco }}</small>
+        }
+      </div>
+    } @else if (hint()) {
+      <small [id]="id() + '-help'" class="text-gray-400 text-xs ml-1">
+        {{ hint() }}
+      </small>
+    }
+  </div>
+</div>
