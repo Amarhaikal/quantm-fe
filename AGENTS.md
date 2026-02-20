@@ -117,7 +117,7 @@ export class Foos extends BaseListDirective implements OnInit {
     };
     this.fooService.getFoos(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        this.foos.set(response.data.data);
+        this.foos.set(response.data.list);
         this.totalRecords.set(response.data.total_count);
         this.loading.set(false);
       },
@@ -235,7 +235,7 @@ export class FooBars extends BaseBulkCrudDirective implements OnInit {
     };
     this.fooBarService.getFooBars(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        this.fooBars.set(response.data.data);
+        this.fooBars.set(response.data.list);
         this.totalRecords.set(response.data.total_count);
         this.loading.set(false);
       },
