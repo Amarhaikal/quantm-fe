@@ -64,10 +64,18 @@ export class Users extends BaseListDirective implements OnInit {
     username: [''],
     fullname: [''],
     role: [null],
+    status: [null],
   });
 
   rolesOptions = computed<OptionDropdown[]>(() => {
     return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
+      value: role.code,
+      label: role.description,
+    }));
+  });
+
+  statusOptions = computed<OptionDropdown[]>(() => {
+    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_STATUS).map((role) => ({
       value: role.code,
       label: role.description,
     }));
