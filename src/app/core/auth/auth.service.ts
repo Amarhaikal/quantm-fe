@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 
 import { UserService } from '../services/user.service';
 import { UserDetailed } from '../models/user.model';
+import { MsalService } from '@azure/msal-angular';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class AuthService {
   private userService = inject(UserService);
   private httpBackend = inject(HttpBackend);
   private backendHttpClient = new HttpClient(this.httpBackend);
+  private msalService = inject(MsalService);
 
   // Signals for managing state
   private currentUserSig = signal<UserDetailed | null>(null);
@@ -27,6 +29,9 @@ export class AuthService {
   isHydrated = this.isHydratedSig.asReadonly();
   private refreshSig = signal<number>(0);
   refreshCounter = this.refreshSig.asReadonly();
+
+  // Flag to prevent MSAL handleRedirectObservable from triggering loops
+  msalRedirectProcessed = false;
 
   profileImageUrl = computed(() => {
     const counter = this.refreshCounter();
@@ -153,6 +158,13 @@ export class AuthService {
     // Call API to clear cookie
     this.api.post('auth/logout', {}).subscribe();
     this.setUser(null);
+
+    // Clear MSAL cache so handleRedirectObservable doesn't replay the old token
+    try {
+      this.msalService.instance.clearCache();
+    } catch (e) {
+      console.warn('Could not clear MSAL cache', e);
+    }
   }
 
   register(data: any): Observable<ApiResponse<any>> {

@@ -83,10 +83,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.startSlider();
 
+      // If we're returning from a Microsoft redirect, show loading immediately
+      // before MSAL even gets a chance to process the token, because that
+      // process plus the backend API call can take 1-2 seconds combined.
+      if (window.location.hash && window.location.hash.includes('code=')) {
+        this.loading.set(true);
+      }
+
       // Listen for returning redirect from Microsoft Login
       this.msalService.handleRedirectObservable().subscribe({
         next: (result) => {
-          if (result && result.idToken) {
+          if (result && result.idToken && !this.authService.msalRedirectProcessed) {
+            this.authService.msalRedirectProcessed = true;
             this.loading.set(true);
             this.authService.loginWithMicrosoft(result.idToken).subscribe({
               next: () => {
