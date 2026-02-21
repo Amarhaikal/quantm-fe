@@ -1,5 +1,6 @@
 import { Injectable, signal, inject, computed } from '@angular/core';
 import { catchError, map, Observable, tap } from 'rxjs';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { AuthResponse } from '../models/auth.model';
 import { ApiService } from '../services/api.service';
 import { ApiResponse } from '../models/api.model';
@@ -14,6 +15,8 @@ import { UserDetailed } from '../models/user.model';
 export class AuthService {
   private api = inject(ApiService);
   private userService = inject(UserService);
+  private httpBackend = inject(HttpBackend);
+  private backendHttpClient = new HttpClient(this.httpBackend);
 
   // Signals for managing state
   private currentUserSig = signal<UserDetailed | null>(null);
@@ -52,6 +55,24 @@ export class AuthService {
         }
       }),
     );
+  }
+
+  loginWithMicrosoft(idToken: string): Observable<AuthResponse> {
+    const url = environment.apiUrl
+      ? `${environment.apiUrl}/api/auth/login-microsoft`
+      : '/api/auth/login-microsoft';
+
+    return this.backendHttpClient
+      .post<AuthResponse>(url, { id_token: idToken }, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          const userData = response.data?.user || (response.data as any);
+
+          if (response.status === 200 && userData && (userData.username || userData.fullname)) {
+            this.setUser(userData);
+          }
+        }),
+      );
   }
 
   /**

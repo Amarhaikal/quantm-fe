@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { APP_INITIALIZER } from '@angular/core';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -13,6 +14,34 @@ import { DatePipe } from '@angular/common';
 import { STORAGE_KEYS } from './core/constants/storage.constants';
 
 import { routes } from './app.routes';
+
+import { environment } from '../environments/environment';
+import {
+  IPublicClientApplication,
+  PublicClientApplication,
+  BrowserCacheLocation,
+} from '@azure/msal-browser';
+import { MsalService, MsalBroadcastService, MSAL_INSTANCE } from '@azure/msal-angular';
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: environment.azureAd.clientId,
+      authority: environment.azureAd.authority,
+      redirectUri: environment.azureAd.redirectUri,
+      postLogoutRedirectUri: environment.azureAd.redirectUri,
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+    },
+  });
+}
+
+export function MSALInitializerFactory(msalService: MsalService) {
+  return () => {
+    return msalService.instance.initialize();
+  };
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,5 +74,17 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     ConfirmationService,
     DatePipe,
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory,
+    },
+    MsalService,
+    MsalBroadcastService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: MSALInitializerFactory,
+      deps: [MsalService],
+      multi: true,
+    },
   ],
 };

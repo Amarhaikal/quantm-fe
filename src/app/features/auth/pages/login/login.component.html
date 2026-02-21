@@ -95,6 +95,26 @@
           [loading]="loading()"
           styleClass="py-3 font-bold text-white bg-blue-600! rounded-xl border-blue-600! hover:bg-blue-700! hover:border-blue-700!"
         ></p-button>
+
+        <div class="flex items-center gap-4 my-2">
+          <div class="h-px bg-gray-200 flex-1"></div>
+          <span class="text-xs text-gray-500 font-medium uppercase tracking-wider"
+            >or continue with</span
+          >
+          <div class="h-px bg-gray-200 flex-1"></div>
+        </div>
+
+        <p-button
+          label="Microsoft"
+          type="button"
+          icon="pi pi-microsoft"
+          [fluid]="true"
+          size="large"
+          [loading]="loading()"
+          severity="secondary"
+          (onClick)="loginWithMicrosoft()"
+          styleClass="py-3 font-bold text-gray-700! bg-gray-50! border border-solid border-gray-200! rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:bg-gray-100!"
+        ></p-button>
       </form>
 
       <div class="mt-12 text-center">
