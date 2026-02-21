@@ -77,7 +77,6 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     AvatarSelectionDialog,
     MenuModule,
     ScrollTopModule,
-    PageHeaderComponent,
     PageContainerComponent,
     CardComponent,
   ],
