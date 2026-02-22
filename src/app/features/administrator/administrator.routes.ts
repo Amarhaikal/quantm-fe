@@ -29,4 +29,8 @@ export const ADMINISTRATOR_ROUTES: Routes = [
     loadComponent: () =>
       import('./session-activities/session-activities').then((m) => m.SessionActivities),
   },
+  {
+    path: 'rates',
+    loadComponent: () => import('./rates/rates').then((m) => m.Rates),
+  },
 ];
