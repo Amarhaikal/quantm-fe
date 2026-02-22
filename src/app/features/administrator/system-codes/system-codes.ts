@@ -133,6 +133,11 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
       page_size: this.pageSize(),
     };
 
+    if (this.sortField()) {
+      apiParams.sort_by = this.sortField();
+      apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
+    }
+
     this.codeTypeService.getSystemCodesList(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
         const data = response.data.list.map((item: any) => {
