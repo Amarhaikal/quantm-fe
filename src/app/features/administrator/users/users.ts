@@ -95,6 +95,8 @@ export class Users extends BaseListDirective implements OnInit {
   ];
 
   ngOnInit() {
+    console.log('deployed');
+
     this.fetchData();
 
     this.searchForm.valueChanges
