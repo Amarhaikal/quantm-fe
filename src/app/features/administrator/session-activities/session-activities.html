@@ -20,6 +20,7 @@
         [totalRecords]="totalRecords()"
         [rows]="pageSize()"
         (onPageChange)="handlePageChange($event)"
+        (onSort)="handleSort($event)"
         (onDelete)="handleDelete($event)"
       />
     </div>

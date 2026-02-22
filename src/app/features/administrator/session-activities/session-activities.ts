@@ -47,6 +47,8 @@ export class SessionActivities implements OnInit {
 
   data = signal<any[]>([]);
   totalRecords = signal<number>(0);
+  sortField = signal<string | null>(null);
+  sortOrder = signal<number>(1);
 
   ngOnInit(): void {
     this.fetchData();
@@ -127,6 +129,11 @@ export class SessionActivities implements OnInit {
       page_size: this.pageSize(),
     };
 
+    if (this.sortField()) {
+      apiParams.sort_by = this.sortField();
+      apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
+    }
+
     if (apiParams.is_active === null) {
       delete apiParams.is_active;
     }
@@ -162,6 +169,12 @@ export class SessionActivities implements OnInit {
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
     }));
+  }
+
+  handleSort(event: any) {
+    this.sortField.set(event.field);
+    this.sortOrder.set(event.order);
+    this.fetchData();
   }
 
   resetSearch() {
