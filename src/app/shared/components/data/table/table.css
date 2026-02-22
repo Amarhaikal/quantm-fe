@@ -24,10 +24,13 @@
   color: var(--primary-color) !important;
 }
 
-/* Show secondary color icon when sorted */
+/* Show secondary color icon when sorted (and keep it on hover) */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight .p-datatable-sort-icon,
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="ascending"] .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"] .p-datatable-sort-icon {
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"] .p-datatable-sort-icon,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight:hover .p-datatable-sort-icon,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="ascending"]:hover .p-datatable-sort-icon,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"]:hover .p-datatable-sort-icon {
   color: var(--secondary-color) !important;
 }
 
