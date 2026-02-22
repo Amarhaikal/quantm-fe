@@ -1,0 +1,19 @@
+services:
+  quantm-frontend:
+    image: quantm-frontend:latest
+    container_name: quantm-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - quantm-network
+    # Optional: If you want to mount config dynamically instead of copying it into the image
+    # volumes:
+    #   - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+networks:
+  quantm-network:
+    external: true
+    name: quantm_network # Assumes a shared network with backend, update if different
