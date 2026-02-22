@@ -89,7 +89,7 @@ export class Users extends BaseListDirective implements OnInit {
       imageField: 'profile_image_url',
     },
     { field: 'fullname', header: 'label.full_name' },
-    { field: 'email', header: 'label.email' },
+    { field: 'staff_id', header: 'label.staff_id' },
     { field: 'role', header: 'label.role' },
     { field: 'status', header: 'label.status', type: 'badge' },
   ];
