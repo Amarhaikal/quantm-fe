@@ -43,15 +43,18 @@
     <div class="w-full">
       @if (viewMode() === 'table') {
         <lib-table
-          [columns]="columns"
           [data]="users()"
+          [columns]="columns"
           [loading]="loading()"
           [totalRecords]="totalRecords()"
           [rows]="pageSize()"
+          [first]="(pageNo() - 1) * pageSize()"
           actionType="DETAILS_DELETE"
           (onPageChange)="handlePageChange($event)"
-          (onEdit)="onEdit($event)"
+          (onSort)="handleSort($event)"
           (onDelete)="handleDelete($event)"
+          (onView)="onEdit($event)"
+          (onEdit)="onEdit($event)"
         />
       } @else {
         <lib-card-list

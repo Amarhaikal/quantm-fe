@@ -80,6 +80,7 @@ export interface TableColumn {
   options?: any[]; // Options for dropdown inputType (OptionDropdown[])
   minlength?: number; // Minimum character length for text inputs
   maxlength?: number; // Maximum character length for text inputs
+  sortable?: boolean; // Defaults to true; set to false to disable sorting for this column
 }
 ```
 
@@ -123,6 +124,18 @@ Example data structure for a badge column `status`:
   "status_severity": "success"
 }
 ```
+
+### Sorting
+
+All columns are sortable by default unless `sortable: false` is explicitly set in their `TableColumn` definition.
+
+The table uses a **Tri-State Server-Side Sort** mechanism:
+
+- **First click** on a header: Sorts ascending (triggers `onSort` with `order: 1`).
+- **Second click**: Sorts descending (triggers `onSort` with `order: -1`).
+- **Third click**: Removes sorting (triggers `onSort` with `field: null, order: null` and table visually resets).
+
+Parent components should consume the `(onSort)` event or inherit from `BaseListDirective` to handle automatic API parameter insertion (`sort_by` and `sort_order`).
 
 ### Standard Actions
 

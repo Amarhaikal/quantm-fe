@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  inject,
+  input,
+  output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar';
 import { TableColumn } from './table.model';
 import { TranslocoPipe } from '@ngneat/transloco';
@@ -43,6 +50,8 @@ export type ActionType =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent {
+  @ViewChild('dt') dt!: Table;
+
   data = input<any[]>([]);
   columns = input<TableColumn[]>([]);
   loading = input<boolean>(false);
@@ -54,6 +63,7 @@ export class TableComponent {
 
   onRowSelect = output<any>();
   onPageChange = output<any>();
+  onSort = output<any>();
   onEdit = output<any>();
   onDelete = output<any>();
   onView = output<any>();
@@ -62,6 +72,10 @@ export class TableComponent {
   onRowsCreate = output<any[]>();
   onRowsUpdate = output<any[]>();
   onRowsDelete = output<any[]>();
+
+  // Tracks the currently sorted column and its state (true = asc, false = desc)
+  activeSortField: string | null = null;
+  activeSortState: boolean | null = null;
 
   private router = inject(Router);
   private toastService = inject(ToastService);
@@ -100,6 +114,32 @@ export class TableComponent {
       if (col.editable) {
         rowData._originalValues[col.field] = rowData[col.field];
       }
+    }
+  }
+
+  customSort(event: any) {
+    if (this.activeSortField !== event.field) {
+      // First click on this column: Sort Ascending
+      this.activeSortField = event.field;
+      this.activeSortState = true;
+      this.onSort.emit({ field: event.field, order: 1 });
+    } else if (this.activeSortState === true) {
+      // Second click on the same column: Sort Descending
+      this.activeSortState = false;
+      this.onSort.emit({ field: event.field, order: -1 });
+    } else {
+      // Third click on the same column: Unsort (Remove Sort)
+      this.activeSortField = null;
+      this.activeSortState = null;
+
+      // Use PrimeNG reset to clear the internal UI sorting states
+      if (this.dt) {
+        setTimeout(() => {
+          this.dt.reset();
+        });
+      }
+
+      this.onSort.emit({ field: null, order: null });
     }
   }
 

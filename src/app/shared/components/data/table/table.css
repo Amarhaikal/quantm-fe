@@ -13,6 +13,24 @@
   @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none! whitespace-nowrap;
 }
 
+/* Hide sort icon by default using the same background color */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th .p-datatable-sort-icon {
+  color: var(--primary-color) !important;
+  transition: color 0.2s ease;
+}
+
+/* Keep icon hidden on hover when not sorted */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th:not(.p-highlight):hover .p-datatable-sort-icon {
+  color: var(--primary-color) !important;
+}
+
+/* Show secondary color icon when sorted */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight .p-datatable-sort-icon,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="ascending"] .p-datatable-sort-icon,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"] .p-datatable-sort-icon {
+  color: var(--secondary-color) !important;
+}
+
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
   @apply text-sm py-3 px-3 border-b border-gray-50 text-gray-700 whitespace-nowrap;

@@ -110,11 +110,17 @@ export class Foos extends BaseListDirective implements OnInit {
 
   fetchData(params: any = this.searchForm.value) {
     this.loading.set(true);
-    const apiParams = {
+    const apiParams: any = {
       ...CrudUtils.filterApiParams(params),
       page_no: this.pageNo(),
       page_size: this.pageSize(),
     };
+
+    if (this.sortField()) {
+      apiParams.sort_by = this.sortField();
+      apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
+    }
+
     this.fooService.getFoos(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
         this.foos.set(response.data.list);
@@ -228,11 +234,17 @@ export class FooBars extends BaseBulkCrudDirective implements OnInit {
 
   fetchData(params: any = this.searchForm.value) {
     this.loading.set(true);
-    const apiParams = {
+    const apiParams: any = {
       ...CrudUtils.filterApiParams(params),
       page_no: this.pageNo(),
       page_size: this.pageSize(),
     };
+
+    if (this.sortField()) {
+      apiParams.sort_by = this.sortField();
+      apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
+    }
+
     this.fooBarService.getFooBars(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
         this.fooBars.set(response.data.list);

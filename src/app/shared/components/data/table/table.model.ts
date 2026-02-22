@@ -10,5 +10,6 @@ export interface TableColumn {
   options?: any[];
   minlength?: number;
   maxlength?: number;
+  sortable?: boolean; // (default: true)
   imageField?: string;
 }

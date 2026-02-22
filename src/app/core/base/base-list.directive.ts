@@ -11,12 +11,20 @@ export abstract class BaseListDirective {
   totalRecords = signal<number>(0);
   pageNo = signal<number>(1);
   pageSize = signal<number>(10);
+  sortField = signal<string | null>(null);
+  sortOrder = signal<number>(1); // 1 for asc, -1 for desc
 
   abstract fetchData(params?: any): void;
 
   handlePageChange(event: any) {
     this.pageNo.set(event.first / event.rows + 1);
     this.pageSize.set(event.rows);
+    this.fetchData();
+  }
+
+  handleSort(event: any) {
+    this.sortField.set(event.field);
+    this.sortOrder.set(event.order);
     this.fetchData();
   }
 

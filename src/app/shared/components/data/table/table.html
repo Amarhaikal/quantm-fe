@@ -1,5 +1,6 @@
 <div class="table-container">
   <p-table
+    #dt
     [value]="data()"
     [columns]="columns()"
     [loading]="loading()"
@@ -16,14 +17,23 @@
     [tableStyle]="{ 'min-width': '50rem' }"
     [currentPageReportTemplate]="'common.page_report_template' | transloco"
     (onPage)="onPageChange.emit($event)"
+    [customSort]="true"
+    (onSort)="customSort($event)"
     styleClass="p-datatable-sm p-datatable-striped"
     [scrollable]="true"
   >
     <ng-template #header let-columns>
       <tr>
         @for (col of columns; track col.field) {
-          <th [style.width]="col.width" [class.text-center]="'center'">
+          <th
+            [style.width]="col.width"
+            [class.text-center]="col.textAlign === 'center'"
+            [pSortableColumn]="col.sortable !== false ? col.field : undefined"
+          >
             {{ col.header | transloco }}
+            @if (col.sortable !== false) {
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            }
           </th>
         }
         @if (actionType() !== 'NONE') {
