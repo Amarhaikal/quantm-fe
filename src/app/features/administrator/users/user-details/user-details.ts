@@ -541,8 +541,11 @@ export class UserDetails extends BaseFormComponent implements OnInit {
                       this.fetchedUser.update((user) =>
                         user ? { ...user, profile_image_url: newPath } : null,
                       );
-                      // Always update AuthService so header + sidemenu avatar refresh
-                      this.authService.updateProfileImage(newPath);
+                      // Sync with AuthService if editing self
+                      const currentUser = this.authService.currentUser();
+                      if (currentUser && currentUser.id === this.userId) {
+                        this.authService.updateProfileImage(newPath);
+                      }
                     });
                   }
                 },
