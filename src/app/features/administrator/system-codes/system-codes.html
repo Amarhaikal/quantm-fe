@@ -7,9 +7,10 @@
           label="label.code_type"
           formControlName="code_type"
           [options]="codeTypesOptions()"
+          [isSearching]="true"
         />
-        <lib-textbox label="label.code" formControlName="code" />
-        <lib-textbox label="label.description" formControlName="description" />
+        <lib-textbox label="label.code" formControlName="code" [isSearching]="true" />
+        <lib-textbox label="label.description" formControlName="description" [isSearching]="true" />
       </lib-search>
     </div>
 

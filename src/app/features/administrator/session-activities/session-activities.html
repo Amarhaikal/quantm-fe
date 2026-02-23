@@ -4,10 +4,23 @@
   <div class="flex flex-col gap-6">
     <div class="w-full" [formGroup]="searchForm">
       <lib-search (reset)="resetSearch()">
-        <lib-textbox label="label.username" formControlName="username" />
-        <lib-date-range label="label.logged_in_date" formControlName="range_date" />
-        <lib-datepicker label="label.last_activity_date" formControlName="last_activity_date" />
-        <lib-dropdown label="label.status" formControlName="status" [options]="statusOptions()" />
+        <lib-textbox label="label.username" formControlName="username" [isSearching]="true" />
+        <lib-date-range
+          label="label.logged_in_date"
+          formControlName="range_date"
+          [isSearching]="true"
+        />
+        <lib-datepicker
+          label="label.last_activity_date"
+          formControlName="last_activity_date"
+          [isSearching]="true"
+        />
+        <lib-dropdown
+          label="label.status"
+          formControlName="status"
+          [options]="statusOptions()"
+          [isSearching]="true"
+        />
       </lib-search>
     </div>
 
