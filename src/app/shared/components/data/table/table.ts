@@ -17,6 +17,7 @@ import { BadgeComponent } from '../badge/badge';
 import { ButtonComponent } from '../../button/button';
 import { TextboxComponent } from '../../form/textbox/textbox';
 import { DropdownComponent } from '../../form/dropdown/dropdown';
+import { NumericComponent } from '../../form/numeric/numeric';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../core/services/toast.service';
 
@@ -42,6 +43,7 @@ export type ActionType =
     ButtonComponent,
     TextboxComponent,
     DropdownComponent,
+    NumericComponent,
     FormsModule,
     AvatarModule,
   ],

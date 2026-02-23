@@ -1,0 +1,82 @@
+<div
+  class="flex gap-2 w-full"
+  [class.flex-col]="effectiveLabelPosition() === 'top'"
+  [class.flex-row]="effectiveLabelPosition() === 'left'"
+  [class.items-start]="effectiveLabelPosition() === 'left'"
+>
+  @if (label()) {
+    <label
+      [for]="id()"
+      class="text-sm font-medium text-gray-600 select-none"
+      [class.w-1/3]="effectiveLabelPosition() === 'left'"
+      [class.pt-2]="effectiveLabelPosition() === 'left'"
+    >
+      {{ label() | transloco }}
+      @if (required()) {
+        <span class="text-red-500 ml-0.5">*</span>
+      }
+    </label>
+  }
+
+  <div
+    class="flex flex-col gap-2"
+    [class.flex-1]="effectiveLabelPosition() === 'left'"
+    [class.w-full]="effectiveLabelPosition() === 'top'"
+  >
+    <p-inputnumber
+      [inputId]="id()"
+      [mode]="mode()"
+      [currency]="numericType() === 'currency' ? currency() : undefined"
+      [currencyDisplay]="numericType() === 'currency' ? currencyDisplay() : undefined"
+      [locale]="locale()"
+      [suffix]="suffix()"
+      [minFractionDigits]="effectiveMinFractionDigits()"
+      [maxFractionDigits]="effectiveMaxFractionDigits()"
+      [min]="effectiveMin()"
+      [max]="effectiveMax()"
+      [ngModel]="displayValue()"
+      (ngModelChange)="handleValueChange($event)"
+      [disabled]="effectiveDisabled()"
+      (onBlur)="handleBlur()"
+      [placeholder]="
+        placeholder()
+          ? (placeholder() | transloco)
+          : label()
+            ? ('label.placeholders.enter' | transloco) + ' ' + (label() | transloco)
+            : ''
+      "
+      [pt]="{ root: { class: 'w-full' } }"
+      [inputStyleClass]="
+        'w-full rounded-lg! border transition-colors shadow-none! text-sm! ' +
+        (isTable() ? 'h-8! px-2! ' : 'h-9! px-3! ') +
+        (showError() ? 'border-red-500! ' : 'border-gray-300! ') +
+        (!effectiveDisabled() ? 'hover:border-indigo-400! ' : '') +
+        (effectiveDisabled() ? 'bg-gray-100! text-gray-600! cursor-not-allowed! ' : 'bg-white! ')
+      "
+      [class.ng-invalid]="showError()"
+      [class.ng-dirty]="ngControl?.dirty"
+    />
+
+    @if (showError()) {
+      <div class="flex flex-col gap-1">
+        @if (errors()?.['required']) {
+          <small class="text-red-500 text-xs ml-1">{{ 'validation.required' | transloco }}</small>
+        }
+        @if (errors()?.['min']) {
+          <small class="text-red-500 text-xs ml-1">
+            {{ 'validation.min' | transloco: { min: errors()?.['min'].min } }}
+          </small>
+        }
+        @if (errors()?.['max']) {
+          <small class="text-red-500 text-xs ml-1">
+            {{ 'validation.max' | transloco: { max: errors()?.['max'].max } }}
+          </small>
+        }
+      </div>
+    } @else if (hint()) {
+      <small [id]="id() + '-help'" class="text-gray-400 text-xs ml-1">
+        {{ hint() }}
+      </small>
+    }
+  </div>
+</div>

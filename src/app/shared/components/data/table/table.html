@@ -70,6 +70,20 @@
                     [isTable]="true"
                   />
                 }
+                @case ('numeric') {
+                  <lib-numeric
+                    [(ngModel)]="rowData[col.field]"
+                    [placeholder]="col.header | transloco"
+                    [required]="col.required ?? false"
+                    [numericType]="col.numericType ?? 'decimal'"
+                    [currency]="col.numericCurrency ?? 'MYR'"
+                    [min]="col.numericMin"
+                    [max]="col.numericMax"
+                    [minFractionDigits]="col.numericMinFractionDigits"
+                    [maxFractionDigits]="col.numericMaxFractionDigits"
+                    [isTable]="true"
+                  />
+                }
                 @default {
                   <lib-textbox
                     [(ngModel)]="rowData[col.field]"
@@ -118,7 +132,15 @@
                     {{ rowData[col.field] | date: 'dd/MM/yyyy HH:mm:ss' }}
                   }
                   @default {
+                    @if (col.numericType === 'currency') {
+                      <span class="mr-1 text-gray-400 font-medium text-[10px]">{{
+                        col.numericCurrency ?? 'MYR'
+                      }}</span>
+                    }
                     {{ rowData[col.field + '_display'] ?? rowData[col.field] }}
+                    @if (col.numericType === 'percentage') {
+                      <span class="ml-0.5 text-gray-400 font-medium">%</span>
+                    }
                   }
                 }
               }
