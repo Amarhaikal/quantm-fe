@@ -105,6 +105,8 @@
         "expires_at": "Expires At",
         "logged_in_date": "Logged In Date",
         "last_activity_date": "Last Activity Date",
+        "rate_type": "Rate Type",
+        "rate": "Rate",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",

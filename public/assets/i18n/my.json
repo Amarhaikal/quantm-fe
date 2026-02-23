@@ -105,6 +105,8 @@
         "expires_at": "Tamat Pada",
         "logged_in_date": "Tarikh Log Masuk",
         "last_activity_date": "Tarikh Aktiviti Terakhir",
+        "rate_type": "Jenis Kadar",
+        "rate": "Kadar",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
