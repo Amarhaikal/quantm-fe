@@ -113,6 +113,11 @@ export abstract class BaseBulkCrudDirective extends BaseListDirective {
       rowData.isEditing = false;
       rowData.isModified = false;
       rowData.isMarkedForDeletion = false;
+
+      // Remove from pending signals
+      this.modifiedRows.update((rows) => rows.filter((r) => r.id !== rowData.id));
+      this.deletedRows.update((rows) => rows.filter((r) => r.id !== rowData.id));
+
       this.fetchData();
     }
   }
