@@ -11,7 +11,10 @@ import { CardComponent } from '../card/card';
     <lib-card [padding]="true">
       <div class="flex flex-col md:flex-row items-stretch md:items-end gap-4">
         <div class="flex-1 w-full">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            class="grid gap-4"
+            style="grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr))"
+          >
             <ng-content></ng-content>
           </div>
         </div>
