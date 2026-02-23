@@ -2,7 +2,16 @@ import { computed, Directive, inject, signal } from '@angular/core';
 import { BaseListDirective } from './base-list.directive';
 import { ConfirmService } from '../services/confirm.service';
 import { ApiResponse } from '../models/api.model';
-import { forkJoin, Observable } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+
+/**
+ * Result of a bulk operation to track partial successes.
+ */
+interface BulkOpResult {
+  type: 'create' | 'update' | 'delete';
+  success: boolean;
+  error?: any;
+}
 
 /**
  * Configuration for the bulk CRUD API calls.
@@ -131,34 +140,74 @@ export abstract class BaseBulkCrudDirective extends BaseListDirective {
 
     this.confirmService.confirmSave(() => {
       this.loading.set(true);
-      const requests: Observable<ApiResponse<any>>[] = [];
+      const requests: Observable<BulkOpResult>[] = [];
 
       // Bulk create
       if (drafts.length && this.bulkCrudApi.bulkCreate) {
         const payload = drafts.map((r) => this.extractPayload(r));
-        requests.push(this.bulkCrudApi.bulkCreate(payload));
+        requests.push(
+          this.bulkCrudApi.bulkCreate(payload).pipe(
+            map(() => ({ type: 'create' as const, success: true })),
+            catchError((error) => of({ type: 'create' as const, success: false, error })),
+          ),
+        );
       }
 
       // Bulk update — send only changed fields + id per row
       if (modified.length && this.bulkCrudApi.bulkUpdate) {
         const payload = modified.map((r) => ({ id: r.id, ...this.extractUpdatePayload(r) }));
-        requests.push(this.bulkCrudApi.bulkUpdate(payload));
+        requests.push(
+          this.bulkCrudApi.bulkUpdate(payload).pipe(
+            map(() => ({ type: 'update' as const, success: true })),
+            catchError((error) => of({ type: 'update' as const, success: false, error })),
+          ),
+        );
       }
 
       // Bulk delete
       if (deleted.length && this.bulkCrudApi.bulkDelete) {
         const ids = deleted.map((r) => r.id);
-        requests.push(this.bulkCrudApi.bulkDelete(ids));
+        requests.push(
+          this.bulkCrudApi.bulkDelete(ids).pipe(
+            map(() => ({ type: 'delete' as const, success: true })),
+            catchError((error) => of({ type: 'delete' as const, success: false, error })),
+          ),
+        );
       }
 
       forkJoin(requests).subscribe({
-        next: () => {
-          this.toastService.success('Success', 'All changes saved successfully');
-          this.clearPendingState();
-          this.fetchData();
+        next: (results) => {
+          let anySuccess = false;
+
+          results.forEach((res) => {
+            if (res.success) {
+              anySuccess = true;
+              if (res.type === 'create') {
+                this.toastService.createSuccess();
+                this.draftRows.set([]);
+              } else if (res.type === 'update') {
+                this.toastService.updateSuccess();
+                this.modifiedRows.set([]);
+              } else if (res.type === 'delete') {
+                this.toastService.deleteSuccess();
+                this.deletedRows.set([]);
+              }
+            } else {
+              if (res.type === 'create') this.toastService.createFailed(res.error);
+              else if (res.type === 'update') this.toastService.updateFailed(res.error);
+              else if (res.type === 'delete') this.toastService.deleteFailed(res.error);
+            }
+          });
+
+          if (anySuccess) {
+            this.fetchData();
+          } else {
+            this.loading.set(false);
+          }
         },
         error: (error) => {
-          this.toastService.error('Error', 'Failed to save some changes');
+          // This should rarely be hit since we use catchError inside requests
+          this.toastService.error('Error', 'An unexpected error occurred during bulk save');
           console.error(error);
           this.loading.set(false);
         },

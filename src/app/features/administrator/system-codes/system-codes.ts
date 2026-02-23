@@ -151,7 +151,7 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
         this.loading.set(false);
       },
       error: (error: unknown) => {
-        this.handleError(error, 'Failed to fetch system codes');
+        this.toastService.fetchFailed(error);
       },
     });
   }
