@@ -55,14 +55,16 @@ export class TextboxComponent implements ControlValueAccessor, OnInit, OnDestroy
   maxLength = input<number | undefined>(undefined);
   patternErrorKey = input<string>('validation.pattern_error');
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isSearching = input<boolean>(false);
   isTable = input<boolean>(false);
 
   /**
    * Effective label position based on explicit property or global appearance setting.
    */
-  effectiveLabelPosition = computed(
-    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
-  );
+  effectiveLabelPosition = computed(() => {
+    if (this.isSearching()) return 'top';
+    return this.labelPosition() ?? this.appearanceService.labelPosition();
+  });
 
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<string | null | undefined>(undefined, { alias: 'value' });

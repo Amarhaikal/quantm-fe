@@ -38,13 +38,15 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit, OnDest
   dateFormat = input<string>('dd/mm/yy'); // PrimeNG format
   showIcon = input<boolean>(true);
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isSearching = input<boolean>(false);
 
   /**
    * Effective label position based on explicit property or global appearance setting.
    */
-  effectiveLabelPosition = computed(
-    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
-  );
+  effectiveLabelPosition = computed(() => {
+    if (this.isSearching()) return 'top';
+    return this.labelPosition() ?? this.appearanceService.labelPosition();
+  });
 
   isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 

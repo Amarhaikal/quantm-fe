@@ -41,13 +41,15 @@ export class RadioButtonComponent implements ControlValueAccessor, OnInit, OnDes
   name = input<string>(`group-${Math.random().toString(36).substring(2, 11)}`);
   hint = input<string>('');
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isSearching = input<boolean>(false);
 
   /**
    * Effective label position based on explicit property or global appearance setting.
    */
-  effectiveLabelPosition = computed(
-    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
-  );
+  effectiveLabelPosition = computed(() => {
+    if (this.isSearching()) return 'top';
+    return this.labelPosition() ?? this.appearanceService.labelPosition();
+  });
 
   isDisabled = input<boolean | undefined>(undefined, { alias: 'disabled' });
 

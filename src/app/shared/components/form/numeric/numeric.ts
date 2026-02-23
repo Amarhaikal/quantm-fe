@@ -44,11 +44,13 @@ export class NumericComponent implements ControlValueAccessor, OnInit, OnDestroy
   min = input<number | undefined>(undefined);
   max = input<number | undefined>(undefined);
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isSearching = input<boolean>(false);
   isTable = input<boolean>(false);
 
-  effectiveLabelPosition = computed(
-    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
-  );
+  effectiveLabelPosition = computed(() => {
+    if (this.isSearching()) return 'top';
+    return this.labelPosition() ?? this.appearanceService.labelPosition();
+  });
 
   // Support for non-form usage
   externalValue = input<number | null | undefined>(undefined, { alias: 'value' });

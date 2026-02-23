@@ -53,13 +53,15 @@ export class DropdownComponent implements ControlValueAccessor, OnInit, OnDestro
   protected shouldShowClear = computed(() => this.isFocused() || this.isOpen());
 
   labelPosition = input<LabelPosition | undefined>(undefined);
+  isSearching = input<boolean>(false);
 
   /**
    * Effective label position based on explicit property or global appearance setting.
    */
-  effectiveLabelPosition = computed(
-    () => this.labelPosition() ?? this.appearanceService.labelPosition(),
-  );
+  effectiveLabelPosition = computed(() => {
+    if (this.isSearching()) return 'top';
+    return this.labelPosition() ?? this.appearanceService.labelPosition();
+  });
 
   // Support for non-form usage (read-only/one-way binding)
   externalValue = input<any>(undefined, { alias: 'value' });
