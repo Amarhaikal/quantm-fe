@@ -13,7 +13,7 @@ import { CardComponent } from '../card/card';
         <div class="flex-1 w-full">
           <div
             class="grid gap-4"
-            style="grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr))"
+            style="grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr))"
           >
             <ng-content></ng-content>
           </div>
