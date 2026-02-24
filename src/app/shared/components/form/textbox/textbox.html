@@ -43,7 +43,7 @@
             'w-full rounded-lg! border h-9 transition-all text-sm! px-3 focus:ring-indigo-500! focus:border-indigo-500! ' +
             (showError() ? 'border-red-500! ' : 'border-gray-300! ') +
             (icon() ? 'pl-9 ' : '') +
-            (effectiveDisabled() ? 'bg-gray-100! text-gray-600! ' : '')
+            (effectiveDisabled() ? 'bg-gray-100! text-gray-400! ' : 'bg-white! ')
           "
           [class.ng-invalid]="showError()"
           [class.ng-dirty]="ngControl?.dirty"
@@ -72,7 +72,7 @@
             'w-full rounded-lg! border h-9 transition-all text-sm! px-3 focus:ring-indigo-500! focus:border-indigo-500! ' +
             (showError() ? 'border-red-500! ' : 'border-gray-300! ') +
             (icon() ? 'pl-9 ' : '') +
-            (effectiveDisabled() ? 'bg-gray-100! text-gray-600! ' : '')
+            (effectiveDisabled() ? 'bg-gray-100! text-gray-400! ' : 'bg-white! ')
           "
           [class.ng-invalid]="showError()"
           [class.ng-dirty]="ngControl?.dirty"
@@ -99,7 +99,7 @@
           [disabled]="effectiveDisabled()"
           (focus)="effectiveDisabled() ? null : handleFocus()"
           (blur)="handleBlur()"
-          class="w-full rounded-lg! border transition-colors shadow-none! text-sm! bg-white!"
+          class="w-full rounded-lg! border transition-colors shadow-none! text-sm!"
           [class.h-8]="isTable()"
           [class.h-9]="!isTable()"
           [class.px-2]="isTable()"
@@ -111,8 +111,9 @@
           [class.pl-10]="icon()"
           [class.ng-invalid]="showError()"
           [class.hover:border-indigo-400!]="!effectiveDisabled()"
+          [class.bg-white!]="!effectiveDisabled()"
           [class.bg-gray-100!]="effectiveDisabled()"
-          [class.text-gray-600!]="effectiveDisabled()"
+          [class.text-gray-400!]="effectiveDisabled()"
           [class.cursor-not-allowed]="effectiveDisabled()"
         />
       }

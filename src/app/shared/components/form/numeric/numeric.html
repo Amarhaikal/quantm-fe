@@ -51,7 +51,7 @@
         (isTable() ? 'h-8! px-2! ' : 'h-9! px-3! ') +
         (showError() ? 'border-red-500! ' : 'border-gray-300! ') +
         (!effectiveDisabled() ? 'hover:border-indigo-400! ' : '') +
-        (effectiveDisabled() ? 'bg-gray-100! text-gray-600! cursor-not-allowed! ' : 'bg-white! ')
+        (effectiveDisabled() ? 'bg-gray-100! text-gray-400! cursor-not-allowed! ' : 'bg-white! ')
       "
       [class.ng-invalid]="showError()"
       [class.ng-dirty]="ngControl?.dirty"
