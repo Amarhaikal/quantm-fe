@@ -25,7 +25,7 @@ export class CodeTypeService {
    */
   loadCodeTypes() {
     this.isLoading.set(true);
-    this.api.get<CodeTypeResponse>('parameter/codeType').subscribe({
+    this.api.get<CodeTypeResponse>('parameter/codeTypes').subscribe({
       next: (response) => {
         this.codeTypesData.set(response.data);
         this.isLoading.set(false);
@@ -68,27 +68,15 @@ export class CodeTypeService {
   }
 
   getSystemCodesList(params: any): Observable<ApiResponse<any>> {
-    return this.api.get<ApiResponse<any>>('parameter/systemCode', params);
-  }
-
-  createSystemCode(data: any): Observable<ApiResponse<any>> {
-    return this.api.post<ApiResponse<any>>('parameter/systemCode', data);
+    return this.api.get<ApiResponse<any>>('parameter/systemCodes', params);
   }
 
   createSystemCodes(data: any): Observable<ApiResponse<any>> {
     return this.api.post<ApiResponse<any>>('parameter/systemCodes', data);
   }
 
-  updateSystemCode(id: string, data: any): Observable<ApiResponse<any>> {
-    return this.api.put<ApiResponse<any>>(`parameter/systemCode/${id}`, data);
-  }
-
   updateSystemCodes(data: any): Observable<ApiResponse<any>> {
     return this.api.put<ApiResponse<any>>(`parameter/systemCodes`, data);
-  }
-
-  deleteSystemCode(id: string): Observable<ApiResponse<any>> {
-    return this.api.delete<ApiResponse<any>>(`parameter/systemCode/${id}`);
   }
 
   deleteSystemCodes(ids: string[]): Observable<ApiResponse<any>> {

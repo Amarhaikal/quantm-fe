@@ -11,38 +11,38 @@ export class UserService {
   private api = inject(ApiService);
 
   getMyProfile(): Observable<ApiResponse<UserMiniProfile>> {
-    return this.api.get<ApiResponse<UserMiniProfile>>('user/mini-profile');
+    return this.api.get<ApiResponse<UserMiniProfile>>('users/mini-profile');
   }
 
   getUserById(id: number): Observable<ApiResponse<UserDetailed>> {
-    return this.api.get<ApiResponse<UserDetailed>>(`user/${id}`);
+    return this.api.get<ApiResponse<UserDetailed>>(`users/${id}`);
   }
 
   getUserByUsername(username: string): Observable<ApiResponse<UserDetailed>> {
-    return this.api.get<ApiResponse<UserDetailed>>(`user/username/${username}`);
+    return this.api.get<ApiResponse<UserDetailed>>(`users/username/${username}`);
   }
 
   updateUser(id: number, data: UserUpdateDto): Observable<ApiResponse<UserDetailed>> {
-    return this.api.put<ApiResponse<UserDetailed>>(`user/${id}`, data);
+    return this.api.put<ApiResponse<UserDetailed>>(`users/${id}`, data);
   }
 
   updateProfilePhoto(id: number, data: FormData): Observable<ApiResponse<any>> {
-    return this.api.put<ApiResponse<any>>(`user/${id}/photo`, data);
+    return this.api.put<ApiResponse<any>>(`users/${id}/photo`, data);
   }
 
   deleteProfilePhoto(id: number): Observable<ApiResponse<any>> {
-    return this.api.delete<ApiResponse<any>>(`user/${id}/photo`);
+    return this.api.delete<ApiResponse<any>>(`users/${id}/photo`);
   }
 
   deleteUser(id: number): Observable<ApiResponse<any>> {
-    return this.api.delete<ApiResponse<any>>(`user/${id}`);
+    return this.api.delete<ApiResponse<any>>(`users/${id}`);
   }
 
   getUsers(params: any): Observable<ApiResponse<any>> {
-    return this.api.get<ApiResponse<any>>('user/list', params);
+    return this.api.get<ApiResponse<any>>('users', params);
   }
 
   checkUsernameAvailability(username: string): Observable<ApiResponse<{ available: boolean }>> {
-    return this.api.get<ApiResponse<{ available: boolean }>>(`user/check-username/${username}`);
+    return this.api.get<ApiResponse<{ available: boolean }>>(`users/check-username/${username}`);
   }
 }
