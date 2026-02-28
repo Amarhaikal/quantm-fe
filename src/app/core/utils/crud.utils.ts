@@ -19,6 +19,8 @@ export class CrudUtils {
       case 'D':
       case 'DELETED':
       case 'DISABLED':
+      case 'S':
+      case 'SUSPENDED':
         return 'danger';
       case 'I':
       case 'INACTIVE':
