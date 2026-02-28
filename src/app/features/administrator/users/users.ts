@@ -91,7 +91,7 @@ export class Users extends BaseListDirective implements OnInit {
     { field: 'fullname', header: 'label.full_name' },
     { field: 'staff_id', header: 'label.staff_id' },
     { field: 'role', header: 'label.role' },
-    { field: 'status', header: 'label.status', type: 'badge' },
+    { field: 'status', header: 'label.status', type: 'badge', textAlign: 'center' },
   ];
 
   ngOnInit() {

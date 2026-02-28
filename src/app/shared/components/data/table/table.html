@@ -27,7 +27,7 @@
         @for (col of columns; track col.field) {
           <th
             [style.width]="col.width"
-            [class.text-center]="col.textAlign === 'center'"
+            class="text-center"
             [pSortableColumn]="col.sortable !== false ? col.field : undefined"
           >
             {{ col.header | transloco }}
@@ -111,7 +111,10 @@
                     />
                   }
                   @case ('avatarText') {
-                    <div class="flex items-center gap-3">
+                    <div
+                      class="flex items-center gap-3"
+                      [class.justify-center]="col.textAlign === 'center'"
+                    >
                       <p-avatar
                         [image]="col.imageField ? rowData[col.imageField] || null : null"
                         [icon]="!col.imageField || !rowData[col.imageField] ? 'pi pi-user' : ''"

@@ -10,7 +10,14 @@
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: var(--primary-color) !important;
+  text-align: center !important;
   @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none! whitespace-nowrap;
+}
+
+/* Ensure PrimeNG's internal flex container for sorting is also centered */
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th .p-column-header-content {
+  display: flex !important;
+  justify-content: center !important;
 }
 
 /* Hide sort icon by default using the same background color */
