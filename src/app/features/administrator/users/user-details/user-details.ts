@@ -104,10 +104,12 @@ export class UserDetails extends BaseFormComponent implements OnInit {
 
   userDetailsForm: FormGroup;
   isLoading = signal<boolean>(true);
+  isLoadingInsight = signal<boolean>(false);
   isSaving = signal<boolean>(false);
   isUploadingPhoto = signal<boolean>(false);
 
   private fetchedUser = signal<UserDetailed | null>(null);
+  userInsight = signal<string | null>(null);
 
   // Plain writable signal — .set() always triggers OnPush re-render
   profileImageUrl = signal<string | undefined>(undefined);
@@ -319,6 +321,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       next: (response: ApiResponse<UserDetailed>) => {
         if (response.status === 200) {
           this.handleUserDataResponse(response.data);
+          this.fetchUserInsight(response.data.id);
         }
         this.isLoading.set(false);
       },
@@ -326,6 +329,22 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         this.toastService.error('Error', 'Failed to load user data');
         this.isLoading.set(false);
         this.goBack();
+      },
+    });
+  }
+
+  private fetchUserInsight(userId: number) {
+    this.isLoadingInsight.set(true);
+    this.userService.getUserInsight(userId).subscribe({
+      next: (response) => {
+        if (response.status === 200) {
+          this.userInsight.set(response.data.insight);
+        }
+        this.isLoadingInsight.set(false);
+      },
+      error: () => {
+        // Silently fail for insight, or maybe set a default message
+        this.isLoadingInsight.set(false);
       },
     });
   }

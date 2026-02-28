@@ -78,33 +78,57 @@
 
           <!-- User info -->
           <div class="profile-card__info">
-            <h2 class="profile-card__name">
-              {{ originalData?.fullname || ('common.new_user' | transloco) }}
-            </h2>
+            <div class="profile-card__identity">
+              <h2 class="profile-card__name">
+                {{ originalData?.fullname || ('common.new_user' | transloco) }}
+              </h2>
 
-            <p class="profile-card__username">&#64;{{ originalData?.username }}</p>
+              <p class="profile-card__username">&#64;{{ originalData?.username }}</p>
 
-            <div class="profile-card__badges">
-              @if (originalData?.staff_id) {
-                <span class="profile-card__badge">
-                  <i class="pi pi-id-card"></i>
-                  {{ originalData?.staff_id }}
-                </span>
-              }
-              @if (originalData?.designation) {
-                <span class="profile-card__badge">
-                  <i class="pi pi-briefcase"></i>
-                  {{ originalData?.designation }}
-                </span>
-              }
-              @if (originalData?.status) {
-                <span class="profile-card__badge profile-card__badge--status">
-                  <span
-                    class="profile-card__status-dot"
-                    [class.profile-card__status-dot--active]="originalData?.status === 'Active'"
-                  ></span>
-                  {{ originalData?.status }}
-                </span>
+              <div class="profile-card__badges">
+                @if (originalData?.staff_id) {
+                  <span class="profile-card__badge">
+                    <i class="pi pi-id-card"></i>
+                    {{ originalData?.staff_id }}
+                  </span>
+                }
+                @if (originalData?.status) {
+                  <span class="profile-card__badge profile-card__badge--status">
+                    <span
+                      class="profile-card__status-dot"
+                      [class.profile-card__status-dot--active]="originalData?.status === 'Active'"
+                    ></span>
+                    {{ originalData?.status }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- AI Insight Section -->
+            <div class="profile-card__insight-container">
+              @if (isLoadingInsight()) {
+                <div class="insight-skeleton">
+                  <div class="insight-skeleton__sparkle"></div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <i class="pi pi-sparkles text-indigo-400 insight-sparkle-icon"></i>
+                    <p-skeleton width="100px" height="1rem" borderRadius="4px"></p-skeleton>
+                  </div>
+                  <p-skeleton
+                    width="100%"
+                    height="0.8rem"
+                    borderRadius="4px"
+                    class="mb-1"
+                  ></p-skeleton>
+                  <p-skeleton width="90%" height="0.8rem" borderRadius="4px"></p-skeleton>
+                </div>
+              } @else if (userInsight()) {
+                <div class="insight-box">
+                  <div class="insight-box__header">
+                    <i class="pi pi-sparkles insight-box__icon"></i>
+                    <span class="insight-box__title">AI Insight</span>
+                  </div>
+                  <p class="insight-box__text">{{ userInsight() }}</p>
+                </div>
               }
             </div>
           </div>

@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api.model';
-import { UserDetailed, UserMiniProfile, UserUpdateDto } from '../models/user.model';
+import {
+  UserDetailed,
+  UserMiniProfile,
+  UserUpdateDto,
+  UserInsightResponse,
+} from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +49,9 @@ export class UserService {
 
   checkUsernameAvailability(username: string): Observable<ApiResponse<{ available: boolean }>> {
     return this.api.get<ApiResponse<{ available: boolean }>>(`users/check-username/${username}`);
+  }
+
+  getUserInsight(id: number): Observable<UserInsightResponse> {
+    return this.api.get<UserInsightResponse>(`users/${id}/insight`);
   }
 }
