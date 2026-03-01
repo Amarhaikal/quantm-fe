@@ -19,7 +19,7 @@ export interface SessionActivity {
     role: {
       code: string;
       description: string;
-      profile_image_url: string;
+      profile_photo: string;
     };
   };
 }

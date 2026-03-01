@@ -15,9 +15,7 @@ export interface Role {
 //   username: string;
 //   email: string;
 //   role: Role;
-//   profile_image_url?: string;
+//   profile_photo?: string;
 // }
 
-export type AuthResponse = ApiResponse<{
-  user: UserDetailed;
-}>;
+export type AuthResponse = ApiResponse<UserDetailed>;

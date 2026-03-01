@@ -4,8 +4,8 @@
     <div class="w-full" [formGroup]="searchForm">
       <lib-search (reset)="resetSearch()">
         <lib-dropdown
-          label="label.code_type"
-          formControlName="code_type"
+          label="label.system_code_type"
+          formControlName="system_code_type"
           [options]="codeTypesOptions()"
           [isSearching]="true"
         />

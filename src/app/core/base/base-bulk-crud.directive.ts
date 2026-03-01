@@ -45,7 +45,7 @@ export interface BulkCrudApi<T = any> {
  *   };
  *
  *   addRow() {
- *     this.addNewRow(this.data, { code: '', description: '' });
+ *     this.addNewRow(this.result, { code: '', description: '' });
  *   }
  * }
  * ```

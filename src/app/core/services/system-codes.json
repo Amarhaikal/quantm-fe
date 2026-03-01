@@ -1,0 +1,222 @@
+{
+    "status": 200,
+    "message": "System codes retrieved successfully",
+    "result": [
+        {
+            "code": "S001",
+            "description": "User Role",
+            "codes": [
+                {
+                    "code": "SA",
+                    "description": "Super Admin"
+                },
+                {
+                    "code": "ADM",
+                    "description": "Admin"
+                },
+                {
+                    "code": "SVR",
+                    "description": "Supervisor"
+                },
+                {
+                    "code": "OFC",
+                    "description": "Officer"
+                }
+            ]
+        },
+        {
+            "code": "S002",
+            "description": "User Status",
+            "codes": [
+                {
+                    "code": "ACT",
+                    "description": "Active"
+                },
+                {
+                    "code": "NEW",
+                    "description": "New"
+                },
+                {
+                    "code": "INA",
+                    "description": "Inactive"
+                },
+                {
+                    "code": "SUS",
+                    "description": "Suspended"
+                }
+            ]
+        },
+        {
+            "code": "S003",
+            "description": "Gender",
+            "codes": [
+                {
+                    "code": "M",
+                    "description": "Male"
+                },
+                {
+                    "code": "F",
+                    "description": "Female"
+                }
+            ]
+        },
+        {
+            "code": "S004",
+            "description": "Department",
+            "codes": [
+                {
+                    "code": "HR",
+                    "description": "Human Resources"
+                },
+                {
+                    "code": "IT",
+                    "description": "Information Technology"
+                },
+                {
+                    "code": "FIN",
+                    "description": "Finance"
+                },
+                {
+                    "code": "SAL",
+                    "description": "Sales"
+                },
+                {
+                    "code": "MKT",
+                    "description": "Marketing"
+                },
+                {
+                    "code": "OPS",
+                    "description": "Operations"
+                },
+                {
+                    "code": "RND",
+                    "description": "Research and Development"
+                },
+                {
+                    "code": "SUP",
+                    "description": "Support"
+                },
+                {
+                    "code": "OTH",
+                    "description": "Others"
+                }
+            ]
+        },
+        {
+            "code": "S005",
+            "description": "Country",
+            "codes": [
+                {
+                    "code": "MY",
+                    "description": "Malaysia"
+                },
+                {
+                    "code": "SG",
+                    "description": "Singapore"
+                },
+                {
+                    "code": "ID",
+                    "description": "Indonesia"
+                },
+                {
+                    "code": "TH",
+                    "description": "Thailand"
+                },
+                {
+                    "code": "VN",
+                    "description": "Vietnam"
+                },
+                {
+                    "code": "PH",
+                    "description": "Philippines"
+                },
+                {
+                    "code": "BN",
+                    "description": "Brunei"
+                },
+                {
+                    "code": "KH",
+                    "description": "Cambodia"
+                },
+                {
+                    "code": "LA",
+                    "description": "Laos"
+                },
+                {
+                    "code": "MM",
+                    "description": "Myanmar"
+                }
+            ]
+        },
+        {
+            "code": "S006",
+            "description": "State",
+            "codes": [
+                {
+                    "code": "01",
+                    "description": "Johor"
+                },
+                {
+                    "code": "02",
+                    "description": "Kedah"
+                },
+                {
+                    "code": "03",
+                    "description": "Kelantan"
+                },
+                {
+                    "code": "04",
+                    "description": "Melaka"
+                },
+                {
+                    "code": "05",
+                    "description": "Negeri Sembilan"
+                },
+                {
+                    "code": "06",
+                    "description": "Pahang"
+                },
+                {
+                    "code": "07",
+                    "description": "Perak"
+                },
+                {
+                    "code": "08",
+                    "description": "Perlis"
+                },
+                {
+                    "code": "09",
+                    "description": "Penang"
+                },
+                {
+                    "code": "10",
+                    "description": "Sabah"
+                },
+                {
+                    "code": "11",
+                    "description": "Sarawak"
+                },
+                {
+                    "code": "12",
+                    "description": "Selangor"
+                },
+                {
+                    "code": "13",
+                    "description": "Terengganu"
+                },
+                {
+                    "code": "14",
+                    "description": "Kuala Lumpur"
+                },
+                {
+                    "code": "15",
+                    "description": "Labuan"
+                },
+                {
+                    "code": "16",
+                    "description": "Putrajaya"
+                }
+            ]
+        }
+    ]
+}

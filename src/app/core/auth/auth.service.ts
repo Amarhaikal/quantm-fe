@@ -36,14 +36,12 @@ export class AuthService {
   profileImageUrl = computed(() => {
     const counter = this.refreshCounter();
     const user = this.currentUser();
-    if (!user?.profile_image_url) return undefined;
+    if (!user?.profile_photo) return undefined;
 
     const baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;
-    const path = user.profile_image_url.startsWith('/')
-      ? user.profile_image_url
-      : `/${user.profile_image_url}`;
+    const path = user.profile_photo.startsWith('/') ? user.profile_photo : `/${user.profile_photo}`;
 
     // Add timestamp to force browser to reload image if path is same
     // Using counter to ensure uniqueness on every refresh
@@ -53,10 +51,8 @@ export class AuthService {
   login(credentials: { username: string; password: string }): Observable<AuthResponse> {
     return this.api.post<AuthResponse>('auth/login', credentials).pipe(
       tap((response) => {
-        const userData = response.data?.user || (response.data as any);
-
-        if (response.status === 200 && userData && (userData.username || userData.fullname)) {
-          this.setUser(userData);
+        if (response.status === 200 && response.result) {
+          this.setUser(response.result);
         }
       }),
     );
@@ -71,10 +67,8 @@ export class AuthService {
       .post<AuthResponse>(url, { id_token: idToken }, { withCredentials: true })
       .pipe(
         tap((response) => {
-          const userData = response.data?.user || (response.data as any);
-
-          if (response.status === 200 && userData && (userData.username || userData.fullname)) {
-            this.setUser(userData);
+          if (response.status === 200 && response.result) {
+            this.setUser(response.result);
           }
         }),
       );
@@ -87,19 +81,19 @@ export class AuthService {
   hydrate(): Observable<UserDetailed | null> {
     return this.userService.getMyProfile().pipe(
       map((response) => {
-        if (response.status === 200) {
-          const apiUser = response.data;
+        if (response.status === 200 && response.result) {
+          const apiUser = response.result;
           const user: UserDetailed = {
             id: (apiUser as any).id || 0,
             fullname: apiUser.fullname || '',
             shortname: apiUser.shortname || '',
             username: apiUser.username || '',
-            staff_id: (apiUser as any).staff_id || '',
+            staff_no: (apiUser as any).staff_no || '',
             email: (apiUser as any).email || '',
             id_no: (apiUser as any).id_no || '',
             phone_no: (apiUser as any).phone_no || '',
             role: (apiUser as any).role || { code: '', description: '' },
-            profile_image_url: apiUser.profile_image_url,
+            profile_photo: apiUser.profile_photo,
             gender: (apiUser as any).gender || { code: '', description: '' },
             status: (apiUser as any).status || { code: '', description: '' },
             joined_dt: (apiUser as any).joined_dt || '',
@@ -107,8 +101,8 @@ export class AuthService {
             designation: (apiUser as any).designation || '',
             remarks: (apiUser as any).remarks || '',
             address: (apiUser as any).address || {
-              address_line_1: '',
-              address_line_2: '',
+              address_line1: '',
+              address_line2: '',
               city: '',
               postcode: '',
               state: { code: '', description: '' },
@@ -144,7 +138,7 @@ export class AuthService {
       // Ensure we return a new object reference to trigger signals
       return {
         ...user,
-        profile_image_url: photoUrl,
+        profile_photo: photoUrl,
       };
     });
     this.triggerRefresh();

@@ -33,6 +33,6 @@ export class MenuService {
   }
 
   getMenu(): Observable<UserResponse> {
-    return this.api.get<UserResponse>('menu');
+    return this.api.get<UserResponse>('menus');
   }
 }

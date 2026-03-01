@@ -23,8 +23,8 @@ export class UserService {
     return this.api.get<ApiResponse<UserDetailed>>(`users/${id}`);
   }
 
-  getUserByUsername(username: string): Observable<ApiResponse<UserDetailed>> {
-    return this.api.get<ApiResponse<UserDetailed>>(`users/username/${username}`);
+  getCurrentUser(): Observable<ApiResponse<UserDetailed>> {
+    return this.api.get<ApiResponse<UserDetailed>>(`users/currentUser`);
   }
 
   updateUser(id: number, data: UserUpdateDto): Observable<ApiResponse<UserDetailed>> {

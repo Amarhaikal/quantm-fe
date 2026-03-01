@@ -178,7 +178,7 @@ export class HeaderComponent {
     fullname: string;
     shortname: string;
     username: string;
-    profile_image_url: string | null;
+    profile_photo: string | null;
   } | null>(null);
   logout = output<void>();
 

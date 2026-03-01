@@ -12,7 +12,7 @@ import { PageContainerComponent } from '../../../shared/components/layout/page-c
 import { SearchComponent } from '../../../shared/components/layout/search/search';
 import { BaseBulkCrudDirective, BulkCrudApi } from '../../../core/base/base-bulk-crud.directive';
 import { RateService } from '../../../core/services/rate.service';
-import { CodeTypeService } from '../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../core/services/system-code.service';
 import { Rate } from '../../../core/models/rate.model';
 import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { CrudUtils } from '../../../core/utils/crud.utils';
@@ -36,7 +36,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 })
 export class Rates extends BaseBulkCrudDirective implements OnInit {
   private rateService = inject(RateService);
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
 
   // ─── Data ─────────────────────────────────────────────────────────────
   rates = signal<Rate[]>([]);
@@ -71,7 +71,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
   });
 
   rateTypesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes('RATE_TYPE').map((sc) => ({
+    return this.systemCodeService.getSystemCodes('RATE_TYPE').map((sc) => ({
       value: sc.code,
       label: sc.description,
     }));
@@ -164,7 +164,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
 
     this.rateService.getRates(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const data = response.data.list.map((item: any) => {
+        const data = response.result.list.map((item: any) => {
           return {
             ...item,
             // Store code in rate_type for the dropdown value
@@ -174,7 +174,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
           };
         });
         this.rates.set(data);
-        this.totalRecords.set(response.data.total_count);
+        this.totalRecords.set(response.result.total_count);
         this.loading.set(false);
       },
       error: (error: unknown) => {

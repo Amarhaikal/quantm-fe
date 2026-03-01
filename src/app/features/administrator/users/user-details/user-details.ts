@@ -36,7 +36,7 @@ import {
   OptionDropdown,
 } from '../../../../shared/components/form/dropdown/dropdown';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { CodeTypeService } from '../../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../../core/services/system-code.service';
 import { CustomValidators } from '../../../../core/utils/validators';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';
@@ -52,7 +52,7 @@ import { PageHeaderComponent } from '../../../../shared/components/layout/page-h
 import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
 import { CardComponent } from '../../../../shared/components/layout/card/card';
 
-const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
+const ADDRESS_FIELDS = ['address_line1', 'address_line2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
 const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
 
@@ -93,7 +93,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private userService = inject(UserService);
   private toastService = inject(ToastService);
   private authService = inject(AuthService);
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
   private confirmService = inject(ConfirmService);
   private dateService = inject(DateService);
   private translocoService = inject(TranslocoService);
@@ -149,31 +149,31 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   });
 
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
       value: role.code,
       label: role.description,
     }));
   });
   countriesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.COUNTRY).map((country) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.COUNTRY).map((country) => ({
       value: country.code,
       label: country.description,
     }));
   });
   statesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.STATE).map((state) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.STATE).map((state) => ({
       value: state.code,
       label: state.description,
     }));
   });
   genderOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.GENDER).map((gender) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.GENDER).map((gender) => ({
       value: gender.code,
       label: gender.description,
     }));
   });
   departmentOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
       value: department.code,
       label: department.description,
     }));
@@ -204,7 +204,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9._-]+$/),
         ],
       ],
-      staff_id: ['', [Validators.required, Validators.maxLength(10)]],
+      staff_no: ['', [Validators.required, Validators.maxLength(10)]],
       id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
       gender: [{ value: '', disabled: true }],
       role: ['', [Validators.required]],
@@ -217,8 +217,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       department: [''],
       designation: ['', [Validators.maxLength(120)]],
       remarks: ['', [Validators.maxLength(255)]],
-      address_line_1: ['', [Validators.maxLength(255)]],
-      address_line_2: ['', [Validators.maxLength(255)]],
+      address_line1: ['', [Validators.maxLength(255)]],
+      address_line2: ['', [Validators.maxLength(255)]],
       city: ['', [Validators.maxLength(120)]],
       postcode: ['', [Validators.maxLength(6)]],
       state: [{ value: '' }],
@@ -283,7 +283,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         this.userService.checkUsernameAvailability(username).subscribe({
           next: (response: ApiResponse<{ available: boolean }>) => {
             if (response.status === 200) {
-              if (response.data && response.data.available === false) {
+              if (response.result && response.result.available === false) {
                 const control = this.userDetailsForm.get('username');
                 control?.setErrors({ notAvailable: true }, { emitEvent: true });
                 control?.markAsDirty();
@@ -320,8 +320,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userService.getUserById(parseInt(userIdOrUsername)).subscribe({
       next: (response: ApiResponse<UserDetailed>) => {
         if (response.status === 200) {
-          this.handleUserDataResponse(response.data);
-          this.fetchUserInsight(response.data.id);
+          this.handleUserDataResponse(response.result);
+          this.fetchUserInsight(response.result.id);
         }
         this.isLoading.set(false);
       },
@@ -338,7 +338,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userService.getUserInsight(userId).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          this.userInsight.set(response.data.insight);
+          this.userInsight.set(response.result.insight);
         }
         this.isLoadingInsight.set(false);
       },
@@ -352,7 +352,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private handleUserDataResponse(data: UserDetailed) {
     this.userId = data.id;
     this.fetchedUser.set(data);
-    this.profileImageUrl.set(this.buildImageUrl(data.profile_image_url));
+    this.profileImageUrl.set(this.buildImageUrl(data.profile_photo));
 
     const formData = this.patchForm(data);
     this.userDetailsForm.patchValue(formData);
@@ -385,7 +385,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
-      staff_id,
+      staff_no,
       role,
       id_no,
       address,
@@ -407,7 +407,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
-      staff_id,
+      staff_no,
       id_no,
       email,
       phone_no: phone_no || '',
@@ -418,8 +418,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       role: role.code,
       status: userStatus.description,
       joined_dt,
-      address_line_1: address?.address_line_1 || '',
-      address_line_2: address?.address_line_2 || '',
+      address_line1: address?.address_line1 || '',
+      address_line2: address?.address_line2 || '',
       city: address?.city || '',
       postcode: address?.postcode || '',
       state: address?.state?.code || '',
@@ -441,7 +441,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['admin/users']);
+    this.router.navigate(['system-admin/users']);
   }
 
   onSave() {
@@ -489,7 +489,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         next: (response: ApiResponse<UserDetailed>) => {
           if (response.status === 200) {
             this.toastService.success('Success', 'User updated successfully');
-            this.handleUserDataResponse(response.data);
+            this.handleUserDataResponse(response.result);
           }
           this.isSaving.set(false);
         },
@@ -533,13 +533,13 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       next: (response: ApiResponse<any>) => {
         if (response.status === 201 || response.status === 200) {
           this.toastService.success('Success', this.getTranslation('profile.photo_upload_success'));
-          const d = response.data || {};
+          const d = response.result || {};
           const path = d.FilePath || d.filePath || d.FileUrl || d.fileUrl || d.Path || d.path;
 
           if (path) {
             // Path returned directly — update local signal immediately
             this.profileImageUrl.set(this.buildImageUrl(path));
-            this.fetchedUser.update((user) => (user ? { ...user, profile_image_url: path } : null));
+            this.fetchedUser.update((user) => (user ? { ...user, profile_photo: path } : null));
 
             // Always sync AuthService if editing self so header + sidemenu refresh
             const currentUser = this.authService.currentUser();
@@ -553,12 +553,12 @@ export class UserDetails extends BaseFormComponent implements OnInit {
               this.userService.getUserById(this.userId!).subscribe({
                 next: (refetchResponse: ApiResponse<UserDetailed>) => {
                   if (refetchResponse.status === 200) {
-                    const newPath = refetchResponse.data.profile_image_url;
+                    const newPath = refetchResponse.result.profile_photo;
                     // Use NgZone.run() to ensure OnPush components (header, sidemenu) are notified
                     this.ngZone.run(() => {
                       this.profileImageUrl.set(this.buildImageUrl(newPath));
                       this.fetchedUser.update((user) =>
-                        user ? { ...user, profile_image_url: newPath } : null,
+                        user ? { ...user, profile_photo: newPath } : null,
                       );
                       // Sync with AuthService if editing self
                       const currentUser = this.authService.currentUser();
@@ -616,9 +616,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
               );
               // Directly set the writable signal — guaranteed to trigger OnPush re-render
               this.profileImageUrl.set(undefined);
-              this.fetchedUser.update((user) =>
-                user ? { ...user, profile_image_url: null } : null,
-              );
+              this.fetchedUser.update((user) => (user ? { ...user, profile_photo: null } : null));
 
               // Sync with AuthService if it's the current user
               const currentUser = this.authService.currentUser();

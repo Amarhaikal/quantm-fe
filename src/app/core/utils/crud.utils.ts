@@ -11,6 +11,7 @@ export class CrudUtils {
   static getStatusSeverity(code: string): 'success' | 'info' | 'warning' | 'danger' | 'secondary' {
     switch (code) {
       case 'A':
+      case 'ACT':
       case 'ACTIVE':
         return 'success';
       case 'N':
