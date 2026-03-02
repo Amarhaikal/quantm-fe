@@ -29,8 +29,8 @@ pipeline {
             steps {
                 script {
                     echo "Detecting current active environment..."
-                    // Check Nginx config for current port. Default to 4400 if not found (meaning first deploy is Blue)
-                    def currentPort = sh(script: "grep -oP 'proxy_pass http://localhost:\\K[0-9]+' ${NGINX_CONFIG} || echo '4400'", returnStdout: true).trim()
+                    // More robust detection: Look for the port specifically on the line marked with # FE_PORT
+                    def currentPort = sh(script: "grep -P 'proxy_pass http://localhost:[0-9]+; # FE_PORT' ${NGINX_CONFIG} | grep -oP 'localhost:\\K[0-9]+' || echo '4400'", returnStdout: true).trim()
                     
                     env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
                     env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "blue" : "green"
@@ -47,7 +47,6 @@ pipeline {
                 script {
                     echo "Syncing code to: ${DEPLOY_DIR}..."
                     sh "mkdir -p ${DEPLOY_DIR}"
-                    // Sync local files like docker-compose.yml 
                     sh "rsync -av --delete --exclude='.git' --exclude='node_modules' --exclude='dist' ${WORKSPACE}/ ${DEPLOY_DIR}/"
                 }
             }
@@ -72,9 +71,7 @@ pipeline {
             steps {
                 script {
                     echo "Waiting for health check on port ${env.NEXT_PORT}..."
-                    // Wait for NGINX inside container to start
                     sleep 10
-                    // Retry up to 5 times
                     sh """
                     for i in {1..15}; do
                         if curl -s http://localhost:${env.NEXT_PORT} > /dev/null; then
@@ -95,9 +92,8 @@ pipeline {
             steps {
                 script {
                     echo "Switching traffic from ${env.CURRENT_PORT} to ${env.NEXT_PORT}..."
-                    // Use sed to replace the port in the NGINX config file
-                    sh "sudo sed -i 's/proxy_pass http:\\/\\/localhost:${env.CURRENT_PORT}/proxy_pass http:\\/\\/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"
-                    // Reload host Nginx
+                    // Target specifically the line with # FE_PORT
+                    sh "sudo sed -i '/# FE_PORT/s/localhost:${env.CURRENT_PORT}/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"
                     sh "sudo systemctl reload nginx"
                 }
             }
@@ -107,7 +103,7 @@ pipeline {
             steps {
                 script {
                     def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
-                    echo "Stopping old ${prevColor} container (retaining for rollback)..."
+                    echo "Stopping old ${prevColor} container..."
                     dir(DEPLOY_DIR) {
                         sh "docker compose stop quantm-fe-${prevColor} || true"
                     }
@@ -124,17 +120,14 @@ pipeline {
 
     post {
         success {
-            echo "Successfully deployed Quantm-FE to ${env.NEXT_COLOR} cluster at port ${env.NEXT_PORT}!"
+            echo "Successfully deployed Quantm-FE to ${env.NEXT_COLOR} cluster!"
         }
         failure {
             echo "Deployment failed! Rolling back to ${env.CURRENT_PORT}..."
             script {
-                // If we attempted to update Nginx but it might have failed or the container is down,
-                // we should ensure Nginx still points to the previous working port.
-                sh "sudo sed -i 's/proxy_pass http:\\/\\/localhost:[0-9]\\+/proxy_pass http:\\/\\/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"
+                sh "sudo sed -i '/# FE_PORT/s/localhost:[0-9]\\+/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"
                 sh "sudo systemctl reload nginx"
                 
-                // Ensure the previous container is running
                 def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
                 dir(DEPLOY_DIR) {
                     sh "docker compose start quantm-fe-${prevColor} || true"
