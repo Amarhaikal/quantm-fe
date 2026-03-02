@@ -1,5 +1,5 @@
 import { Injectable, signal, inject, computed } from '@angular/core';
-import { catchError, map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, Subscription, interval } from 'rxjs';
 import { HttpClient, HttpBackend } from '@angular/common/http';
 import { AuthResponse } from '../models/auth.model';
 import { ApiService } from '../services/api.service';
@@ -32,6 +32,8 @@ export class AuthService {
 
   // Flag to prevent MSAL handleRedirectObservable from triggering loops
   msalRedirectProcessed = false;
+
+  private refreshSubscription?: Subscription;
 
   profileImageUrl = computed(() => {
     const counter = this.refreshCounter();
@@ -130,6 +132,29 @@ export class AuthService {
     this.currentUserSig.set(user);
     this.isHydratedSig.set(true);
     this.triggerRefresh();
+
+    if (user) {
+      this.startTokenRefresh();
+    } else {
+      this.stopTokenRefresh();
+    }
+  }
+
+  private startTokenRefresh() {
+    this.stopTokenRefresh();
+    // 29 minutes = 29 * 60 * 1000 = 1740000 ms
+    this.refreshSubscription = interval(1740000).subscribe(() => {
+      this.api.post('auth/refresh', {}).subscribe({
+        error: (err) => console.error('Token refresh failed', err),
+      });
+    });
+  }
+
+  private stopTokenRefresh() {
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+      this.refreshSubscription = undefined;
+    }
   }
 
   updateProfileImage(photoUrl: string | null) {
