@@ -1,17 +1,21 @@
 services:
-  quantm-frontend:
+  quantm-fe-blue:
     image: quantm-frontend:latest
-    container_name: quantm-frontend
+    container_name: quantm-fe-blue
     restart: unless-stopped
     ports:
-      - "8082:80"
-    environment:
-      - NODE_ENV=production
+      - '4200:80'
     networks:
       - quantm-network
-    # Optional: If you want to mount config dynamically instead of copying it into the image
-    # volumes:
-    #   - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  quantm-fe-green:
+    image: quantm-frontend:latest
+    container_name: quantm-fe-green
+    restart: unless-stopped
+    ports:
+      - '4400:80'
+    networks:
+      - quantm-network
 
 networks:
   quantm-network:

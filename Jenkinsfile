@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'quantm-frontend'
         DOCKER_TAG = "${BUILD_NUMBER}"
-        COMPOSE_PROJECT_NAME = 'quantm'
         DEPLOY_DIR = '/var/www/quantm/quantm-fe'
+        NGINX_CONFIG = '/etc/nginx/sites-available/quantm-fe'
     }
 
     stages {
@@ -19,26 +19,25 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                        docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
-                    """
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
             }
         }
 
-        stage('Stop Old Containers') {
+        stage('Determine Deployment Target') {
             steps {
                 script {
-                    echo 'Stopping old containers...'
-                    sh """
-                        if [ -d "${DEPLOY_DIR}" ]; then
-                            cd ${DEPLOY_DIR}
-                            docker stop ${DOCKER_IMAGE} || true
-                            docker rm ${DOCKER_IMAGE} || true
-                            docker compose down || true
-                        fi
-                    """
+                    echo "Detecting current active environment..."
+                    // Check Nginx config for current port. Default to 4400 if not found (meaning first deploy is Blue)
+                    def currentPort = sh(script: "grep -oP 'proxy_pass http://localhost:\\K[0-9]+' ${NGINX_CONFIG} || echo '4400'", returnStdout: true).trim()
+                    
+                    env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
+                    env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "blue" : "green"
+                    env.CURRENT_PORT = currentPort
+                    
+                    echo "Current Port: ${currentPort}"
+                    echo "Next Deploy: ${env.NEXT_COLOR} on port ${env.NEXT_PORT}"
                 }
             }
         }
@@ -46,55 +45,101 @@ pipeline {
         stage('Sync Code to Deployment Directory') {
             steps {
                 script {
-                    echo "Syncing code from workspace to deployment directory: ${DEPLOY_DIR}..."
+                    echo "Syncing code to: ${DEPLOY_DIR}..."
+                    sh "mkdir -p ${DEPLOY_DIR}"
+                    // Sync local files like docker-compose.yml 
+                    sh "rsync -av --delete --exclude='.git' --exclude='node_modules' --exclude='dist' ${WORKSPACE}/ ${DEPLOY_DIR}/"
+                }
+            }
+        }
+
+        stage('Target Clearance & Parallel Deploy') {
+            steps {
+                script {
+                    dir(DEPLOY_DIR) {
+                        echo "Cleaning up target ${env.NEXT_COLOR}..."
+                        sh "docker compose stop quantm-fe-${env.NEXT_COLOR} || true"
+                        sh "docker compose rm -f quantm-fe-${env.NEXT_COLOR} || true"
+                        
+                        echo "Starting service quantm-fe-${env.NEXT_COLOR}..."
+                        sh "docker compose up --build -d quantm-fe-${env.NEXT_COLOR}"
+                    }
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                script {
+                    echo "Waiting for health check on port ${env.NEXT_PORT}..."
+                    // Wait for NGINX inside container to start
+                    sleep 10
+                    // Retry up to 5 times
                     sh """
-                        # Create deployment directory if it doesn't exist
-                        mkdir -p ${DEPLOY_DIR}
-                        
-                        # Sync all needed files
-                        rsync -av --delete \
-                            --exclude='.git' \
-                            --exclude='node_modules' \
-                            --exclude='dist' \
-                            ${WORKSPACE}/ ${DEPLOY_DIR}/
-                        
-                        echo 'Code sync completed!'
+                    for i in {1..15}; do
+                        if curl -s http://localhost:${env.NEXT_PORT} > /dev/null; then
+                            echo "Health check PASSED"
+                            exit 0
+                        fi
+                        echo "Health check failed, retrying in 2 seconds..."
+                        sleep 2
+                    done
+                    echo "Health check FAILED"
+                    exit 1
                     """
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Instant Switch (Nginx)') {
             steps {
                 script {
-                    echo 'Deploying new containers...'
-                    sh """
-                        cd ${DEPLOY_DIR}
-                        docker compose up -d
-                    """
+                    echo "Switching traffic from ${env.CURRENT_PORT} to ${env.NEXT_PORT}..."
+                    // Use sed to replace the port in the NGINX config file
+                    sh "sudo sed -i 's/proxy_pass http:\\/\\/localhost:${env.CURRENT_PORT}/proxy_pass http:\\/\\/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"
+                    // Reload host Nginx
+                    sh "sudo systemctl reload nginx"
                 }
             }
         }
 
-        stage('Cleanup') {
+        stage('Safety Stop') {
             steps {
                 script {
-                    echo 'Cleaning up old images...'
-                    sh """
-                        docker image prune -f
-                    """
+                    def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
+                    echo "Stopping old ${prevColor} container (retaining for rollback)..."
+                    dir(DEPLOY_DIR) {
+                        sh "docker compose stop quantm-fe-${prevColor} || true"
+                    }
                 }
+            }
+        }
+
+        stage('Cleanup Images') {
+            steps {
+                sh "docker image prune -f"
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment successful!'
+            echo "Successfully deployed Quantm-FE to ${env.NEXT_COLOR} cluster at port ${env.NEXT_PORT}!"
         }
         failure {
-            echo 'Deployment failed!'
-            sh "docker compose logs ${DOCKER_IMAGE} || true"
+            echo "Deployment failed! Rolling back to ${env.CURRENT_PORT}..."
+            script {
+                // If we attempted to update Nginx but it might have failed or the container is down,
+                // we should ensure Nginx still points to the previous working port.
+                sh "sudo sed -i 's/proxy_pass http:\\/\\/localhost:[0-9]\\+/proxy_pass http:\\/\\/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"
+                sh "sudo systemctl reload nginx"
+                
+                // Ensure the previous container is running
+                def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
+                dir(DEPLOY_DIR) {
+                    sh "docker compose start quantm-fe-${prevColor} || true"
+                }
+            }
         }
     }
 }
