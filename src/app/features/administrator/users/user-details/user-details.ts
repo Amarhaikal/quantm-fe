@@ -338,7 +338,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userService.getUserInsight(userId).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          this.userInsight.set(response.result.insight);
+          this.userInsight.set(response.result);
         }
         this.isLoadingInsight.set(false);
       },

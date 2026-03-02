@@ -42,11 +42,7 @@ export interface UserDetailed {
 export type UserMiniProfileResponse = ApiResponse<UserMiniProfile>;
 export type UserResponse = ApiResponse<UserDetailed>;
 
-export interface UserInsight {
-  insight: string;
-}
-
-export type UserInsightResponse = ApiResponse<UserInsight>;
+export type UserInsightResponse = ApiResponse<string>;
 
 export interface UserUpdateDto {
   fullname?: string;
