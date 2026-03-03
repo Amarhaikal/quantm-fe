@@ -66,7 +66,7 @@ export class AuthService {
       : '/api/auth/login-microsoft';
 
     return this.backendHttpClient
-      .post<AuthResponse>(url, { id_token: idToken }, { withCredentials: true })
+      .post<AuthResponse>(url, { microsoft_token: idToken }, { withCredentials: true })
       .pipe(
         tap((response) => {
           if (response.status === 200 && response.result) {
