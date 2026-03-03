@@ -10,40 +10,12 @@ pipeline {
     }
 
     stages {
-        stage('Pull Latest Code') {
-            steps {
-                // Force a clean checkout to ensure we aren't using stale code
-                checkout scm
-            }
-        }
-
-        stage('Prepare') {
-            steps {
-                script {
-                    echo "Cleaning up Docker build cache..."
-                    sh "docker image prune -f"
-                }
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
-                    sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
-                }
-            }
-        }
-
         stage('Determine Deployment Target') {
             steps {
                 script {
                     echo "Detecting current active environment..."
-                    // SMARTER DETECTION: 
-                    // 1. Find the FE_PORT line
-                    // 2. Try to find a number. 
-                    // 3. IF no number found (like 'null'), DEFAULT to 4200/4400 to rescue the site.
+                    // We do this FIRST so that even if the build fails later, 
+                    // we have a valid CURRENT_PORT for the rollback script.
                     def rawLine = sh(script: "grep 'FE_PORT' ${NGINX_CONFIG} || echo 'NOT_FOUND'", returnStdout: true).trim()
                     
                     if (rawLine == "NOT_FOUND") {
@@ -51,15 +23,13 @@ pipeline {
                         error "FATAL: Could not find 'FE_PORT' marker in ${NGINX_CONFIG}."
                     }
 
-                    // Extract the port number using regex
                     def matcher = (rawLine =~ /localhost:(\d+)/)
                     def currentPort = ""
 
                     if (matcher.find()) {
                         currentPort = matcher[0][1]
-                        echo "Detected active port: ${currentPort}"
                     } else {
-                        echo "WARNING: Port is corrupted (e.g. 'null'). Defaulting to 4400 to initiate recovery."
+                        echo "WARNING: Port is corrupted (e.g. 'null'). Defaulting to 4400 for recovery."
                         currentPort = "4400"
                     }
                     
@@ -68,7 +38,18 @@ pipeline {
                     env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "blue" : "green"
                     
                     echo "Current Port: ${env.CURRENT_PORT}"
-                    echo "Next Deploy: ${env.NEXT_COLOR} on port ${env.NEXT_PORT}"
+                    echo "Next Deploy will be: ${env.NEXT_COLOR} on port ${env.NEXT_PORT}"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
+                    // Removed 'image prune' from before the build as it causes "failed to get destination image" errors
+                    sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
             }
         }
@@ -106,11 +87,8 @@ pipeline {
         stage('Instant Switch (Nginx)') {
             steps {
                 script {
-                    echo "Switching traffic from Port ${env.CURRENT_PORT} (or corrupted state) to Port ${env.NEXT_PORT}..."
-                    // SMARTER SED: Matches 'localhost:' followed by ANY non-semicolon characters and replaces it with the correct port
-                    // This fixes 'localhost:null' or 'localhost:1234' effectively.
+                    echo "Switching traffic from Port ${env.CURRENT_PORT} to Port ${env.NEXT_PORT}..."
                     sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
-                    
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
                     echo "Nginx traffic successfully switched to Port ${env.NEXT_PORT}!"
@@ -132,16 +110,22 @@ pipeline {
     post {
         success {
             echo "Successfully deployed Quantm-FE 🏆"
+            // Prune only AFTER success
             sh "docker image prune -f"
         }
         failure {
             script {
                 echo "DEPLOYMENT FAILED. Rolling back..."
-                def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
-                // Recovery sed
-                sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
-                sh "sudo systemctl reload nginx"
-                sh "docker compose start quantm-fe-${prevColor} || true"
+                // Only attempt rollback if CURRENT_PORT was successfully detected
+                if (env.CURRENT_PORT && env.CURRENT_PORT != "null") {
+                    def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
+                    sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
+                    sh "sudo systemctl reload nginx"
+                    sh "docker compose start quantm-fe-${prevColor} || true"
+                    echo "Rollback to Port ${env.CURRENT_PORT} completed."
+                } else {
+                    echo "Rollback skipped: CURRENT_PORT was not determined."
+                }
             }
         }
     }
