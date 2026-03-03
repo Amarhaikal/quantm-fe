@@ -10,6 +10,13 @@ pipeline {
     }
 
     stages {
+        stage('Pull Latest Code') {
+            steps {
+                // Force a clean checkout to ensure we aren't using stale code
+                checkout scm
+            }
+        }
+
         stage('Prepare') {
             steps {
                 script {
@@ -33,13 +40,27 @@ pipeline {
             steps {
                 script {
                     echo "Detecting current active environment..."
-                    // Ultra-flexible: Just looks for FE_PORT on the same line as the port
-                    def currentPort = sh(script: "grep 'FE_PORT' ${NGINX_CONFIG} | grep -oP 'localhost:\\K[0-9]+' || echo 'NOT_FOUND'", returnStdout: true).trim()
+                    // SMARTER DETECTION: 
+                    // 1. Find the FE_PORT line
+                    // 2. Try to find a number. 
+                    // 3. IF no number found (like 'null'), DEFAULT to 4200/4400 to rescue the site.
+                    def rawLine = sh(script: "grep 'FE_PORT' ${NGINX_CONFIG} || echo 'NOT_FOUND'", returnStdout: true).trim()
                     
-                    if (currentPort == "NOT_FOUND" || currentPort == "") {
-                        // Debugging: Show the user what the file looks like if it fails
+                    if (rawLine == "NOT_FOUND") {
                         sh "cat ${NGINX_CONFIG}"
-                        error "FATAL: Could not find 'FE_PORT' marker in ${NGINX_CONFIG}. Please ensure your proxy_pass line has '# FE_PORT' at the end!"
+                        error "FATAL: Could not find 'FE_PORT' marker in ${NGINX_CONFIG}."
+                    }
+
+                    // Extract the port number using regex
+                    def matcher = (rawLine =~ /localhost:(\d+)/)
+                    def currentPort = ""
+
+                    if (matcher.find()) {
+                        currentPort = matcher[0][1]
+                        echo "Detected active port: ${currentPort}"
+                    } else {
+                        echo "WARNING: Port is corrupted (e.g. 'null'). Defaulting to 4400 to initiate recovery."
+                        currentPort = "4400"
                     }
                     
                     env.CURRENT_PORT = currentPort
@@ -85,9 +106,10 @@ pipeline {
         stage('Instant Switch (Nginx)') {
             steps {
                 script {
-                    echo "Switching traffic from ${env.CURRENT_PORT} to ${env.NEXT_PORT}..."
-                    // Flexible Switch: Targets any line with FE_PORT
-                    sh """sudo sed -i '/FE_PORT/s/localhost:${env.CURRENT_PORT}/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
+                    echo "Switching traffic from Port ${env.CURRENT_PORT} (or corrupted state) to Port ${env.NEXT_PORT}..."
+                    // SMARTER SED: Matches 'localhost:' followed by ANY non-semicolon characters and replaces it with the correct port
+                    // This fixes 'localhost:null' or 'localhost:1234' effectively.
+                    sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
                     
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
@@ -110,12 +132,14 @@ pipeline {
     post {
         success {
             echo "Successfully deployed Quantm-FE 🏆"
+            sh "docker image prune -f"
         }
         failure {
             script {
                 echo "DEPLOYMENT FAILED. Rolling back..."
                 def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
-                sh """sudo sed -i '/FE_PORT/s/localhost:[0-9]\\+/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
+                // Recovery sed
+                sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
                 sh "sudo systemctl reload nginx"
                 sh "docker compose start quantm-fe-${prevColor} || true"
             }
