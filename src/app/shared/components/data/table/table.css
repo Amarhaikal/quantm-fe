@@ -14,33 +14,42 @@
   @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none! whitespace-nowrap;
 }
 
-/* Ensure PrimeNG's internal flex container for sorting is also centered */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th .p-column-header-content {
   display: flex !important;
   justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  position: relative !important;
 }
 
-/* Hide sort icon by default using the same background color */
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th .p-datatable-sort-icon {
+/* Ensure the sort icon is positioned to the right of the center, rather than pushing the text */
+:host ::ng-deep .p-datatable-thead > tr > th .p-sortable-column-icon,
+:host ::ng-deep .p-datatable-thead > tr > th .p-datatable-sort-icon {
+  position: absolute !important;
+  right: 8px !important;
+  margin: 0 !important;
   color: var(--primary-color) !important;
   transition: color 0.2s ease;
 }
 
-/* Keep icon hidden on hover when not sorted */
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th:not(.p-highlight):hover .p-datatable-sort-icon {
-  color: var(--primary-color) !important;
-}
-
-/* Show secondary color icon when sorted (and keep it on hover) */
+/* Show icon when sorted */
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="ascending"] .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"] .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight:hover .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="ascending"]:hover .p-datatable-sort-icon,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th[aria-sort="descending"]:hover .p-datatable-sort-icon {
+:host
+  ::ng-deep
+  .p-datatable
+  .p-datatable-thead
+  > tr
+  > th[aria-sort='ascending']
+  .p-datatable-sort-icon,
+:host
+  ::ng-deep
+  .p-datatable
+  .p-datatable-thead
+  > tr
+  > th[aria-sort='descending']
+  .p-datatable-sort-icon {
   color: var(--secondary-color) !important;
 }
-
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
   @apply text-sm py-3 px-3 border-b border-gray-50 text-gray-700 whitespace-nowrap;
