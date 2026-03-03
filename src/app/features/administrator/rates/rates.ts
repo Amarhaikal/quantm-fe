@@ -67,7 +67,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
     rate_type: [''],
     code: ['', [Validators.maxLength(10)]],
     description: ['', [Validators.minLength(3), Validators.maxLength(60)]],
-    rate: [''],
+    // rate: [''],
   });
 
   rateTypesOptions = computed<OptionDropdown[]>(() => {
@@ -164,7 +164,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
 
     this.rateService.getRates(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const data = response.result.list.map((item: any) => {
+        const data = response.result.data.map((item: any) => {
           return {
             ...item,
             // Store code in rate_type for the dropdown value
