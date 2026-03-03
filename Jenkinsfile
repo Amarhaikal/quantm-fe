@@ -5,9 +5,9 @@ pipeline {
         DOCKER_IMAGE = 'quantm-frontend'
         DOCKER_TAG = "${BUILD_NUMBER}"
         NGINX_CONFIG = '/etc/nginx/sites-available/quantm-fe'
-        // FIX for "failed to get destination image"
-        DOCKER_BUILDKIT = '1'
-        COMPOSE_DOCKER_CLI_BUILD = '1'
+        // Disabling BuildKit since the server is missing the component
+        DOCKER_BUILDKIT = '0'
+        COMPOSE_DOCKER_CLI_BUILD = '0'
     }
 
     stages {
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
-                    // --no-cache ensures your "console.log" changes are definitely picked up
+                    // --no-cache ensures your "console.log" changes are definitely picked up and avoids "missing destination image" issues
                     sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                     sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
@@ -85,7 +85,7 @@ pipeline {
                     // Ultra-safe sed: Only targets the exact line with the marker
                     sh "sudo sed -i 's/localhost:${env.CURRENT_PORT}; # FE_PORT/localhost:${env.NEXT_PORT}; # FE_PORT/' ${NGINX_CONFIG}"
                     
-                    // Verify Nginx config before reloading to prevent service downtime
+                    // Verify Nginx config before reloading
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
                     echo "Nginx traffic successfully switched to Port ${env.NEXT_PORT}!"
