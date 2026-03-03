@@ -44,8 +44,10 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   editableFields = ['system_code_type', 'code', 'description'];
 
   override bulkCrudApi: BulkCrudApi = {
-    bulkCreate: (payload) => this.systemCodeService.createSystemCodes(payload),
-    bulkUpdate: (payload) => this.systemCodeService.updateSystemCodes(payload),
+    bulkCreate: (payload) =>
+      this.systemCodeService.createSystemCodes(payload.map((r) => this.toApiPayload(r))),
+    bulkUpdate: (payload) =>
+      this.systemCodeService.updateSystemCodes(payload.map((r) => this.toApiPayload(r))),
     bulkDelete: (ids) => this.systemCodeService.deleteSystemCodes(ids),
   };
 
@@ -183,6 +185,17 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   /** Override onCancel to pass the systemCodes signal. */
   override onCancel(rowData: any) {
     super.onCancel(rowData, this.systemCodes);
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────
+  /** Transforms the flat payload into the API-expected shape. */
+  private toApiPayload(row: Record<string, any>): Record<string, any> {
+    const { system_code_type, ...rest } = row;
+    const payload: Record<string, any> = { ...rest };
+    if (system_code_type !== undefined) {
+      payload['system_code_type'] = { code: system_code_type };
+    }
+    return payload;
   }
 
   // ─── Search ───────────────────────────────────────────────────────────
