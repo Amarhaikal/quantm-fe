@@ -5,17 +5,27 @@ pipeline {
         DOCKER_IMAGE = 'quantm-frontend'
         DOCKER_TAG = "${BUILD_NUMBER}"
         NGINX_CONFIG = '/etc/nginx/sites-available/quantm-fe'
+        // FIX for "failed to get destination image"
+        DOCKER_BUILDKIT = '1'
+        COMPOSE_DOCKER_CLI_BUILD = '1'
     }
 
     stages {
-        // Stage 1: Checkout is done automatically by Jenkins
-        
+        stage('Prepare') {
+            steps {
+                script {
+                    echo "Cleaning up Docker build cache..."
+                    sh "docker image prune -f"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
                     echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
-                    // We build it here so we can tag it properly before deployment
-                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    // --no-cache ensures your "console.log" changes are definitely picked up
+                    sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                     sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
             }
@@ -25,8 +35,8 @@ pipeline {
             steps {
                 script {
                     echo "Detecting current active environment..."
-                    // SMARTER DETECTION: Only looks for the port inside the 'location /' block
-                    def currentPort = sh(script: "sed -n '/location \\/ {/,/}/p' ${NGINX_CONFIG} | grep -oP 'localhost:\\K[0-9]+' || echo '4400'", returnStdout: true).trim()
+                    // Safe detection using the # FE_PORT marker
+                    def currentPort = sh(script: "grep -oP 'localhost:\\K[0-9]+(?=; # FE_PORT)' ${NGINX_CONFIG} || echo '4400'", returnStdout: true).trim()
                     
                     env.CURRENT_PORT = currentPort
                     env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
@@ -41,12 +51,11 @@ pipeline {
         stage('Target Clearance & Parallel Deploy') {
             steps {
                 script {
-                    echo "Cleaning up any old ${env.NEXT_COLOR} container..."
+                    echo "Cleaning up current target: ${env.NEXT_COLOR}..."
                     sh "docker compose stop quantm-fe-${env.NEXT_COLOR} || true"
                     sh "docker compose rm -f quantm-fe-${env.NEXT_COLOR} || true"
                     
-                    echo "Starting fresh service: quantm-fe-${env.NEXT_COLOR}..."
-                    // We use --build just in case, but it relies on 'quantm-frontend:latest' which we just tagged
+                    echo "Deploying fresh ${env.NEXT_COLOR} version..."
                     sh "docker compose up -d quantm-fe-${env.NEXT_COLOR}"
                 }
             }
@@ -73,7 +82,11 @@ pipeline {
             steps {
                 script {
                     echo "Switching traffic from ${env.CURRENT_PORT} to ${env.NEXT_PORT}..."
-                    sh "sudo sed -i '/location \\/ {/,/}/ s/localhost:${env.CURRENT_PORT}/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"
+                    // Ultra-safe sed: Only targets the exact line with the marker
+                    sh "sudo sed -i 's/localhost:${env.CURRENT_PORT}; # FE_PORT/localhost:${env.NEXT_PORT}; # FE_PORT/' ${NGINX_CONFIG}"
+                    
+                    // Verify Nginx config before reloading to prevent service downtime
+                    sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
                     echo "Nginx traffic successfully switched to Port ${env.NEXT_PORT}!"
                 }
@@ -89,26 +102,20 @@ pipeline {
                 }
             }
         }
-
-        stage('Housekeeping') {
-            steps {
-                sh "docker image prune -f"
-            }
-        }
     }
 
     post {
         success {
-            echo "Successfully deployed Quantm-FE to the ${env.NEXT_COLOR} cluster! 🏆"
+            echo "Successfully deployed Quantm-FE 🏆"
         }
         failure {
             script {
-                echo "DEPLOYMENT FAILED. Initiating self-healing rollback..."
+                echo "DEPLOYMENT FAILED. Rolling back..."
                 def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
-                sh "sudo sed -i '/location \\/ {/,/}/ s/localhost:[0-9]\\+/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"
+                // Revert Nginx back to the known stable port
+                sh "sudo sed -i 's/localhost:[0-9]\\+; # FE_PORT/localhost:${env.CURRENT_PORT}; # FE_PORT/' ${NGINX_CONFIG}"
                 sh "sudo systemctl reload nginx"
                 sh "docker compose start quantm-fe-${prevColor} || true"
-                echo "Rollback successful. Users are back on stable Port ${env.CURRENT_PORT}."
             }
         }
     }
