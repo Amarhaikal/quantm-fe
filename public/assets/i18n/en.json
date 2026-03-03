@@ -1,5 +1,6 @@
 {
     "login": {
+        "last_used": "Last Used",
         "title": "Welcome to",
         "welcome": "Welcome Back to Loan Management System",
         "username": "Username or Email",
