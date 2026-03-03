@@ -18,6 +18,7 @@ import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { CrudUtils } from '../../../core/utils/crud.utils';
 import { ApiResponse } from '../../../core/models/api.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 
 @Component({
   selector: 'app-rates',
@@ -71,7 +72,7 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
   });
 
   rateTypesOptions = computed<OptionDropdown[]>(() => {
-    return this.systemCodeService.getSystemCodes('RATE_TYPE').map((sc) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.RATE_TYPE).map((sc) => ({
       value: sc.code,
       label: sc.description,
     }));
