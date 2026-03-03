@@ -80,6 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   private intervalId: any;
 
   ngOnInit() {
+    console.log('deployed 12:59 pm');
+
     if (isPlatformBrowser(this.platformId)) {
       this.startSlider();
 
