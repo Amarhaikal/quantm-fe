@@ -41,7 +41,7 @@ export class RateService {
     return this.api.delete<ApiResponse<any>>(`rates/${id}`);
   }
 
-  deleteRates(ids: string[]): Observable<ApiResponse<any>> {
-    return this.api.post<ApiResponse<any>>('rates/delete', ids);
+  deleteRates(ids: (string | number)[]): Observable<ApiResponse<any>> {
+    return this.api.delete<ApiResponse<any>>('rates', { ids: ids.join(',') });
   }
 }

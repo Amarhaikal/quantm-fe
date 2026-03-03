@@ -66,8 +66,8 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
   // ─── Search ───────────────────────────────────────────────────────────
   searchForm = this.fb.group({
     rate_type: [''],
-    code: ['', [Validators.maxLength(10)]],
-    description: ['', [Validators.minLength(3), Validators.maxLength(60)]],
+    code: [''],
+    description: [''],
     // rate: [''],
   });
 
