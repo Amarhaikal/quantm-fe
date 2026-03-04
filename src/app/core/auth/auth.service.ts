@@ -143,8 +143,8 @@ export class AuthService {
 
   private startTokenRefresh() {
     this.stopTokenRefresh();
-    // 29 minutes = 29 * 60 * 1000 = 1740000 ms
-    this.refreshSubscription = interval(1740000).subscribe(() => {
+    // 5 minutes = 5 * 60 * 1000 = 300000 ms
+    this.refreshSubscription = interval(300000).subscribe(() => {
       this.api.post('auth/refresh', {}).subscribe({
         error: (err) => console.error('Token refresh failed', err),
       });
