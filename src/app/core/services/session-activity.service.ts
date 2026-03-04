@@ -15,6 +15,6 @@ export class SessionActivityService {
   }
 
   endSession(id: string): Observable<ApiResponse<any>> {
-    return this.api.delete<ApiResponse<any>>(`logout-session/${id}`);
+    return this.api.delete<ApiResponse<any>>(`sessions/${id}`);
   }
 }
