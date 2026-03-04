@@ -40,9 +40,10 @@ export class AuthService {
     const user = this.currentUser();
     if (!user?.profile_photo) return undefined;
 
-    const baseUrl = environment.apiUrl.endsWith('/')
+    let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;
+    baseUrl = `${baseUrl}/api`;
     const path = user.profile_photo.startsWith('/') ? user.profile_photo : `/${user.profile_photo}`;
 
     // Add timestamp to force browser to reload image if path is same

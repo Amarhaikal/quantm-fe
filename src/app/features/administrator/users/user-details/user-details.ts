@@ -368,9 +368,10 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private buildImageUrl(rawPath: string | null | undefined): string | undefined {
     if (!rawPath) return undefined;
 
-    const baseUrl = environment.apiUrl.endsWith('/')
+    let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;
+    baseUrl = `${baseUrl}/api`;
 
     if (rawPath.startsWith('http')) {
       return `${rawPath}${rawPath.includes('?') ? '&' : '?'}t=${Date.now()}`;

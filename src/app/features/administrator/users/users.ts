@@ -122,12 +122,17 @@ export class Users extends BaseListDirective implements OnInit {
 
     this.userService.getUsers(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
+        const baseUrl = environment.apiUrl.endsWith('/')
+          ? environment.apiUrl.slice(0, -1)
+          : environment.apiUrl;
         const mappedData = response.result.data.map((user: any) => ({
           ...user,
           role: user.role?.description,
           status: user.status?.description,
           status_severity: CrudUtils.getStatusSeverity(user.status?.code),
-          profile_photo: user.profile_photo ? `${environment.apiUrl}${user.profile_photo}` : null,
+          profile_photo: user.profile_photo
+            ? `${baseUrl}/api${user.profile_photo.startsWith('/') ? user.profile_photo : '/' + user.profile_photo}`
+            : null,
         }));
         this.users.set(mappedData);
         this.totalRecords.set(response.result.total_count);

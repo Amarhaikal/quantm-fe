@@ -159,11 +159,14 @@ export class SessionActivities implements OnInit {
   }
 
   refactorData(data: any[]) {
+    const baseUrl = environment.apiUrl.endsWith('/')
+      ? environment.apiUrl.slice(0, -1)
+      : environment.apiUrl;
     return data.map((item: any) => ({
       ...item,
       username: item.user?.username,
       profile_photo: item.user?.profile_photo
-        ? `${environment.apiUrl}${item.user.profile_photo}`
+        ? `${baseUrl}/api${item.user.profile_photo.startsWith('/') ? item.user.profile_photo : '/' + item.user.profile_photo}`
         : null,
       // role: item.user?.role?.description,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
