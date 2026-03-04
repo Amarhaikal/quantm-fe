@@ -76,8 +76,8 @@ export class SessionActivities implements OnInit {
     {
       field: 'username',
       header: 'label.username',
-      type: 'avatarText',
-      imageField: 'profile_photo',
+      // type: 'avatarText',
+      // imageField: 'profile_photo',
     },
     {
       field: 'created_at',
@@ -149,7 +149,7 @@ export class SessionActivities implements OnInit {
     this.sessionActivityService.getSessionActivities(apiParams).subscribe({
       next: (response) => {
         this.loading.set(false);
-        this.data.set(this.refactorData(response.result.list));
+        this.data.set(this.refactorData(response.result.data));
         this.totalRecords.set(response.result.total_count);
       },
       error: (error) => {
@@ -164,10 +164,10 @@ export class SessionActivities implements OnInit {
       : environment.apiUrl;
     return data.map((item: any) => ({
       ...item,
-      username: item.user?.username,
-      profile_photo: item.user?.profile_photo
-        ? `${baseUrl}/api${item.user.profile_photo.startsWith('/') ? item.user.profile_photo : '/' + item.user.profile_photo}`
-        : null,
+      username: item.username,
+      // profile_photo: item.user?.profile_photo
+      //   ? `${baseUrl}/api${item.user.profile_photo.startsWith('/') ? item.user.profile_photo : '/' + item.user.profile_photo}`
+      //   : null,
       // role: item.user?.role?.description,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
