@@ -25,6 +25,11 @@ export const routes: Routes = [
             (m) => m.ADMINISTRATOR_ROUTES,
           ),
       },
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/customer/customer.routes').then((m) => m.CUSTOMER_ROUTES),
+      },
     ],
   },
   {

@@ -6,6 +6,8 @@ export const CODE_TYPES = {
   COUNTRY: 'S005',
   STATE: 'S006',
   RATE_TYPE: 'S007',
+  FREQUENCY: 'S008',
+  CUSTOMER_TYPE: 'S009',
 } as const;
 
 export type CodeTypeValue = (typeof CODE_TYPES)[keyof typeof CODE_TYPES];

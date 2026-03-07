@@ -40,7 +40,9 @@
         "search": "Cari menu...",
         "no_results": "Menu tidak dijumpai",
         "session activities": "Aktiviti Sesi",
-        "rates": "Kadar"
+        "rates": "Kadar",
+        "customers": "Pelanggan",
+        "add_customer": "Tambah Pelanggan"
     },
     "profile": {
         "title": "Profil Saya",
@@ -108,6 +110,8 @@
         "last_activity_date": "Tarikh Aktiviti Terakhir",
         "rate_type": "Jenis Kadar",
         "rate": "Kadar",
+        "reg_no": "No. Pendaftaran",
+        "customer_type": "Jenis Pelanggan",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",

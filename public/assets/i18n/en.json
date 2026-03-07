@@ -40,7 +40,9 @@
         "search": "Search menus...",
         "no_results": "No menus found",
         "session activities": "Session Activities",
-        "rates": "Rates"
+        "rates": "Rates",
+        "customers": "Customers",
+        "add_customer": "Add Customer"
     },
     "profile": {
         "title": "My Profile",
@@ -108,6 +110,8 @@
         "last_activity_date": "Last Activity Date",
         "rate_type": "Rate Type",
         "rate": "Rate",
+        "reg_no": "Registration No",
+        "customer_type": "Customer Type",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
