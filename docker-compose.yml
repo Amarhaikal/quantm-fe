@@ -6,7 +6,7 @@ services:
     ports:
       - '4200:80'
     networks:
-      - quantm-network
+      - quantm-shared-network
 
   quantm-fe-green:
     image: quantm-frontend:latest
@@ -15,8 +15,9 @@ services:
     ports:
       - '4400:80'
     networks:
-      - quantm-network
+      - quantm-shared-network
 
 networks:
-  quantm-network:
-    name: quantm_network
+  quantm-shared-network:
+    external: true
+    name: quantm-shared-network
