@@ -1,3 +1,33 @@
 <lib-page-container>
   <lib-page-header title="sidemenu.add_customer" [showBack]="true" />
+
+  <div class="w-full bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <lib-dropdown
+          formControlName="customer_type_code"
+          label="label.customer_type"
+          [options]="customerTypeOptions()"
+          [required]="true"
+        />
+
+        <lib-textbox
+          formControlName="fullname"
+          label="label.full_name"
+          [required]="true"
+        />
+
+        <lib-textbox
+          formControlName="reg_no"
+          label="label.reg_no"
+          [type]="regNoType()"
+          [required]="true"
+        />
+      </div>
+
+      <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
+        <lib-button type="SAVE" [loading]="loading()" (click)="onSubmit()" />
+      </div>
+    </form>
+  </div>
 </lib-page-container>

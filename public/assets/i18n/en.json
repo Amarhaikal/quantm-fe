@@ -42,7 +42,8 @@
         "session activities": "Session Activities",
         "rates": "Rates",
         "customers": "Customers",
-        "add_customer": "Add Customer"
+        "add_customer": "Add Customer",
+        "customer_details": "Customer Details"
     },
     "profile": {
         "title": "My Profile",

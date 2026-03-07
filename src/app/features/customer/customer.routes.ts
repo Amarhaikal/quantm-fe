@@ -9,4 +9,9 @@ export const CUSTOMER_ROUTES: Routes = [
     path: 'add',
     loadComponent: () => import('./customer-add/customer-add').then((m) => m.CustomerAdd),
   },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./customer-details/customer-details').then((m) => m.CustomerDetails),
+  },
 ];
