@@ -1,123 +1,122 @@
 @reference "../../../../../styles.css";
 
 :host {
-  display: block;
+    display: block;
 }
 
 .table-container {
-  @apply rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden;
+    @apply rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  background-color: var(--primary-color) !important;
-  text-align: center !important;
-  @apply text-white font-semibold text-xs uppercase tracking-wider py-4 px-6 border-none! whitespace-nowrap;
+:host ::ng-deep .p-datatable .p-datatable-thead>tr>th {
+    background-color: var(--primary-color) !important;
+    text-align: center !important;
+    @apply !text-white !font-semibold !text-xs !uppercase !tracking-wider !py-4 !px-6 !border-none !whitespace-nowrap;
+    position: relative !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th .p-column-header-content {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  position: relative !important;
+:host ::ng-deep .p-datatable .p-datatable-thead>tr>th .p-column-header-content {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
 }
 
-/* Ensure the sort icon is positioned to the right of the center, rather than pushing the text */
-:host ::ng-deep .p-datatable-thead > tr > th .p-sortable-column-icon,
-:host ::ng-deep .p-datatable-thead > tr > th .p-datatable-sort-icon {
-  position: absolute !important;
-  right: 8px !important;
-  margin: 0 !important;
-  color: var(--primary-color) !important;
-  transition: color 0.2s ease;
+/* Position sort icon absolutely to the right so it doesn't shift the centered text */
+:host ::ng-deep .p-datatable-thead>tr>th .p-datatable-sort-icon {
+    position: absolute !important;
+    right: 0.5rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+
+    /* Hide by default */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.2s ease !important;
+    color: #ffffff !important;
 }
 
-/* Show icon when sorted */
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-highlight .p-datatable-sort-icon,
-:host
-  ::ng-deep
-  .p-datatable
-  .p-datatable-thead
-  > tr
-  > th[aria-sort='ascending']
-  .p-datatable-sort-icon,
-:host
-  ::ng-deep
-  .p-datatable
-  .p-datatable-thead
-  > tr
-  > th[aria-sort='descending']
-  .p-datatable-sort-icon {
-  color: var(--secondary-color) !important;
+/* Show icon on hover */
+:host ::ng-deep .p-datatable-thead>tr>th:hover .p-datatable-sort-icon {
+    opacity: 0.5 !important;
+    visibility: visible !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
-  @apply text-sm py-3 px-3 border-b border-gray-50 text-gray-700 whitespace-nowrap;
+/* Show and color icon when sorted */
+:host ::ng-deep .p-datatable-thead>tr>th.p-datatable-column-sorted .p-datatable-sort-icon {
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: var(--secondary-color) !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr:last-child > td {
-  @apply border-b-0;
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
+    @apply text-sm py-3 px-3 border-b border-gray-50 text-gray-700 whitespace-nowrap;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr:last-child>td {
+    @apply border-b-0;
 }
 
 :host ::ng-deep .p-datatable .p-frozen-column {
-  background-color: inherit !important;
-  @apply shadow-[-4px_0_12px_-4px_rgba(0,0,0,0.1)];
+    background-color: inherit !important;
+    box-shadow: -4px 0 12px -4px rgba(0, 0, 0, 0.1) !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th.p-frozen-column {
-  background-color: var(--primary-color) !important;
+:host ::ng-deep .p-datatable .p-datatable-thead>tr>th.p-frozen-column {
+    background-color: var(--primary-color) !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr.p-highlight {
-  @apply bg-indigo-50/30 text-indigo-700;
+:host ::ng-deep .p-datatable .p-datatable-tbody>tr.p-highlight {
+    @apply bg-indigo-50/30 text-indigo-700;
 }
 
-:host ::ng-deep .p-datatable-hoverable-rows .p-datatable-tbody > tr:hover {
-  @apply bg-gray-50 transition-colors duration-150;
+:host ::ng-deep .p-datatable-hoverable-rows .p-datatable-tbody>tr:hover {
+    @apply bg-gray-50 transition-colors duration-150;
 }
 
 :host ::ng-deep .p-paginator,
 :host ::ng-deep .p-paginator-current,
 :host ::ng-deep .p-paginator-pages .p-paginator-page,
 :host ::ng-deep .p-select .p-select-label {
-  @apply text-sm! font-medium;
+    @apply !text-sm !font-medium;
 }
 
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page-selected {
-  @apply bg-indigo-600! text-white! rounded-full! w-8! h-8! min-w-8!;
+    @apply !bg-indigo-600 !text-white !rounded-full !w-8 !h-8 !min-w-8;
 }
 
 /* Reduce navigation buttons size */
 :host ::ng-deep .p-paginator .p-paginator-nav-link {
-  @apply w-8 h-8 min-w-8!;
+    @apply !w-8 !h-8 !min-w-8;
 }
 
 /* Disabled state styling */
 :host ::ng-deep .p-paginator button.p-disabled {
-  @apply text-gray-300! opacity-60!;
-  cursor: not-allowed;
+    @apply !text-gray-300 !opacity-60;
+    cursor: not-allowed;
 }
 
 :host ::ng-deep .p-paginator button.p-disabled svg {
-  @apply text-gray-300!;
+    @apply !text-gray-300;
 }
 
 /* Reduce icons size */
 :host ::ng-deep .p-paginator .p-paginator-icon {
-  @apply text-xs!;
+    @apply !text-xs;
 }
 
 /* Reduce dropdown size and add specific padding */
 :host ::ng-deep .p-paginator .p-select {
-  @apply h-auto min-w-[65px]! border-gray-200!;
-  padding: 6px 0px 6px 8px !important;
+    @apply !h-auto !min-w-[65px] !border-gray-200;
+    padding: 6px 0px 6px 8px !important;
 }
 
 :host ::ng-deep .p-paginator .p-select .p-select-label {
-  @apply p-0! leading-none;
+    @apply !p-0 !leading-none;
 }
 
 :host ::ng-deep .p-paginator {
-  @apply justify-end px-4 border-t border-gray-50 bg-gray-50/20 py-1.5;
-  overflow: visible !important;
+    @apply justify-end px-4 border-t border-gray-50 bg-gray-50/20 py-1.5;
+    overflow: visible !important;
 }
