@@ -159,8 +159,8 @@ export class Rates extends BaseBulkCrudDirective implements OnInit {
     };
 
     if (this.sortField()) {
-      apiParams.sortBy = this.sortField();
-      apiParams.sortOrder = this.sortOrder() === 1 ? 'asc' : 'desc';
+      apiParams.sort_by = this.sortField();
+      apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
     }
 
     this.rateService.getRates(apiParams).subscribe({
