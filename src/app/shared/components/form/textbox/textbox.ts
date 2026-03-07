@@ -23,7 +23,7 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
 import { AppearanceService, LabelPosition } from '../../../../core/services/appearance.service';
 
-export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO' | 'password';
+export type TextboxType = 'text' | 'email' | 'IDNO' | 'PHONENO' | 'REGNO' | 'password';
 
 @Component({
   selector: 'lib-textbox',

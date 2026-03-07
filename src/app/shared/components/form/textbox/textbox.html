@@ -48,6 +48,27 @@
           [class.ng-invalid]="showError()"
           [class.ng-dirty]="ngControl?.dirty"
         ></p-inputMask>
+      } @else if (type() === 'REGNO') {
+        <p-inputMask
+          [id]="id()"
+          mask="999999999999"
+          [unmask]="true"
+          [autoClear]="false"
+          [ngModel]="displayValue()"
+          (ngModelChange)="handleInput($event)"
+          (onBlur)="handleBlur()"
+          (onFocus)="handleFocus()"
+          [placeholder]="(placeholder() | transloco) || '000000000000'"
+          [disabled]="effectiveDisabled()"
+          [styleClass]="
+            'w-full rounded-lg! border h-9 transition-all text-sm! px-3 focus:ring-indigo-500! focus:border-indigo-500! ' +
+            (showError() ? 'border-red-500! ' : 'border-gray-300! ') +
+            (icon() ? 'pl-9 ' : '') +
+            (effectiveDisabled() ? 'bg-gray-100! text-gray-400! ' : 'bg-white! ')
+          "
+          [class.ng-invalid]="showError()"
+          [class.ng-dirty]="ngControl?.dirty"
+        ></p-inputMask>
       } @else if (type() === 'PHONENO') {
         <p-inputMask
           [id]="id()"
@@ -146,6 +167,11 @@
         @if (errors()?.['invalidIdNo']) {
           <small class="text-red-500 text-xs ml-1">{{
             'validation.invalidIdNo' | transloco
+          }}</small>
+        }
+        @if (errors()?.['invalidCompanyRegNo']) {
+          <small class="text-red-500 text-xs ml-1">{{
+            'validation.invalidCompanyRegNo' | transloco
           }}</small>
         }
         @if (errors()?.['notAvailable']) {
