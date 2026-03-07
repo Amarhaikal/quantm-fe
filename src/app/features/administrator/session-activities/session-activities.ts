@@ -169,10 +169,13 @@ export class SessionActivities implements OnInit {
       //   ? `${baseUrl}/api${item.user.profile_photo.startsWith('/') ? item.user.profile_photo : '/' + item.user.profile_photo}`
       //   : null,
       // role: item.user?.role?.description,
+      is_active_raw: item.is_active,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
     }));
   }
+
+  showDeleteFn = (row: any) => row.is_active_raw === true;
 
   handleSort(event: any) {
     this.sortField.set(event.field);

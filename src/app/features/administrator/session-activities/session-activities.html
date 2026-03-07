@@ -30,6 +30,7 @@
         [data]="data()"
         [loading]="loading()"
         actionType="DELETE"
+        [showDeleteFn]="showDeleteFn"
         [totalRecords]="totalRecords()"
         [rows]="pageSize()"
         (onPageChange)="handlePageChange($event)"

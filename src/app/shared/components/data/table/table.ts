@@ -62,6 +62,7 @@ export class TableComponent {
   totalRecords = input<number>(0);
   rows = input<number>(10);
   first = input<number>(0);
+  showDeleteFn = input<((row: any) => boolean) | null>(null);
 
   onRowSelect = output<any>();
   onPageChange = output<any>();

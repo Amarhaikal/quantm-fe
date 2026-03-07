@@ -212,12 +212,13 @@
                   />
                 }
                 @if (
-                  actionType() === 'DELETE' ||
-                  actionType() === 'DELETES' ||
-                  actionType() === 'DETAILS_DELETE' ||
-                  actionType() === 'DETAILS_DELETES' ||
-                  actionType() === 'EDIT_DELETE' ||
-                  actionType() === 'EDIT_DELETES'
+                  (actionType() === 'DELETE' ||
+                    actionType() === 'DELETES' ||
+                    actionType() === 'DETAILS_DELETE' ||
+                    actionType() === 'DETAILS_DELETES' ||
+                    actionType() === 'EDIT_DELETE' ||
+                    actionType() === 'EDIT_DELETES') &&
+                  (showDeleteFn() === null || showDeleteFn()!(rowData))
                 ) {
                   <lib-button
                     size="sm"
