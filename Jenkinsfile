@@ -35,7 +35,7 @@ pipeline {
                     
                     env.CURRENT_PORT = currentPort
                     env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
-                    env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "blue" : "green"
+                    env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "primary" : "secondary"
                     
                     echo "Current Port: ${env.CURRENT_PORT}"
                     echo "Next Deploy will be: ${env.NEXT_COLOR} on port ${env.NEXT_PORT}"
@@ -99,7 +99,7 @@ pipeline {
         stage('Safety Stop') {
             steps {
                 script {
-                    def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
+                    def prevColor = (env.NEXT_COLOR == "primary") ? "secondary" : "primary"
                     echo "Stopping old version (${prevColor})..."
                     sh "docker compose stop quantm-fe-${prevColor} || true"
                 }
@@ -118,7 +118,7 @@ pipeline {
                 echo "DEPLOYMENT FAILED. Rolling back..."
                 // Only attempt rollback if CURRENT_PORT was successfully detected
                 if (env.CURRENT_PORT && env.CURRENT_PORT != "null") {
-                    def prevColor = (env.NEXT_COLOR == "blue") ? "green" : "blue"
+                    def prevColor = (env.NEXT_COLOR == "primary") ? "secondary" : "primary"
                     sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
                     sh "sudo systemctl reload nginx"
                     sh "docker compose start quantm-fe-${prevColor} || true"
