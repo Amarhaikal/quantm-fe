@@ -4,7 +4,7 @@ services:
     container_name: quantm-fe
     restart: unless-stopped
     ports:
-      - '4400:80'
+      - '4200:80'
     environment:
       - SERVICE_ROLE=frontend
     networks:

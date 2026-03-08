@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'quantm-frontend'
         DOCKER_TAG = "${BUILD_NUMBER}"
-        FE_PORT = "4400"
+        FE_PORT = "4200"
         NGINX_CONFIG = '/etc/nginx/sites-available/quantm-fe'
     }
 
@@ -48,14 +48,11 @@ pipeline {
         stage('Ensure Nginx Config') {
             steps {
                 script {
-                    echo "Ensuring Nginx config is pointing to correct port and IP..."
-                    // Detect Docker Bridge IP for robustness
-                    def bridgeIp = sh(script: 'docker network inspect bridge -f "{{(index .IPAM.Config 0).Gateway}}" || echo "172.17.0.1"', returnStdout: true).trim()
+                    echo "Ensuring Nginx config is pointing to 127.0.0.1:${FE_PORT}..."
                     
-                    // Update Nginx to point to the fixed port and detected IP
+                    // Force 127.0.0.1 which is mapped by Docker to the host loopback
                     sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${FE_PORT}/' ${NGINX_CONFIG}"
-                    sh "sudo sed -i '/FE_PORT/s/127.0.0.1/${bridgeIp}/' ${NGINX_CONFIG}"
-                    sh "sudo sed -i '/FE_PORT/s/localhost/${bridgeIp}/' ${NGINX_CONFIG}"
+                    sh "sudo sed -i -E '/FE_PORT/s/(http:\\/\\/)[^; ]+(:[0-9]+)/\\1127.0.0.1\\2/' ${NGINX_CONFIG}"
                     
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
