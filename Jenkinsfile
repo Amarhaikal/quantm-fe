@@ -23,7 +23,7 @@ pipeline {
                         error "FATAL: Could not find 'FE_PORT' marker in ${NGINX_CONFIG}."
                     }
 
-                    def matcher = (rawLine =~ /localhost:(\d+)/)
+                    def matcher = (rawLine =~ /127\.0\.0\.1:(\d+)/) ?: (rawLine =~ /localhost:(\d+)/)
                     def currentPort = ""
 
                     if (matcher.find()) {
@@ -88,7 +88,8 @@ pipeline {
             steps {
                 script {
                     echo "Switching traffic from Port ${env.CURRENT_PORT} to Port ${env.NEXT_PORT}..."
-                    sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
+                    sh """sudo sed -i '/FE_PORT/s/[0-9]\{4,5\}/${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
+                    sh "sudo sed -i '/FE_PORT/s/localhost/127.0.0.1/' ${NGINX_CONFIG}"
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
                     echo "Nginx traffic successfully switched to Port ${env.NEXT_PORT}!"
