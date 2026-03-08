@@ -50,7 +50,6 @@ pipeline {
                 script {
                     echo "Ensuring Nginx config is pointing to 127.0.0.1:${FE_PORT}..."
                     
-                    // Force 127.0.0.1 which is mapped by Docker to the host loopback
                     sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${FE_PORT}/' ${NGINX_CONFIG}"
                     sh "sudo sed -i -E '/FE_PORT/s/(http:\\/\\/)[^; ]+(:[0-9]+)/\\1127.0.0.1\\2/' ${NGINX_CONFIG}"
                     
