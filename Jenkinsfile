@@ -37,7 +37,11 @@ pipeline {
                     env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
                     env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "primary" : "secondary"
                     
+                    def bridgeIp = sh(script: "docker network inspect bridge -f '{{(index .IPAM.Config 0).Gateway}}' || echo '172.17.0.1'", returnStdout: true).trim()
+                    env.DOCKER_BRIDGE_IP = bridgeIp
+                    
                     echo "Current Port: ${env.CURRENT_PORT}"
+                    echo "Docker Bridge IP: ${env.DOCKER_BRIDGE_IP}"
                     echo "Next Deploy will be: ${env.NEXT_COLOR} on port ${env.NEXT_PORT}"
                 }
             }
@@ -71,15 +75,21 @@ pipeline {
             steps {
                 script {
                     echo "Waiting for health check on port ${env.NEXT_PORT}..."
-                    timeout(time: 2, unit: 'MINUTES') {
-                        sh """
-                        until \$(curl --output /dev/null --silent --head --fail http://localhost:${env.NEXT_PORT}); do
-                            printf '.'
-                            sleep 5
-                        done
-                        """
+                    try {
+                        timeout(time: 2, unit: 'MINUTES') {
+                            sh """
+                            until \$(curl --output /dev/null --silent --head --fail http://127.0.0.1:${env.NEXT_PORT}); do
+                                printf '.'
+                                sleep 5
+                            done
+                            """
+                        }
+                        echo "Health check PASSED!"
+                    } catch (Exception e) {
+                        echo "Health check FAILED. Showing container logs for debugging:"
+                        sh "docker logs quantm-fe-${env.NEXT_COLOR} --tail 50"
+                        error "Deployment failed during health check."
                     }
-                    echo "Health check PASSED!"
                 }
             }
         }
@@ -87,9 +97,18 @@ pipeline {
         stage('Instant Switch (Nginx)') {
             steps {
                 script {
+                    echo "Ensuring symlink exists..."
+                    sh "sudo ln -sf ${env.NGINX_CONFIG} /etc/nginx/sites-enabled/quantm-fe || true"
+                    
                     echo "Switching traffic from Port ${env.CURRENT_PORT} to Port ${env.NEXT_PORT}..."
                     sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${env.NEXT_PORT}/' ${NGINX_CONFIG}"
-                    sh "sudo sed -i '/FE_PORT/s/localhost/127.0.0.1/' ${NGINX_CONFIG}"
+                    sh "sudo sed -i '/FE_PORT/s/localhost/${env.DOCKER_BRIDGE_IP}/' ${NGINX_CONFIG}"
+                    sh "sudo sed -i '/FE_PORT/s/127.0.0.1/${env.DOCKER_BRIDGE_IP}/' ${NGINX_CONFIG}"
+                    
+                    // Verify the change was actually saved
+                    def updatedLine = sh(script: "grep 'FE_PORT' ${NGINX_CONFIG}", returnStdout: true).trim()
+                    echo "Verified Nginx Line: ${updatedLine}"
+                    
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
                     echo "Nginx traffic successfully switched to Port ${env.NEXT_PORT}!"
