@@ -23,7 +23,7 @@ pipeline {
                         error "FATAL: Could not find 'FE_PORT' marker in ${NGINX_CONFIG}."
                     }
 
-                    def matcher = (rawLine =~ /127\.0\.0\.1:(\d+)/) ?: (rawLine =~ /localhost:(\d+)/)
+                    def matcher = (rawLine =~ /:(\d+)/)
                     def currentPort = ""
 
                     if (matcher.find()) {
@@ -37,7 +37,7 @@ pipeline {
                     env.NEXT_PORT = (currentPort == "4200") ? "4400" : "4200"
                     env.NEXT_COLOR = (env.NEXT_PORT == "4200") ? "primary" : "secondary"
                     
-                    def bridgeIp = sh(script: "docker network inspect bridge -f '{{(index .IPAM.Config 0).Gateway}}' || echo '172.17.0.1'", returnStdout: true).trim()
+                    def bridgeIp = sh(script: 'docker network inspect bridge -f "{{(index .IPAM.Config 0).Gateway}}" || echo "172.17.0.1"', returnStdout: true).trim()
                     env.DOCKER_BRIDGE_IP = bridgeIp
                     
                     echo "Current Port: ${env.CURRENT_PORT}"
@@ -139,7 +139,7 @@ pipeline {
                 // Only attempt rollback if CURRENT_PORT was successfully detected
                 if (env.CURRENT_PORT && env.CURRENT_PORT != "null") {
                     def prevColor = (env.NEXT_COLOR == "primary") ? "secondary" : "primary"
-                    sh """sudo sed -i '/FE_PORT/s/localhost:[^;]*/localhost:${env.CURRENT_PORT}/' ${NGINX_CONFIG}"""
+                    sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${env.CURRENT_PORT}/' ${NGINX_CONFIG}"
                     sh "sudo systemctl reload nginx"
                     sh "docker compose start quantm-fe-${prevColor} || true"
                     echo "Rollback to Port ${env.CURRENT_PORT} completed."
