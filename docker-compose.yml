@@ -1,23 +1,12 @@
 services:
-  quantm-fe-primary:
+  quantm-fe:
     image: quantm-frontend:latest
-    container_name: quantm-fe-primary
-    restart: unless-stopped
-    ports:
-      - '4200:80'
-    environment:
-      - SERVICE_ROLE=primary
-    networks:
-      - quantm-shared-network
-
-  quantm-fe-secondary:
-    image: quantm-frontend:latest
-    container_name: quantm-fe-secondary
+    container_name: quantm-fe
     restart: unless-stopped
     ports:
       - '4400:80'
     environment:
-      - SERVICE_ROLE=secondary
+      - SERVICE_ROLE=frontend
     networks:
       - quantm-shared-network
 
