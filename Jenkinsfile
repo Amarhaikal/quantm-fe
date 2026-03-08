@@ -88,7 +88,7 @@ pipeline {
             steps {
                 script {
                     echo "Switching traffic from Port ${env.CURRENT_PORT} to Port ${env.NEXT_PORT}..."
-                    sh """sudo sed -i '/FE_PORT/s/[0-9]\{4,5\}/${env.NEXT_PORT}/' ${NGINX_CONFIG}"""
+                    sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${env.NEXT_PORT}/' ${NGINX_CONFIG}"
                     sh "sudo sed -i '/FE_PORT/s/localhost/127.0.0.1/' ${NGINX_CONFIG}"
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
