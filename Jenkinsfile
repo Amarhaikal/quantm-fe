@@ -50,9 +50,8 @@ pipeline {
                 script {
                     echo "Ensuring Nginx config is pointing to 127.0.0.1:${env.FE_PORT}..."
                     
-                    // Force correctly formatted proxy_pass line
-                    sh "sudo sed -i -E '/FE_PORT/s/[0-9]{4,5}/${env.FE_PORT}/' ${NGINX_CONFIG}"
-                    sh "sudo sed -i -E 's|proxy_pass http://[^;]+;|proxy_pass http://127.0.0.1:${env.FE_PORT};|' ${NGINX_CONFIG}"
+                    // Update only the frontend proxy_pass line (marked with # FE_PORT)
+                    sh "sudo sed -i -E '/# FE_PORT/s|proxy_pass http://[^;]+;|proxy_pass http://127.0.0.1:${env.FE_PORT};|' ${NGINX_CONFIG}"
                     
                     sh "sudo nginx -t"
                     sh "sudo systemctl reload nginx"
