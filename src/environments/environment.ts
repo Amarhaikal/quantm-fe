@@ -7,7 +7,7 @@ export const environment = {
     redirectUri: 'https://quantm-bank.com/auth/login',
   },
   apm: {
-    serverUrl: 'http://217.217.255.210:8200',
+    serverUrl: 'https://quantm-bank.com/apm-server',
     environment: 'production',
   },
 };
