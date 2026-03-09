@@ -6,4 +6,8 @@ export const environment = {
     authority: 'https://login.microsoftonline.com/6bfecc36-0624-428f-b3bf-84cc04589b28',
     redirectUri: 'https://quantm-bank.com/auth/login',
   },
+  apm: {
+    serverUrl: 'http://217.217.255.210:8200',
+    environment: 'production',
+  },
 };

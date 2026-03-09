@@ -7,4 +7,8 @@ export const environment = {
     authority: 'https://login.microsoftonline.com/6bfecc36-0624-428f-b3bf-84cc04589b28',
     redirectUri: 'http://localhost:3000/auth/login',
   },
+  apm: {
+    serverUrl: 'http://localhost:8200',
+    environment: 'development',
+  },
 };
