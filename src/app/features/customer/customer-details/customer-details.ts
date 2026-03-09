@@ -13,6 +13,7 @@ import { CustomerShareholders } from './shareholders/shareholders';
 
 @Component({
   selector: 'app-customer-details',
+  standalone: true,
   imports: [
     PageHeaderComponent,
     PageContainerComponent,
@@ -32,6 +33,8 @@ export class CustomerDetails implements OnInit {
 
   loading = signal(false);
   customer = signal<Customer | null>(null);
+
+  activeTab = signal('general');
 
   readonly tabs = [
     { label: 'General', value: 'general', icon: 'pi pi-building' },

@@ -9,20 +9,23 @@ export interface TabItem {
 
 @Component({
   selector: 'app-tab',
+  standalone: true,
   imports: [Tabs, TabList, Tab, TabPanels],
   template: `
     <p-tabs [value]="value()" (valueChange)="value.set($any($event))">
-      <p-tablist>
+      <p-tablist class="px-4 pt-2">
         @for (tab of tabs(); track tab.value) {
           <p-tab [value]="tab.value">
-            @if (tab.icon) {
-              <i [class]="tab.icon + ' mr-2'"></i>
-            }
-            {{ tab.label }}
+            <div class="flex items-center gap-2 px-2 py-1">
+              @if (tab.icon) {
+                <i [class]="tab.icon"></i>
+              }
+              <span class="font-medium text-sm">{{ tab.label }}</span>
+            </div>
           </p-tab>
         }
       </p-tablist>
-      <p-tabpanels>
+      <p-tabpanels class="p-4 md:p-6">
         <ng-content></ng-content>
       </p-tabpanels>
     </p-tabs>

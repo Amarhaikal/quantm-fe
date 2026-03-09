@@ -3,7 +3,7 @@
     <lib-page-header title="sidemenu.customer_details" [showBack]="true" />
 
     <lib-card [padding]="false">
-      <p-tabs value="general">
+      <p-tabs [(value)]="activeTab">
         <p-tablist class="px-4 pt-2">
           @for (tab of tabs; track tab.value) {
             <p-tab [value]="tab.value">
@@ -18,15 +18,21 @@
         </p-tablist>
         <p-tabpanels class="p-4 md:p-6">
           <p-tabpanel value="general">
-            <app-customer-general [customer]="customer()" [loading]="loading()" />
+            @if (activeTab() === 'general') {
+              <app-customer-general [customer]="customer()" [loading]="loading()" />
+            }
           </p-tabpanel>
 
           <p-tabpanel value="directors">
-            <app-customer-directors [customerId]="customer()?.id ?? null" />
+            @if (activeTab() === 'directors') {
+              <app-customer-directors [customerId]="customer()?.id ?? null" />
+            }
           </p-tabpanel>
 
           <p-tabpanel value="shareholders">
-            <app-customer-shareholders [customerId]="customer()?.id ?? null" />
+            @if (activeTab() === 'shareholders') {
+              <app-customer-shareholders [customerId]="customer()?.id ?? null" />
+            }
           </p-tabpanel>
         </p-tabpanels>
       </p-tabs>
