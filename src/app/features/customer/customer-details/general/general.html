@@ -8,24 +8,17 @@
     }
   </div>
 } @else {
-  <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-    <div>
-      <dt class="text-xs font-medium text-gray-500 mb-1">{{ 'label.full_name' | transloco }}</dt>
-      <dd class="text-sm text-gray-900">{{ customer()?.fullname ?? '-' }}</dd>
-    </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+    <lib-textbox label="label.full_name" [value]="customer()?.fullname" [disabled]="true" />
 
-    <div>
-      <dt class="text-xs font-medium text-gray-500 mb-1">{{ 'label.reg_no' | transloco }}</dt>
-      <dd class="text-sm text-gray-900">{{ customer()?.reg_no ?? '-' }}</dd>
-    </div>
+    <lib-textbox label="label.reg_no" [value]="customer()?.reg_no" [disabled]="true" />
 
-    <div>
-      <dt class="text-xs font-medium text-gray-500 mb-1">
-        {{ 'label.customer_type' | transloco }}
-      </dt>
-      <dd class="text-sm text-gray-900">{{ customer()?.customer_type?.description ?? '-' }}</dd>
-    </div>
+    <lib-textbox
+      label="label.customer_type"
+      [value]="customer()?.customer_type?.description"
+      [disabled]="true"
+    />
 
     <lib-audit-info [data]="auditData()" class="md:col-span-2 mt-2" />
-  </dl>
+  </div>
 }

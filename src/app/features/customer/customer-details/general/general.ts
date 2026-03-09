@@ -4,10 +4,11 @@ import { TranslocoPipe } from '@ngneat/transloco';
 
 import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
 import { Customer } from '../../../../core/models/customer.model';
+import { TextboxComponent } from '../../../../shared/components/form/textbox/textbox';
 
 @Component({
   selector: 'app-customer-general',
-  imports: [AuditInfoComponent, SkeletonModule, TranslocoPipe],
+  imports: [AuditInfoComponent, SkeletonModule, TranslocoPipe, TextboxComponent],
   templateUrl: './general.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
