@@ -113,6 +113,7 @@
         "rate": "Kadar",
         "reg_no": "No. Pendaftaran",
         "customer_type": "Jenis Pelanggan",
+        "no_data": "Tiada Data",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",

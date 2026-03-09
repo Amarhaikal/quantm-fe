@@ -113,6 +113,7 @@
         "rate": "Rate",
         "reg_no": "Registration No",
         "customer_type": "Customer Type",
+        "no_data": "No Data",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
