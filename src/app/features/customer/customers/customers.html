@@ -24,13 +24,13 @@
         [columns]="columns"
         [data]="customers()"
         [loading]="loading()"
-        actionType="EDIT_DELETE"
+        actionType="DETAILS_DELETE"
         [totalRecords]="totalRecords()"
         [rows]="pageSize()"
         [first]="(pageNo() - 1) * pageSize()"
         (onPageChange)="handlePageChange($event)"
         (onSort)="handleSort($event)"
-        (onEdit)="onEdit($event)"
+        (onView)="onView($event)"
         (onDelete)="handleDelete($event)"
       />
     </div>

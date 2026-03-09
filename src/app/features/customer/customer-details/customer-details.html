@@ -1,3 +1,35 @@
 <lib-page-container>
-  <lib-page-header title="sidemenu.customer_details" [showBack]="true" />
+  <div class="flex flex-col gap-6">
+    <lib-page-header title="sidemenu.customer_details" [showBack]="true" />
+
+    <lib-card [padding]="false">
+      <p-tabs value="general">
+        <p-tablist class="px-4 pt-2">
+          @for (tab of tabs; track tab.value) {
+            <p-tab [value]="tab.value">
+              <div class="flex items-center gap-2 px-2 py-1">
+                @if (tab.icon) {
+                  <i [class]="tab.icon"></i>
+                }
+                <span class="font-medium text-sm">{{ tab.label }}</span>
+              </div>
+            </p-tab>
+          }
+        </p-tablist>
+        <p-tabpanels class="p-4 md:p-6">
+          <p-tabpanel value="general">
+            <app-customer-general [customer]="customer()" [loading]="loading()" />
+          </p-tabpanel>
+
+          <p-tabpanel value="directors">
+            <app-customer-directors [customerId]="customer()?.id ?? null" />
+          </p-tabpanel>
+
+          <p-tabpanel value="shareholders">
+            <app-customer-shareholders [customerId]="customer()?.id ?? null" />
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </lib-card>
+  </div>
 </lib-page-container>

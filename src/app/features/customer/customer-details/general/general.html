@@ -1,0 +1,31 @@
+@if (loading()) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+    @for (i of [1, 2, 3]; track i) {
+      <div>
+        <p-skeleton width="40%" class="mb-2" />
+        <p-skeleton height="2rem" borderRadius="6px" />
+      </div>
+    }
+  </div>
+} @else {
+  <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+    <div>
+      <dt class="text-xs font-medium text-gray-500 mb-1">{{ 'label.full_name' | transloco }}</dt>
+      <dd class="text-sm text-gray-900">{{ customer()?.fullname ?? '-' }}</dd>
+    </div>
+
+    <div>
+      <dt class="text-xs font-medium text-gray-500 mb-1">{{ 'label.reg_no' | transloco }}</dt>
+      <dd class="text-sm text-gray-900">{{ customer()?.reg_no ?? '-' }}</dd>
+    </div>
+
+    <div>
+      <dt class="text-xs font-medium text-gray-500 mb-1">
+        {{ 'label.customer_type' | transloco }}
+      </dt>
+      <dd class="text-sm text-gray-900">{{ customer()?.customer_type?.description ?? '-' }}</dd>
+    </div>
+
+    <lib-audit-info [data]="auditData()" class="md:col-span-2 mt-2" />
+  </dl>
+}

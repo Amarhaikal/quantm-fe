@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -17,7 +24,10 @@ import { PageContainerComponent } from '../../../shared/components/layout/page-c
 import { SearchComponent } from '../../../shared/components/layout/search/search';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { TextboxComponent } from '../../../shared/components/form/textbox/textbox';
-import { DropdownComponent, OptionDropdown } from '../../../shared/components/form/dropdown/dropdown';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../shared/components/form/dropdown/dropdown';
 
 @Component({
   selector: 'app-customers',
@@ -104,7 +114,7 @@ export class Customers extends BaseListDirective implements OnInit {
     this.router.navigate(['add'], { relativeTo: this.route });
   }
 
-  onEdit(row: Customer) {
+  onView(row: Customer) {
     this.router.navigate([row.id], { relativeTo: this.route });
   }
 
