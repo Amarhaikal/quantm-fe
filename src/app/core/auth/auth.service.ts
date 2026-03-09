@@ -240,6 +240,7 @@ export class AuthService {
   private clearSessionLocally(redirectToLogin = false) {
     this.stopIdleDetection();
     this.stopTokenRefresh();
+    this.confirmService.close();
     this.currentUserSig.set(null);
     this.isHydratedSig.set(true);
     this.triggerRefresh();

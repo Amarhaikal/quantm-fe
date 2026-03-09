@@ -87,6 +87,8 @@ export class ConfirmService {
       message: this.translocoService.translate('confirm.idle_warning.message'),
       header: this.translocoService.translate('confirm.idle_warning.header'),
       icon: 'pi pi-clock',
+      rejectLabel: this.translocoService.translate('confirm.idle_warning.reject'),
+      acceptLabel: this.translocoService.translate('confirm.idle_warning.accept'),
       rejectButtonProps: {
         label: this.translocoService.translate('confirm.idle_warning.reject'),
         severity: 'primary',
@@ -109,6 +111,10 @@ export class ConfirmService {
 
   confirm(options: any) {
     this.confirmationService.confirm(options);
+  }
+
+  close() {
+    this.confirmationService.close();
   }
 
   confirmDiscardChanges(): Observable<boolean> {
