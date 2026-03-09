@@ -1,4 +1,5 @@
 import { Injectable, signal, inject, computed } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, map, Observable, tap, Subscription, interval } from 'rxjs';
 import { HttpClient, HttpBackend } from '@angular/common/http';
 import { AuthResponse } from '../models/auth.model';
@@ -9,6 +10,7 @@ import { environment } from '../../../environments/environment';
 import { UserService } from '../services/user.service';
 import { UserDetailed } from '../models/user.model';
 import { MsalService } from '@azure/msal-angular';
+import { ConfirmService } from '../services/confirm.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,8 @@ export class AuthService {
   private httpBackend = inject(HttpBackend);
   private backendHttpClient = new HttpClient(this.httpBackend);
   private msalService = inject(MsalService);
+  private router = inject(Router);
+  private confirmService = inject(ConfirmService);
 
   // Signals for managing state
   private currentUserSig = signal<UserDetailed | null>(null);
@@ -34,6 +38,20 @@ export class AuthService {
   msalRedirectProcessed = false;
 
   private refreshSubscription?: Subscription;
+  private idleTimer?: ReturnType<typeof setTimeout>;
+  private warningTimer?: ReturnType<typeof setTimeout>;
+  private lastActivityTime = 0;
+  private readonly IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+  private readonly WARNING_BEFORE_IDLE_MS = 2 * 60 * 1000; // warn 2 min before logout
+  private readonly REFRESH_INTERVAL_MS = 25 * 60 * 1000; // 25 minutes
+  private readonly IDLE_EVENTS: (keyof WindowEventMap)[] = [
+    'mousemove',
+    'keydown',
+    'mousedown',
+    'touchstart',
+    'scroll',
+  ];
+  private boundResetIdle = () => this.resetIdleTimer();
 
   profileImageUrl = computed(() => {
     const counter = this.refreshCounter();
@@ -136,15 +154,21 @@ export class AuthService {
 
     if (user) {
       this.startTokenRefresh();
+      this.startIdleDetection();
     } else {
       this.stopTokenRefresh();
+      this.stopIdleDetection();
     }
   }
 
   private startTokenRefresh() {
     this.stopTokenRefresh();
-    // 5 minutes = 5 * 60 * 1000 = 300000 ms
-    this.refreshSubscription = interval(300000).subscribe(() => {
+    this.refreshSubscription = interval(this.REFRESH_INTERVAL_MS).subscribe(() => {
+      const idleDuration = Date.now() - this.lastActivityTime;
+      // Skip refresh if user has been idle at or beyond the idle timeout threshold
+      if (idleDuration >= this.IDLE_TIMEOUT_MS) {
+        return;
+      }
       this.api.post('auth/refresh', {}).subscribe({
         error: (err) => console.error('Token refresh failed', err),
       });
@@ -155,6 +179,79 @@ export class AuthService {
     if (this.refreshSubscription) {
       this.refreshSubscription.unsubscribe();
       this.refreshSubscription = undefined;
+    }
+  }
+
+  private startIdleDetection() {
+    this.IDLE_EVENTS.forEach((event) =>
+      window.addEventListener(event, this.boundResetIdle, { passive: true }),
+    );
+    this.resetIdleTimer();
+  }
+
+  private stopIdleDetection() {
+    this.IDLE_EVENTS.forEach((event) => window.removeEventListener(event, this.boundResetIdle));
+    if (this.idleTimer !== undefined) {
+      clearTimeout(this.idleTimer);
+      this.idleTimer = undefined;
+    }
+    if (this.warningTimer !== undefined) {
+      clearTimeout(this.warningTimer);
+      this.warningTimer = undefined;
+    }
+  }
+
+  private resetIdleTimer() {
+    this.lastActivityTime = Date.now();
+    if (this.idleTimer !== undefined) {
+      clearTimeout(this.idleTimer);
+    }
+    if (this.warningTimer !== undefined) {
+      clearTimeout(this.warningTimer);
+      this.warningTimer = undefined;
+    }
+    // Show warning dialog 2 minutes before the idle timeout fires
+    this.idleTimer = setTimeout(
+      () => this.showIdleWarning(),
+      this.IDLE_TIMEOUT_MS - this.WARNING_BEFORE_IDLE_MS,
+    );
+  }
+
+  private showIdleWarning() {
+    this.confirmService.confirmIdleWarning(
+      // "Stay Logged In" — reset everything from scratch
+      () => this.resetIdleTimer(),
+      // "Logout Now" — fire immediately
+      () => this.handleIdleTimeout(),
+    );
+
+    // Hard timer: if the user ignores the dialog, log out after 2 more minutes
+    this.warningTimer = setTimeout(() => this.handleIdleTimeout(), this.WARNING_BEFORE_IDLE_MS);
+  }
+
+  private handleIdleTimeout() {
+    // Call logout API with idle reason before clearing local state
+    this.api.post('auth/logout', { reason: 'Idle Timeout' }).subscribe({
+      complete: () => this.clearSessionLocally(true),
+      error: () => this.clearSessionLocally(true),
+    });
+  }
+
+  private clearSessionLocally(redirectToLogin = false) {
+    this.stopIdleDetection();
+    this.stopTokenRefresh();
+    this.currentUserSig.set(null);
+    this.isHydratedSig.set(true);
+    this.triggerRefresh();
+
+    try {
+      this.msalService.instance.clearCache();
+    } catch (e) {
+      console.warn('Could not clear MSAL cache', e);
+    }
+
+    if (redirectToLogin) {
+      this.router.navigate(['/auth/login']);
     }
   }
 
@@ -177,14 +274,7 @@ export class AuthService {
   logout() {
     // Call API to clear cookie
     this.api.post('auth/logout', {}).subscribe();
-    this.setUser(null);
-
-    // Clear MSAL cache so handleRedirectObservable doesn't replay the old token
-    try {
-      this.msalService.instance.clearCache();
-    } catch (e) {
-      console.warn('Could not clear MSAL cache', e);
-    }
+    this.clearSessionLocally();
   }
 
   register(data: any): Observable<ApiResponse<any>> {

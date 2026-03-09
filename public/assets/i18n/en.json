@@ -188,6 +188,12 @@
             "message": "Are you sure you want to end this session?",
             "accept": "End",
             "reject": "Cancel"
+        },
+        "idle_warning": {
+            "header": "Session Expiring Soon",
+            "message": "You have been inactive for 28 minutes. Your session will expire in 2 minutes. Do you want to stay logged in?",
+            "accept": "Logout Now",
+            "reject": "Stay Logged In"
         }
     },
     "validation": {

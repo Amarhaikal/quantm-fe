@@ -188,6 +188,12 @@
             "message": "Adakah anda pasti mahu menamatkan sesi ini?",
             "accept": "Tamatkan",
             "reject": "Batal"
+        },
+        "idle_warning": {
+            "header": "Sesi Hampir Tamat",
+            "message": "Anda telah tidak aktif selama 28 minit. Sesi anda akan tamat dalam 2 minit. Adakah anda mahu kekal log masuk?",
+            "accept": "Log Keluar Sekarang",
+            "reject": "Kekal Log Masuk"
         }
     },
     "validation": {
