@@ -1,15 +1,23 @@
-<button [type]="finalHtmlType()" [class]="baseClass()" [disabled]="disabled() || loading()">
+<button
+  [type]="finalHtmlType()"
+  [class]="baseClass()"
+  [disabled]="disabled() || loading()"
+  [attr.data-transaction-name]="'Button - ' + (finalLabel() || type() || 'Unknown')"
+  (click)="onClick($event)"
+>
   @if (finalIcon() && iconPos() === 'left') {
-    <i [class]="finalIcon()"></i>
+    <i class="pointer-events-none" [class]="finalIcon()"></i>
   }
 
   @if (finalLabel()) {
-    <span>{{ finalLabel() | transloco }}</span>
+    <span class="pointer-events-none">{{ finalLabel() | transloco }}</span>
   } @else {
-    <ng-content></ng-content>
+    <div class="pointer-events-none flex items-center gap-2">
+      <ng-content></ng-content>
+    </div>
   }
 
   @if (finalIcon() && iconPos() === 'right') {
-    <i [class]="finalIcon()"></i>
+    <i class="pointer-events-none" [class]="finalIcon()"></i>
   }
 </button>

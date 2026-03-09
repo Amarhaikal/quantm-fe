@@ -1,6 +1,7 @@
-import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { apm } from '../../../core/apm.config';
 
 export type ButtonType = 'ADD' | 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET' | 'SEARCH';
 export type ButtonVariant =
@@ -24,6 +25,8 @@ export type IconPos = 'left' | 'right';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  private translocoService = inject(TranslocoService);
+
   // Inputs
   type = input<ButtonType | undefined>(undefined);
   htmlType = input<ButtonHtmlType>('button');
@@ -156,4 +159,64 @@ export class ButtonComponent {
 
     return classes.join(' ');
   });
+
+  onClick(event: MouseEvent) {
+    if (this.disabled() || this.loading()) {
+      return;
+    }
+
+    let buttonName: string | undefined | null = this.finalLabel();
+
+    if (!buttonName) {
+      const targetElement = event.target as HTMLElement;
+      const buttonElement = (targetElement.closest('button') ||
+        targetElement.closest('.app-button') ||
+        targetElement.closest('a') ||
+        targetElement) as HTMLElement;
+
+      buttonName = buttonElement.textContent?.trim();
+
+      if (!buttonName || buttonName === '') {
+        buttonName =
+          buttonElement.getAttribute('aria-label') ||
+          buttonElement.getAttribute('title') ||
+          buttonElement.getAttribute('data-transaction-name') ||
+          '';
+
+        if (!buttonName) {
+          const icon = buttonElement.querySelector('.pi');
+          if (icon) {
+            const iconClass = Array.from(icon.classList).find(
+              (c) => c.startsWith('pi-') && c !== 'pi-spin',
+            );
+            buttonName = iconClass ? iconClass.replace('pi-', '') : 'Icon';
+          }
+        }
+      }
+    }
+
+    buttonName = buttonName || this.type() || 'Unknown';
+
+    // 100% Explicit Tracking: By using 'button-click' and { managed: false }, this guarantees
+    // Elastic APM instantly saves the click to the database even if the page route changes immediately.
+    const transaction = apm.startTransaction(
+      `Click: ${this.translocoService.translate(buttonName)}`,
+      'button-click',
+      {
+        managed: false,
+      },
+    );
+
+    if (transaction) {
+      // APM transactions that contain 0 spans with 0ms duration are dropped by the agent!
+      // In SPA frameworks like Angular, if the route changes instantly, duration is 0.0ms.
+      // We use a tiny setTimeout so the transaction has an actual duration and is NEVER discarded!
+      const span = transaction.startSpan('execute', 'action');
+
+      setTimeout(() => {
+        if (span) span.end();
+        transaction.end();
+      }, 50); // 50ms guarantees Elastic respects it as a valid, non-accidental trace
+    }
+  }
 }

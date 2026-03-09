@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  ErrorHandler,
+  importProvidersFrom,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -22,6 +27,9 @@ import {
   BrowserCacheLocation,
 } from '@azure/msal-browser';
 import { MsalService, MsalBroadcastService, MSAL_INSTANCE } from '@azure/msal-angular';
+
+import { ApmModule, ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular';
+import './core/apm.config';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -85,6 +93,12 @@ export const appConfig: ApplicationConfig = {
       useFactory: MSALInitializerFactory,
       deps: [MsalService],
       multi: true,
+    },
+    importProvidersFrom(ApmModule),
+    ApmService,
+    {
+      provide: ErrorHandler,
+      useClass: ApmErrorHandler,
     },
   ],
 };
