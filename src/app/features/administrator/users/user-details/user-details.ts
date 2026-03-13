@@ -48,7 +48,6 @@ import { BaseFormComponent } from '../../../../core/base/base-form.component';
 import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
 import { ImageCropDialog } from '../../../../shared/components/form/image-crop-dialog/image-crop-dialog';
 import { AvatarSelectionDialog } from '../../../../shared/components/form/avatar-selection-dialog/avatar-selection-dialog';
-import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
 import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
 import { CardComponent } from '../../../../shared/components/layout/card/card';
 
@@ -480,7 +479,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     });
 
     if (Object.keys(updateData).length === 0) {
-      this.toastService.info('No changes', 'No modifications were detected.');
+      this.toastService.noChanges();
       return;
     }
 
