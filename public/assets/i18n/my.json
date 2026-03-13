@@ -134,7 +134,8 @@
             "remarks": "Masukkan Catatan",
             "username": "Masukkan Nama Pengguna",
             "role": "Pilih Peranan",
-            "password": "Masukkan Kata Laluan"
+            "password": "Masukkan Kata Laluan",
+            "customer_no": "No. Pelanggan"
         }
     },
     "option": {

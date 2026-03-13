@@ -8,17 +8,53 @@
     }
   </div>
 } @else {
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-    <lib-textbox label="label.full_name" [value]="customer()?.fullname" [disabled]="true" />
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSave()"
+    class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4"
+  >
+    <lib-textbox label="label.full_name" formControlName="fullname" />
 
-    <lib-textbox label="label.reg_no" [value]="customer()?.reg_no" [disabled]="true" />
+    <lib-textbox label="label.reg_no" formControlName="reg_no" />
 
-    <lib-textbox
-      label="label.customer_type"
-      [value]="customer()?.customer_type?.description"
-      [disabled]="true"
+    <lib-textbox label="label.customer_no" formControlName="customer_no" />
+
+    <lib-textbox label="label.customer_type" formControlName="customer_type" />
+
+    <lib-textbox label="label.email" formControlName="email" type="email" />
+
+    <lib-textbox label="label.phone_no" formControlName="phone_no" />
+
+    <lib-dropdown
+      label="label.company_type"
+      formControlName="company_type"
+      [options]="companyTypeOptions()"
     />
 
-    <lib-audit-info [data]="auditData()" class="md:col-span-2 mt-2" />
-  </div>
+    <lib-dropdown
+      label="label.department"
+      formControlName="department"
+      [options]="departmentOptions()"
+    />
+
+    <lib-datepicker label="label.start_operation_date" formControlName="start_operation_date" />
+
+    <lib-numeric
+      label="label.no_of_employees"
+      formControlName="no_of_employees"
+      numericType="integer"
+    />
+
+    <lib-numeric
+      label="label.last_revenue_reported"
+      formControlName="last_revenue_reported"
+      numericType="currency"
+    />
+
+    <div class="md:col-span-2 flex justify-end mt-4">
+      <lib-button type="SAVE" htmlType="submit" [loading]="saving()" />
+    </div>
+
+    <lib-audit-info [data]="originalData" class="md:col-span-2 mt-2" />
+  </form>
 }

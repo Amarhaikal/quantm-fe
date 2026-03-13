@@ -114,6 +114,11 @@
         "reg_no": "Registration No",
         "customer_type": "Customer Type",
         "no_data": "No Data",
+        "customer_no": "Customer No.",
+        "company_type": "Company Type",
+        "start_operation_date": "Start Operation Date",
+        "no_of_employees": "No. of Employees",
+        "last_revenue_reported": "Last Revenue Reported",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
