@@ -114,6 +114,13 @@
         "reg_no": "No. Pendaftaran",
         "customer_type": "Jenis Pelanggan",
         "no_data": "Tiada Data",
+        "nationality": "Warganegara",
+        "share_type": "Jenis Saham",
+        "num_shares": "Bilangan Saham",
+        "percentage": "Peratusan",
+        "percentage_shares": "Peratusan Saham",
+        "add_shareholder": "Tambah Pemegang Saham",
+        "edit_shareholder": "Kemaskini Pemegang Saham",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",

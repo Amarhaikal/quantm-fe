@@ -58,7 +58,6 @@ export class CustomerGeneral {
 
   private REFERENCE_FIELDS = ['company_type', 'department'];
 
-
   form: FormGroup;
 
   companyTypeOptions = computed<OptionDropdown[]>(() =>
