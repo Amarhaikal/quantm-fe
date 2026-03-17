@@ -52,4 +52,20 @@ export class CustomerService {
   deleteCustomerShareholder(id: number, shareholderId: number): Observable<ApiResponse<any>> {
     return this.api.delete<ApiResponse<any>>(`customers/${id}/shareholders/${shareholderId}`);
   }
+
+  getCustomerDirectors(id: number, params?: any): Observable<ApiResponse<any>> {
+    return this.api.get<ApiResponse<any>>(`customers/${id}/directors`, params);
+  }
+
+  createCustomerDirector(id: number, data: any): Observable<ApiResponse<any>> {
+    return this.api.post<ApiResponse<any>>(`customers/${id}/directors`, data);
+  }
+
+  updateCustomerDirector(id: number, directorId: number, data: any): Observable<ApiResponse<any>> {
+    return this.api.put<ApiResponse<any>>(`customers/${id}/directors/${directorId}`, data);
+  }
+
+  deleteCustomerDirector(id: number, directorId: number): Observable<ApiResponse<any>> {
+    return this.api.delete<ApiResponse<any>>(`customers/${id}/directors/${directorId}`);
+  }
 }

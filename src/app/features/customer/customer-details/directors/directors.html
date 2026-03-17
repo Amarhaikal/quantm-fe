@@ -1,7 +1,38 @@
-<lib-table
-  [columns]="columns"
-  [data]="[]"
-  [loading]="false"
-  [totalRecords]="0"
-  actionType="EDIT_DELETE"
-/>
+<div class="flex flex-col gap-4">
+  <div class="flex justify-end">
+    <lib-button type="ADD" (click)="onAdd()" />
+  </div>
+
+  <lib-table
+    [columns]="columns"
+    [data]="directors()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="handlePageChange($event)"
+    (onSort)="handleSort($event)"
+    actionType="DETAILS_DELETE"
+    (onView)="onDetails($event)"
+    (onDelete)="onDelete($event)"
+  />
+</div>
+
+<p-dialog
+  [(visible)]="displayForm"
+  [modal]="true"
+  [header]="
+    selectedDirector()?.id
+      ? ('label.edit_director' | transloco)
+      : ('label.add_director' | transloco)
+  "
+  [style]="{ width: '500px' }"
+  styleClass="lib-dialog p-fluid"
+>
+  @if (displayForm()) {
+    <app-director-form
+      [customerId]="customerId()!"
+      [data]="selectedDirector()"
+      (saved)="onSaved()"
+      (cancelled)="hideForm()"
+    />
+  }
+</p-dialog>
