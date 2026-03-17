@@ -121,6 +121,8 @@
         "percentage_shares": "Peratusan Saham",
         "add_shareholder": "Tambah Pemegang Saham",
         "edit_shareholder": "Kemaskini Pemegang Saham",
+        "add_director": "Tambah Pengarah",
+        "edit_director": "Kemaskini Pengarah",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
