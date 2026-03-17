@@ -64,8 +64,12 @@
     "users": {
         "title": "Users",
         "new_user_title": "New User Creation",
-        "details_title": "User Details",
-        "back_to_list": "Back to List"
+        "details_title": "User Details"
+    },
+    "customers": {
+        "title": "Customers",
+        "new_customer_title": "New Customer Creation",
+        "details_title": "Customer Details"
     },
     "label": {
         "full_name": "Full Name",
