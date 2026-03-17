@@ -533,43 +533,21 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       next: (response: ApiResponse<any>) => {
         if (response.status === 201 || response.status === 200) {
           this.toastService.success('Success', this.getTranslation('profile.photo_upload_success'));
-          const d = response.result || {};
-          const path = d.FilePath || d.filePath || d.FileUrl || d.fileUrl || d.Path || d.path;
+          const newProfilePath = response.result;
 
-          if (path) {
+          if (newProfilePath) {
             // Path returned directly — update local signal immediately
-            this.profileImageUrl.set(this.buildImageUrl(path));
-            this.fetchedUser.update((user) => (user ? { ...user, profile_photo: path } : null));
+            this.profileImageUrl.set(this.buildImageUrl(newProfilePath));
+            this.fetchedUser.update((user) =>
+              user ? { ...user, profile_photo: newProfilePath } : null,
+            );
 
             // Always sync AuthService if editing self so header + sidemenu refresh
             const currentUser = this.authService.currentUser();
             if (currentUser && currentUser.id === this.userId) {
-              this.authService.updateProfileImage(path);
+              this.authService.updateProfileImage(newProfilePath);
             }
             this.cdr.markForCheck();
-          } else {
-            // Path not returned by API — re-fetch the user to get the latest image URL
-            setTimeout(() => {
-              this.userService.getUserById(this.userId!).subscribe({
-                next: (refetchResponse: ApiResponse<UserDetailed>) => {
-                  if (refetchResponse.status === 200) {
-                    const newPath = refetchResponse.result.profile_photo;
-                    // Use NgZone.run() to ensure OnPush components (header, sidemenu) are notified
-                    this.ngZone.run(() => {
-                      this.profileImageUrl.set(this.buildImageUrl(newPath));
-                      this.fetchedUser.update((user) =>
-                        user ? { ...user, profile_photo: newPath } : null,
-                      );
-                      // Sync with AuthService if editing self
-                      const currentUser = this.authService.currentUser();
-                      if (currentUser && currentUser.id === this.userId) {
-                        this.authService.updateProfileImage(newPath);
-                      }
-                    });
-                  }
-                },
-              });
-            }, 500);
           }
         }
         this.isUploadingPhoto.set(false);
