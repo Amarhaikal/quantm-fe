@@ -168,9 +168,32 @@ export class CustomerGeneral {
     this.confirmService.confirmSave(() => {
       this.saving.set(true);
       this.customerService.updateCustomer(this.customer()!.id, updateData).subscribe({
-        next: () => {
+        next: (response) => {
           this.toastService.updateSuccess();
           this.saving.set(false);
+
+          if (response.result) {
+            const c = response.result;
+            this.form.patchValue({
+              fullname: c.fullname,
+              reg_no: c.reg_no,
+              customer_no: c.customer_no,
+              customer_type: c.customer_type?.description,
+              email: c.email,
+              phone_no: c.phone_no,
+              company_type: c.company_type?.code,
+              department: c.department?.code,
+              start_operation_date: c.start_operation_date,
+              no_of_employees: c.no_of_employees,
+              last_revenue_reported: c.last_revenue_reported,
+              created_by: c.created_by,
+              created_at: this.dateService.formatAuditDate(c.created_at),
+              updated_by: c.updated_by,
+              updated_at: this.dateService.formatAuditDate(c.updated_at),
+            });
+            this.originalData = this.form.getRawValue();
+          }
+
           this.form.markAsPristine();
           this.cdr.detectChanges();
         },
