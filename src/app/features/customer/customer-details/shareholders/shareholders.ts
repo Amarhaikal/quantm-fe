@@ -3,13 +3,14 @@ import { Component, ChangeDetectionStrategy, input, inject, OnInit, signal } fro
 import { TableComponent } from '../../../../shared/components/data/table/table';
 import { TableColumn } from '../../../../shared/components/data/table/table.model';
 import { CustomerService } from '../../../../core/services/customer.service';
-import { formatCurrency, formatPercentage } from '../../../../core/utils/format.utils';
+import { formatCurrency } from '../../../../core/utils/format.utils';
 import { ConfirmService } from '../../../../core/services/confirm.service';
-import { ToastService } from '../../../../core/services/toast.service';
+import { DateService } from '../../../../core/services/date.service';
 import { DialogModule } from 'primeng/dialog';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import { ShareholderFormComponent } from './shareholder-form/shareholder-form';
+import { BaseListDirective } from '../../../../core/base/base-list.directive';
 
 @Component({
   selector: 'app-customer-shareholders',
@@ -17,20 +18,14 @@ import { ShareholderFormComponent } from './shareholder-form/shareholder-form';
   templateUrl: './shareholders.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerShareholders implements OnInit {
+export class CustomerShareholders extends BaseListDirective implements OnInit {
   customerId = input<number | null>(null);
 
   private customerService = inject(CustomerService);
   private confirmService = inject(ConfirmService);
-  private toastService = inject(ToastService);
+  private dateService = inject(DateService);
 
   shareholders = signal<any[]>([]);
-  pageNo = signal<number>(1);
-  pageSize = signal<number>(10);
-  sortField = signal<string | null>(null);
-  sortOrder = signal<number>(1);
-  totalRecords = signal<number>(0);
-  loading = signal<boolean>(true);
 
   displayForm = signal<boolean>(false);
   selectedShareholder = signal<any>(null);
@@ -64,6 +59,8 @@ export class CustomerShareholders implements OnInit {
           ...item,
           nationality: item.country.description,
           share_amount_formatted: formatCurrency(item.share_amount),
+          created_at: this.dateService.formatAuditDate(item.created_at),
+          updated_at: this.dateService.formatAuditDate(item.updated_at),
           // share_percentage: formatPercentage(item.share_percentage),
         };
       });
@@ -71,18 +68,6 @@ export class CustomerShareholders implements OnInit {
       this.totalRecords.set(res.result.total_count);
       this.loading.set(false);
     });
-  }
-
-  handlePageChange(event: any) {
-    this.pageNo.set(event.first / event.rows + 1);
-    this.pageSize.set(event.rows);
-    this.fetchData();
-  }
-
-  handleSort(event: any) {
-    this.sortField.set(event.field);
-    this.sortOrder.set(event.order);
-    this.fetchData();
   }
 
   onAdd() {
