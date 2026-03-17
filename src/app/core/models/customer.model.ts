@@ -7,6 +7,7 @@ export interface Customer {
   reg_no: string;
   customer_no: string;
   customer_type: SystemCodeReference;
+  profile_photo?: string | null;
   email?: string;
   phone_no?: string;
   company_type?: SystemCodeReference;

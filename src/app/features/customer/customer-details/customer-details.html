@@ -1,7 +1,136 @@
 <lib-page-container>
-  <div class="flex flex-col">
-    <lib-page-header title="sidemenu.customer_details" [showBack]="true" />
+  <div class="flex flex-col gap-6">
+    <!-- Hidden file input for photo upload -->
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="hidden"
+      (change)="onFileSelected($event)"
+    />
 
+    <!-- Profile Card -->
+    @if (!loading()) {
+      <div class="profile-card">
+        <div class="profile-card__content">
+          <!-- Editable Avatar -->
+          <div
+            class="profile-card__avatar-wrapper"
+            (click)="menu.toggle($event)"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="'profile.edit' | transloco"
+            (keydown.enter)="menu.toggle($event)"
+            (keydown.space)="menu.toggle($event)"
+          >
+            @if (isUploadingPhoto()) {
+              <div class="profile-card__avatar-ring flex items-center justify-center bg-indigo-800">
+                <i class="pi pi-spin pi-spinner text-3xl text-white"></i>
+              </div>
+            } @else {
+              @if (profileImageUrl()) {
+                <img
+                  [src]="profileImageUrl()"
+                  alt="Customer photo"
+                  class="profile-card__avatar-ring object-cover"
+                />
+              } @else {
+                <div
+                  class="profile-card__avatar-ring flex items-center justify-center bg-indigo-700"
+                >
+                  <i class="pi pi-building text-4xl text-white/80"></i>
+                </div>
+              }
+              <!-- Hover overlay -->
+              <div class="profile-card__avatar-overlay">
+                <i class="pi pi-pencil text-white text-xl"></i>
+                <span class="text-white text-[10px] font-semibold uppercase tracking-widest">
+                  {{ 'profile.edit' | transloco }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <p-menu
+            #menu
+            [model]="menuItems()"
+            [popup]="true"
+            appendTo="body"
+            styleClass="lib-profile-menu"
+          />
+
+          <!-- Header Title -->
+          <div class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4">
+            <h1 class="profile-card__title hidden md:block">Customer Details</h1>
+          </div>
+
+          <!-- Customer Info -->
+          <div class="profile-card__info">
+            <div class="profile-card__identity">
+              <h2 class="profile-card__name">
+                {{ customer()?.fullname || 'Customer' }}
+              </h2>
+
+              <p class="profile-card__username">{{ customer()?.customer_no }}</p>
+
+              <div class="profile-card__badges">
+                @if (customer()?.reg_no) {
+                  <span class="profile-card__badge">
+                    <i class="pi pi-id-card"></i>
+                    {{ customer()?.reg_no }}
+                  </span>
+                }
+                @if (customer()?.customer_type) {
+                  <span class="profile-card__badge profile-card__badge--status">
+                    {{ customer()?.customer_type?.description }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- AI Insight Section -->
+            <div class="profile-card__insight-container">
+              @if (isLoadingInsight()) {
+                <div class="insight-skeleton">
+                  <div class="insight-skeleton__sparkle"></div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <i class="pi pi-sparkles text-indigo-400 insight-sparkle-icon"></i>
+                    <p-skeleton width="100px" height="1rem" borderRadius="4px"></p-skeleton>
+                  </div>
+                  <p-skeleton width="100%" height="0.8rem" borderRadius="4px" class="mb-1"></p-skeleton>
+                  <p-skeleton width="90%" height="0.8rem" borderRadius="4px"></p-skeleton>
+                </div>
+              } @else if (customerInsight()) {
+                <div class="insight-box">
+                  <div class="insight-box__header">
+                    <i class="pi pi-sparkles insight-box__icon"></i>
+                    <span class="insight-box__title">AI Insight</span>
+                  </div>
+                  <p class="insight-box__text">{{ customerInsight() }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Skeleton for profile card -->
+      <div class="profile-card profile-card--skeleton">
+        <div class="profile-card__content">
+          <p-skeleton shape="circle" size="7rem" />
+          <div class="profile-card__info">
+            <p-skeleton width="200px" height="1.6rem" borderRadius="6px" class="mb-2" />
+            <p-skeleton width="140px" height="1rem" borderRadius="6px" class="mb-3" />
+            <div class="flex gap-2">
+              <p-skeleton width="100px" height="1.8rem" borderRadius="999px" />
+              <p-skeleton width="120px" height="1.8rem" borderRadius="999px" />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tabs Section -->
     <lib-card [padding]="false">
       <p-tabs [(value)]="activeTab">
         <p-tablist class="px-4 pt-2">
@@ -38,4 +167,7 @@
       </p-tabs>
     </lib-card>
   </div>
+
+  <!-- Image Crop Dialog -->
+  <lib-image-crop-dialog #cropDialog (onSave)="onImageCropped($event)" />
 </lib-page-container>

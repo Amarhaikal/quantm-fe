@@ -28,6 +28,7 @@ import {
   DropdownComponent,
   OptionDropdown,
 } from '../../../shared/components/form/dropdown/dropdown';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-customers',
@@ -68,7 +69,12 @@ export class Customers extends BaseListDirective implements OnInit {
   );
 
   columns: TableColumn[] = [
-    { field: 'fullname', header: 'label.full_name' },
+    {
+      field: 'fullname',
+      header: 'label.full_name',
+      type: 'avatarText',
+      imageField: 'profile_photo',
+    },
     { field: 'reg_no', header: 'label.reg_no' },
     { field: 'customer_type', header: 'label.customer_type', type: 'badge', textAlign: 'center' },
     { field: 'created_by', header: 'label.created_by' },
@@ -97,8 +103,12 @@ export class Customers extends BaseListDirective implements OnInit {
 
     this.customerService.getCustomers(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
+        const baseUrl = environment.apiUrl.endsWith('/')
+          ? environment.apiUrl.slice(0, -1)
+          : environment.apiUrl;
         const mapped = response.result.data.map((item: any) => ({
           ...item,
+          profile_photo: item.profile_photo ? `${baseUrl}/api${item.profile_photo}` : null,
           customer_type: item.customer_type?.description,
           customer_type_severity: CrudUtils.getStatusSeverity(item.customer_type?.code),
         }));

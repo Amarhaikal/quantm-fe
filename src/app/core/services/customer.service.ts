@@ -68,4 +68,12 @@ export class CustomerService {
   deleteCustomerDirector(id: number, directorId: number): Observable<ApiResponse<any>> {
     return this.api.delete<ApiResponse<any>>(`customers/${id}/directors/${directorId}`);
   }
+
+  getCustomerInsight(id: number): Observable<ApiResponse<string>> {
+    return this.api.get<ApiResponse<string>>(`customers/${id}/insight`);
+  }
+
+  uploadCustomerLogo(id: number, data: FormData): Observable<ApiResponse<any>> {
+    return this.api.put<ApiResponse<any>>(`customers/${id}/photo`, data);
+  }
 }
