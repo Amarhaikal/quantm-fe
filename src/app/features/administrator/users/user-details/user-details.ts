@@ -282,11 +282,11 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         }
 
         this.userService.checkUsernameAvailability(username).subscribe({
-          next: (response: ApiResponse<{ available: boolean }>) => {
+          next: (response: ApiResponse<any>) => {
             if (response.status === 200) {
-              if (response.result && response.result.available === false) {
+              if (response.result === false) {
                 const control = this.userDetailsForm.get('username');
-                control?.setErrors({ notAvailable: true }, { emitEvent: true });
+                control?.setErrors({ ...(control?.errors || {}), notAvailable: true }, { emitEvent: true });
                 control?.markAsDirty();
                 control?.markAsTouched();
               } else {
@@ -450,8 +450,14 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     if (this.userDetailsForm.invalid) {
       // Mark all controls as touched and trigger validation updates to notify child components
       Object.values(this.userDetailsForm.controls).forEach((control) => {
+        const hasNotAvailable = control.hasError('notAvailable');
+        
         control.markAllAsTouched();
         control.updateValueAndValidity({ emitEvent: true });
+
+        if (hasNotAvailable) {
+          control.setErrors({ ...(control.errors || {}), notAvailable: true });
+        }
       });
       this.toastService.invalidForm();
       this.cdr.detectChanges();
