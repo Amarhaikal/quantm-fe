@@ -206,7 +206,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         ],
       ],
       staff_no: ['', [Validators.required, Validators.maxLength(10)]],
-      id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
+      id_no: [{ value: '', disabled: true }],
       gender: [{ value: '', disabled: true }],
       role: ['', [Validators.required]],
       status: [{ value: '', disabled: true }],

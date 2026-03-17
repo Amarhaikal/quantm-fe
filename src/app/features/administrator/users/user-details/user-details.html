@@ -61,8 +61,6 @@
             styleClass="lib-profile-menu"
           />
 
-
-
           <!-- User info -->
           <div class="profile-card__info">
             <div class="profile-card__identity">
@@ -125,8 +123,6 @@
       <!-- Skeleton for profile card -->
       <div class="profile-card profile-card--skeleton">
         <div class="profile-card__content">
-
-
           <p-skeleton shape="circle" size="7rem" />
           <div class="profile-card__info">
             <p-skeleton width="180px" height="1.6rem" borderRadius="6px" class="mb-2" />
@@ -202,7 +198,7 @@
                 formControlName="id_no"
                 type="IDNO"
                 placeholder="label.placeholders.id_no"
-                [required]="true"
+                [disabled]="true"
               />
 
               <!-- Email -->
