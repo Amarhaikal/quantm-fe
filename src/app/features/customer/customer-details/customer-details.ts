@@ -17,6 +17,7 @@ import { MenuItem } from 'primeng/api';
 import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
+import { PageHeaderComponent } from '../../../shared/components/layout/page-header/page-header';
 import { CardComponent } from '../../../shared/components/layout/card/card';
 import { TabsModule } from 'primeng/tabs';
 import { CustomerService } from '../../../core/services/customer.service';
@@ -31,6 +32,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-customer-details',
   imports: [
+    PageHeaderComponent,
     PageContainerComponent,
     CardComponent,
     TabsModule,

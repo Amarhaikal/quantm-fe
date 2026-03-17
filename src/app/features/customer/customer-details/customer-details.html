@@ -1,4 +1,6 @@
 <lib-page-container>
+  <lib-page-header title="customers.details_title" [showBack]="true" backUrl="customers" />
+
   <div class="flex flex-col gap-6">
     <!-- Hidden file input for photo upload -->
     <input
@@ -59,10 +61,6 @@
             styleClass="lib-profile-menu"
           />
 
-          <!-- Header Title -->
-          <div class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4">
-            <h1 class="profile-card__title hidden md:block">Customer Details</h1>
-          </div>
 
           <!-- Customer Info -->
           <div class="profile-card__info">

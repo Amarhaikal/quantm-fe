@@ -27,14 +27,6 @@
   pointer-events: none;
 }
 
-.profile-card__title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
 /* Inner layout */
 .profile-card__content {
   position: relative;
@@ -51,9 +43,6 @@
   }
 }
 
-.profile-card__actions {
-  z-index: 10;
-}
 
 /* Avatar wrapper */
 .profile-card__avatar-wrapper {
@@ -203,7 +192,6 @@
 @media (min-width: 1024px) {
   .profile-card__insight-container {
     margin-top: 0;
-    padding-right: 4.5rem;
   }
 }
 

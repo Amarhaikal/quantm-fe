@@ -49,6 +49,7 @@ import { AuditInfoComponent } from '../../../../shared/components/form/audit-inf
 import { ImageCropDialog } from '../../../../shared/components/form/image-crop-dialog/image-crop-dialog';
 import { AvatarSelectionDialog } from '../../../../shared/components/form/avatar-selection-dialog/avatar-selection-dialog';
 import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
+import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
 import { CardComponent } from '../../../../shared/components/layout/card/card';
 
 const ADDRESS_FIELDS = ['address_line1', 'address_line2', 'city', 'postcode', 'state', 'country'];
@@ -76,6 +77,7 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     AvatarSelectionDialog,
     MenuModule,
     ScrollTopModule,
+    PageHeaderComponent,
     PageContainerComponent,
     CardComponent,
   ],
