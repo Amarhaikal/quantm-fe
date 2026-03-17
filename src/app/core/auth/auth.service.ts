@@ -43,7 +43,7 @@ export class AuthService {
   private lastActivityTime = 0;
   private readonly IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
   private readonly WARNING_BEFORE_IDLE_MS = 2 * 60 * 1000; // warn 2 min before logout
-  private readonly REFRESH_INTERVAL_MS = 25 * 60 * 1000; // 25 minutes
+  private readonly REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
   private readonly IDLE_EVENTS: (keyof WindowEventMap)[] = [
     'mousemove',
     'keydown',
