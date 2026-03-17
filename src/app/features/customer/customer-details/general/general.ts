@@ -9,6 +9,7 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ScrollTopModule } from 'primeng/scrolltop';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
 import { Customer } from '../../../../core/models/customer.model';
@@ -32,6 +33,7 @@ import { DateService } from '../../../../core/services/date.service';
   imports: [
     AuditInfoComponent,
     SkeletonModule,
+    ScrollTopModule,
     TextboxComponent,
     DropdownComponent,
     DatePickerComponent,
@@ -40,7 +42,11 @@ import { DateService } from '../../../../core/services/date.service';
     ReactiveFormsModule,
   ],
   templateUrl: './general.html',
+  styleUrl: './general.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(window:scroll)': 'onWindowScroll()',
+  },
 })
 export class CustomerGeneral {
   private fb = inject(FormBuilder);
@@ -59,6 +65,7 @@ export class CustomerGeneral {
   private REFERENCE_FIELDS = ['company_type', 'department'];
 
   form: FormGroup;
+  showScrollDown = signal<boolean>(true);
 
   companyTypeOptions = computed<OptionDropdown[]>(() =>
     this.systemCodeService.getSystemCodes(CODE_TYPES.COMPANY_TYPE).map((code) => ({
@@ -174,5 +181,15 @@ export class CustomerGeneral {
         },
       });
     });
+  }
+
+  onWindowScroll() {
+    const scrollPosition =
+      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.showScrollDown.set(scrollPosition < 200);
+  }
+
+  scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
 }

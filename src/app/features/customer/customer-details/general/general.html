@@ -51,10 +51,23 @@
       numericType="currency"
     />
 
-    <div class="md:col-span-2 flex justify-end mt-4">
+    <lib-audit-info [data]="originalData" class="md:col-span-2 mt-2" />
+
+    <!-- Action Buttons -->
+    <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
       <lib-button type="SAVE" htmlType="submit" [loading]="saving()" />
     </div>
-
-    <lib-audit-info [data]="originalData" class="md:col-span-2 mt-2" />
   </form>
+
+  <p-scrollTop threshold="200" icon="pi pi-chevron-up" />
+  @if (showScrollDown()) {
+    <button
+      type="button"
+      class="scroll-down-btn shadow-lg"
+      (click)="scrollToBottom()"
+      aria-label="Scroll to bottom"
+    >
+      <i class="pi pi-chevron-down"></i>
+    </button>
+  }
 }
