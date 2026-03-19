@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectorsForm } from './directors-form';
+import { DirectorForm } from './directors-form';
 
 describe('DirectorsForm', () => {
-  let component: DirectorsForm;
-  let fixture: ComponentFixture<DirectorsForm>;
+  let component: DirectorForm;
+  let fixture: ComponentFixture<DirectorForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DirectorsForm]
-    })
-    .compileComponents();
+      imports: [DirectorForm],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(DirectorsForm);
+    fixture = TestBed.createComponent(DirectorForm);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
