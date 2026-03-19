@@ -6,7 +6,7 @@
     [maxLength]="80"
   />
 
-  <lib-textbox label="label.reg_no" formControlName="reg_no" [maxLength]="12" [type]="'REGNO'" />
+  <lib-textbox label="label.id_no" formControlName="reg_no" [maxLength]="12" [type]="'IDNO'" />
 
   <lib-dropdown
     label="label.nationality"
@@ -16,11 +16,11 @@
   />
 
   <div class="grid grid-cols-2 gap-4">
-    <lib-numeric 
-      label="label.num_shares" 
-      formControlName="share_amount" 
-      [required]="true" 
-      numericType="currency" 
+    <lib-numeric
+      label="label.num_shares"
+      formControlName="share_amount"
+      [required]="true"
+      numericType="currency"
     />
 
     <!-- <lib-numeric
