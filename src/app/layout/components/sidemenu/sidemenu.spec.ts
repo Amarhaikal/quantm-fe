@@ -39,7 +39,10 @@ describe('Sidemenu', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [Sidemenu, TranslocoTestingModule.forRoot({})],
+      imports: [Sidemenu, TranslocoTestingModule.forRoot({
+        langs: { en: {} },
+        translocoConfig: { defaultLang: 'en', availableLangs: ['en'] }
+      })],
       providers: [
         provideRouter([]),
         { provide: MenuService, useValue: mockMenuService },
