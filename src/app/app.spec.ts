@@ -1,10 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { ApmService } from '@elastic/apm-rum-angular';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        {
+          provide: ApmService,
+          useValue: {
+            observe: () => {},
+          },
+        },
+        MessageService,
+        ConfirmationService,
+      ],
     }).compileComponents();
   });
 
@@ -14,10 +26,10 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should contain a router-outlet', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, quantm-fe');
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });
