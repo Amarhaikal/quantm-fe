@@ -11,6 +11,7 @@ import { UserService } from '../services/user.service';
 import { UserDetailed } from '../models/user.model';
 import { MsalService } from '@azure/msal-angular';
 import { ConfirmService } from '../services/confirm.service';
+import { MenuService } from '../services/menu.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class AuthService {
   private msalService = inject(MsalService);
   private router = inject(Router);
   private confirmService = inject(ConfirmService);
+  private menuService = inject(MenuService);
 
   // Signals for managing state
   private currentUserSig = signal<UserDetailed | null>(null);
@@ -243,6 +245,7 @@ export class AuthService {
     this.confirmService.close();
     this.currentUserSig.set(null);
     this.isHydratedSig.set(true);
+    this.menuService.clearMenuCache();
     this.triggerRefresh();
 
     try {
