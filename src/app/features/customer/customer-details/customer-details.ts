@@ -61,6 +61,7 @@ export class CustomerDetails implements OnInit {
   isLoadingInsight = signal(false);
   isUploadingPhoto = signal(false);
   profileImageUrl = signal<string | undefined>(undefined);
+  isIndividual = computed(() => this.customer()?.customer_type?.code === 'IND');
 
   activeTab = signal('general');
 

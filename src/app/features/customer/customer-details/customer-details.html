@@ -130,39 +130,45 @@
 
     <!-- Tabs Section -->
     <lib-card [padding]="false">
-      <p-tabs [(value)]="activeTab">
-        <p-tablist class="px-4 pt-2">
-          @for (tab of tabs; track tab.value) {
-            <p-tab [value]="tab.value">
-              <div class="flex items-center gap-2 px-2 py-1">
-                @if (tab.icon) {
-                  <i [class]="tab.icon"></i>
-                }
-                <span class="font-medium text-sm">{{ tab.label }}</span>
-              </div>
-            </p-tab>
-          }
-        </p-tablist>
-        <p-tabpanels class="p-4 md:p-6">
-          <p-tabpanel value="general">
-            @if (activeTab() === 'general') {
-              <app-customer-general [customer]="customer()" [loading]="loading()" />
+      @if (isIndividual()) {
+        <div class="p-4 md:p-6">
+          <app-customer-general [customer]="customer()" [loading]="loading()" />
+        </div>
+      } @else {
+        <p-tabs [(value)]="activeTab">
+          <p-tablist class="px-4 pt-2">
+            @for (tab of tabs; track tab.value) {
+              <p-tab [value]="tab.value">
+                <div class="flex items-center gap-2 px-2 py-1">
+                  @if (tab.icon) {
+                    <i [class]="tab.icon"></i>
+                  }
+                  <span class="font-medium text-sm">{{ tab.label }}</span>
+                </div>
+              </p-tab>
             }
-          </p-tabpanel>
-
-          <p-tabpanel value="directors">
-            @if (activeTab() === 'directors') {
-              <app-customer-directors [customerId]="customer()?.id ?? null" />
-            }
-          </p-tabpanel>
-
-          <p-tabpanel value="shareholders">
-            @if (activeTab() === 'shareholders') {
-              <app-customer-shareholders [customerId]="customer()?.id ?? null" />
-            }
-          </p-tabpanel>
-        </p-tabpanels>
-      </p-tabs>
+          </p-tablist>
+          <p-tabpanels class="p-4 md:p-6">
+            <p-tabpanel value="general">
+              @if (activeTab() === 'general') {
+                <app-customer-general [customer]="customer()" [loading]="loading()" />
+              }
+            </p-tabpanel>
+  
+            <p-tabpanel value="directors">
+              @if (activeTab() === 'directors') {
+                <app-customer-directors [customerId]="customer()?.id ?? null" />
+              }
+            </p-tabpanel>
+  
+            <p-tabpanel value="shareholders">
+              @if (activeTab() === 'shareholders') {
+                <app-customer-shareholders [customerId]="customer()?.id ?? null" />
+              }
+            </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      }
     </lib-card>
   </div>
 
