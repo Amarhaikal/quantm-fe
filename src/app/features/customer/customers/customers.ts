@@ -29,6 +29,8 @@ import {
   OptionDropdown,
 } from '../../../shared/components/form/dropdown/dropdown';
 import { environment } from '../../../../environments/environment';
+import { CardListComponent } from '../../../shared/components/data/card-list/card-list';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-customers',
@@ -41,6 +43,8 @@ import { environment } from '../../../../environments/environment';
     ButtonComponent,
     TextboxComponent,
     DropdownComponent,
+    CardListComponent,
+    AvatarModule,
   ],
   templateUrl: './customers.html',
   styleUrl: './customers.css',
@@ -54,6 +58,7 @@ export class Customers extends BaseListDirective implements OnInit {
   private confirmService = inject(ConfirmService);
 
   customers = signal<Customer[]>([]);
+  viewMode = signal<'table' | 'card'>('table');
 
   searchForm = this.fb.group({
     fullname: [''],
@@ -154,5 +159,9 @@ export class Customers extends BaseListDirective implements OnInit {
   resetSearch() {
     this.searchForm.reset();
     this.pageNo.set(1);
+  }
+
+  toggleView(mode: 'table' | 'card') {
+    this.viewMode.set(mode);
   }
 }
