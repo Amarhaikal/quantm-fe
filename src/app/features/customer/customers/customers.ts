@@ -76,7 +76,7 @@ export class Customers extends BaseListDirective implements OnInit {
       imageField: 'profile_photo',
     },
     { field: 'reg_no', header: 'label.reg_no' },
-    { field: 'customer_type', header: 'label.customer_type', type: 'badge', textAlign: 'center' },
+    { field: 'customer_type', header: 'label.customer_type', textAlign: 'center' },
     { field: 'created_by', header: 'label.created_by' },
     { field: 'created_at', header: 'label.created_at', type: 'datetime', textAlign: 'center' },
   ];
@@ -110,7 +110,6 @@ export class Customers extends BaseListDirective implements OnInit {
           ...item,
           profile_photo: item.profile_photo ? `${baseUrl}/api${item.profile_photo}` : null,
           customer_type: item.customer_type?.description,
-          customer_type_severity: CrudUtils.getStatusSeverity(item.customer_type?.code),
         }));
         this.customers.set(mapped);
         this.totalRecords.set(response.result.total_count);
