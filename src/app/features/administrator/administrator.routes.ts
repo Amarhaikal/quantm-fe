@@ -37,4 +37,8 @@ export const ADMINISTRATOR_ROUTES: Routes = [
     path: 'facilities',
     loadComponent: () => import('./facilities/facilities').then((m) => m.Facilities),
   },
+  {
+    path: 'products',
+    loadComponent: () => import('./products/products').then((m) => m.Products),
+  },
 ];

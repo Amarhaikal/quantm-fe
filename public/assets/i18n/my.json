@@ -126,6 +126,7 @@
         "add_director": "Tambah Pengarah",
         "edit_director": "Kemaskini Pengarah",
         "asset_type": "Jenis Aset",
+        "facility": "Kemudahan",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
