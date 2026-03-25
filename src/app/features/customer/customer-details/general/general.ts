@@ -81,6 +81,8 @@ export class CustomerGeneral {
     })),
   );
 
+  isCompany = computed(() => this.customer()?.customer_type?.code === 'CMP');
+
   constructor() {
     this.form = this.fb.group({
       fullname: this.fb.nonNullable.control('', [Validators.required]),

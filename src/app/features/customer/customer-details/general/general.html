@@ -25,31 +25,33 @@
 
     <lib-textbox label="label.phone_no" formControlName="phone_no" />
 
-    <lib-dropdown
-      label="label.company_type"
-      formControlName="company_type"
-      [options]="companyTypeOptions()"
-    />
+    @if (isCompany()) {
+      <lib-dropdown
+        label="label.company_type"
+        formControlName="company_type"
+        [options]="companyTypeOptions()"
+      />
 
-    <lib-dropdown
-      label="label.department"
-      formControlName="department"
-      [options]="departmentOptions()"
-    />
+      <lib-dropdown
+        label="label.department"
+        formControlName="department"
+        [options]="departmentOptions()"
+      />
 
-    <lib-datepicker label="label.start_operation_date" formControlName="start_operation_date" />
+      <lib-datepicker label="label.start_operation_date" formControlName="start_operation_date" />
 
-    <lib-numeric
-      label="label.no_of_employees"
-      formControlName="no_of_employees"
-      numericType="integer"
-    />
+      <lib-numeric
+        label="label.no_of_employees"
+        formControlName="no_of_employees"
+        numericType="integer"
+      />
 
-    <lib-numeric
-      label="label.last_revenue_reported"
-      formControlName="last_revenue_reported"
-      numericType="currency"
-    />
+      <lib-numeric
+        label="label.last_revenue_reported"
+        formControlName="last_revenue_reported"
+        numericType="currency"
+      />
+    }
 
     <lib-audit-info [data]="originalData" class="md:col-span-2 mt-2" />
 
