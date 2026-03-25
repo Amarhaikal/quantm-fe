@@ -1,0 +1,41 @@
+<lib-page-container>
+  <lib-page-header title="sidemenu.facilities" />
+  <div class="flex flex-col gap-6">
+    <div class="w-full" [formGroup]="searchForm">
+      <lib-search (reset)="resetSearch()">
+        <lib-textbox label="label.code" formControlName="code" />
+        <lib-textbox label="label.description" formControlName="description" />
+        <lib-dropdown
+          label="label.asset_type"
+          formControlName="asset_type"
+          [options]="assetTypesOptions()"
+        />
+      </lib-search>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      @if (hasPendingChanges()) {
+        <lib-button type="SAVE" (click)="saveAllPending()" />
+      }
+      <lib-button type="ADD" (click)="addFacility()" />
+    </div>
+
+    <div class="w-full">
+      <lib-table
+        [columns]="columns()"
+        [data]="facilities()"
+        [loading]="loading()"
+        [totalRecords]="totalRecords()"
+        [rows]="pageSize()"
+        actionType="EDIT_DELETES"
+        (onPageChange)="handlePageChange($event)"
+        (onCancel)="onCancel($event)"
+        (onEdit)="onEdit($event)"
+        (onSort)="handleSort($event)"
+        (onRowsCreate)="onRowsCreate($event)"
+        (onRowsUpdate)="onRowsUpdate($event)"
+        (onRowsDelete)="onRowsDelete($event)"
+      />
+    </div>
+  </div>
+</lib-page-container>

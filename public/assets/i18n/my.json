@@ -43,7 +43,9 @@
         "rates": "Kadar",
         "customers": "Pelanggan",
         "add_customer": "Tambah Pelanggan",
-        "customer_details": "Butiran Pelanggan"
+        "customer_details": "Butiran Pelanggan",
+        "facilities": "Kemudahan",
+        "products": "Produk"
     },
     "profile": {
         "title": "Profil Saya",
@@ -123,6 +125,7 @@
         "edit_shareholder": "Kemaskini Pemegang Saham",
         "add_director": "Tambah Pengarah",
         "edit_director": "Kemaskini Pengarah",
+        "asset_type": "Jenis Aset",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",

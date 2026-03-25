@@ -43,7 +43,9 @@
         "rates": "Rates",
         "customers": "Customers",
         "add_customer": "Add Customer",
-        "customer_details": "Customer Details"
+        "customer_details": "Customer Details",
+        "facilities": "Facilities",
+        "products": "Products"
     },
     "profile": {
         "title": "My Profile",
@@ -132,6 +134,7 @@
         "edit_shareholder": "Edit Shareholder",
         "add_director": "Add Director",
         "edit_director": "Edit Director",
+        "asset_type": "Asset Type",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
