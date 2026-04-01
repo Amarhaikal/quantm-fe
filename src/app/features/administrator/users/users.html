@@ -64,7 +64,6 @@
           (onSort)="handleSort($event)"
           (onDelete)="handleDelete($event)"
           (onView)="onEdit($event)"
-          (onEdit)="onEdit($event)"
         />
       } @else {
         <lib-card-list
@@ -85,12 +84,12 @@
                   <!-- Avatar -->
                   <div class="shrink-0">
                     <p-avatar
-                      [image]="user.profile_image_url"
-                      [icon]="!user.profile_image_url ? 'pi pi-user' : ''"
+                      [image]="user.profile_photo"
+                      [icon]="!user.profile_photo ? 'pi pi-user' : ''"
                       size="xlarge"
                       shape="circle"
                       [styleClass]="
-                        !user.profile_image_url
+                        !user.profile_photo
                           ? 'bg-gray-100 text-gray-600 !w-16 !h-16 text-2xl'
                           : '!w-16 !h-16 text-2xl'
                       "
@@ -122,7 +121,7 @@
                     <div class="space-y-2 mt-3 text-sm text-gray-600">
                       <div class="flex items-center gap-2">
                         <i class="pi pi-user text-gray-400 shrink-0"></i>
-                        <span class="truncate">{{ user.staff_id }}</span>
+                        <span class="truncate">{{ user.staff_no }}</span>
                       </div>
                       <div class="flex items-center gap-2">
                         <i class="pi pi-briefcase text-gray-400 shrink-0"></i>

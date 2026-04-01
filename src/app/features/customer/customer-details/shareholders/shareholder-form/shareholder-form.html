@@ -1,0 +1,42 @@
+<form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+  <lib-textbox
+    label="label.full_name"
+    formControlName="fullname"
+    [required]="true"
+    [maxLength]="80"
+  />
+
+  <lib-textbox label="label.id_no" formControlName="reg_no" [maxLength]="12" [type]="'IDNO'" />
+
+  <lib-dropdown
+    label="label.nationality"
+    formControlName="nationality"
+    [options]="countryOptions()"
+    [required]="true"
+  />
+
+  <div class="grid grid-cols-2 gap-4">
+    <lib-numeric
+      label="label.num_shares"
+      formControlName="share_amount"
+      [required]="true"
+      numericType="currency"
+    />
+
+    <!-- <lib-numeric
+      label="label.percentage_shares"
+      formControlName="share_percentage"
+      [required]="true"
+      numericType="percentage"
+    /> -->
+  </div>
+
+  @if (data() && data().id) {
+    <lib-audit-info [data]="data()" />
+  }
+
+  <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
+    <lib-button type="CANCEL" (click)="cancel()" />
+    <lib-button type="SAVE" [loading]="isSaving()" (click)="save()" />
+  </div>
+</form>

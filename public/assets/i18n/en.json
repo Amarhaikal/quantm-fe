@@ -1,5 +1,6 @@
 {
     "login": {
+        "last_used": "Last Used",
         "title": "Welcome to",
         "welcome": "Welcome Back to Loan Management System",
         "username": "Username or Email",
@@ -29,7 +30,7 @@
         "dashboard": "Dashboard",
         "settings": "Settings",
         "profile": "Profile",
-        "administrator": "Administrator",
+        "system administrator": "System Administrator",
         "users": "Users",
         "roles": "Roles",
         "system codes": "System Codes",
@@ -38,8 +39,13 @@
         "appearance": "Appearance",
         "search": "Search menus...",
         "no_results": "No menus found",
-        "session activities": "Session Activity",
-        "rates": "Rates"
+        "session activities": "Session Activities",
+        "rates": "Rates",
+        "customers": "Customers",
+        "add_customer": "Add Customer",
+        "customer_details": "Customer Details",
+        "facilities": "Facilities",
+        "products": "Products"
     },
     "profile": {
         "title": "My Profile",
@@ -60,14 +66,18 @@
     "users": {
         "title": "Users",
         "new_user_title": "New User Creation",
-        "details_title": "User Details",
-        "back_to_list": "Back to List"
+        "details_title": "User Details"
+    },
+    "customers": {
+        "title": "Customers",
+        "new_customer_title": "New Customer Creation",
+        "details_title": "Customer Details"
     },
     "label": {
         "full_name": "Full Name",
         "short_name": "Short Name",
         "username": "Username",
-        "staff_id": "Staff ID",
+        "staff_no": "Staff No.",
         "id_no": "ID No.",
         "email": "Email",
         "gender": "Gender",
@@ -93,7 +103,7 @@
         "password": "Password",
         "actions": "Actions",
         "code_types": "Code Types",
-        "code_type": "Code Type",
+        "system_code_type": "System Code Type",
         "code": "Code",
         "description": "Description",
         "logged_in_at": "Logged In At",
@@ -107,12 +117,31 @@
         "last_activity_date": "Last Activity Date",
         "rate_type": "Rate Type",
         "rate": "Rate",
+        "reg_no": "Registration No",
+        "customer_type": "Customer Type",
+        "no_data": "No Data",
+        "customer_no": "Customer No.",
+        "company_type": "Company Type",
+        "start_operation_date": "Start Operation Date",
+        "no_of_employees": "No. of Employees",
+        "last_revenue_reported": "Last Revenue Reported",
+        "nationality": "Nationality",
+        "share_type": "Share Type",
+        "num_shares": "No. of Shares",
+        "percentage": "Percentage",
+        "percentage_shares": "Percentage of Shares",
+        "add_shareholder": "Add Shareholder",
+        "edit_shareholder": "Edit Shareholder",
+        "add_director": "Add Director",
+        "edit_director": "Edit Director",
+        "asset_type": "Asset Type",
+        "facility": "Facility",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
             "full_name": "Enter Full Name",
             "short_name": "Enter Short Name",
-            "staff_id": "Enter Staff ID",
+            "staff_no": "Enter Staff No.",
             "id_no": "000000-00-0000",
             "email": "Enter Email",
             "phone_no": "Enter Phone Number",
@@ -181,6 +210,12 @@
             "message": "Are you sure you want to end this session?",
             "accept": "End",
             "reject": "Cancel"
+        },
+        "idle_warning": {
+            "header": "Session Expiring Soon",
+            "message": "You have been inactive for 28 minutes. Your session will expire in 2 minutes. Do you want to stay logged in?",
+            "accept": "Logout Now",
+            "reject": "Stay Logged In"
         }
     },
     "validation": {

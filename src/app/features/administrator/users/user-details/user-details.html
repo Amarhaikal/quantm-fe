@@ -1,4 +1,6 @@
 <lib-page-container>
+  <lib-page-header title="users.details_title" [showBack]="true" backUrl="system-admin/users" />
+
   <div class="flex flex-col gap-6">
     <!-- Hidden file input (outside card, shared by card avatar and form) -->
     <input
@@ -59,23 +61,6 @@
             styleClass="lib-profile-menu"
           />
 
-          <!-- Header & Actions Block (Top Right) -->
-          <div
-            class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4"
-          >
-            <h1 class="profile-card__title hidden md:block">
-              {{ 'users.details_title' | transloco }}
-            </h1>
-            <button
-              type="button"
-              (click)="goBack()"
-              class="profile-card__back-btn"
-              aria-label="Go back"
-            >
-              <i class="pi pi-arrow-left"></i>
-            </button>
-          </div>
-
           <!-- User info -->
           <div class="profile-card__info">
             <div class="profile-card__identity">
@@ -86,10 +71,10 @@
               <p class="profile-card__username">&#64;{{ originalData?.username }}</p>
 
               <div class="profile-card__badges">
-                @if (originalData?.staff_id) {
+                @if (originalData?.staff_no) {
                   <span class="profile-card__badge">
                     <i class="pi pi-id-card"></i>
-                    {{ originalData?.staff_id }}
+                    {{ originalData?.staff_no }}
                   </span>
                 }
                 @if (originalData?.status) {
@@ -138,14 +123,6 @@
       <!-- Skeleton for profile card -->
       <div class="profile-card profile-card--skeleton">
         <div class="profile-card__content">
-          <!-- Skeleton Header Actions (Top Right) -->
-          <div
-            class="profile-card__actions absolute top-0 right-0 flex items-center justify-end gap-4"
-          >
-            <p-skeleton width="200px" height="2rem" borderRadius="6px" class="hidden md:block" />
-            <p-skeleton width="2.5rem" height="2.5rem" borderRadius="0.75rem" />
-          </div>
-
           <p-skeleton shape="circle" size="7rem" />
           <div class="profile-card__info">
             <p-skeleton width="180px" height="1.6rem" borderRadius="6px" class="mb-2" />
@@ -209,8 +186,8 @@
 
               <!-- Staff ID -->
               <lib-textbox
-                label="label.staff_id"
-                formControlName="staff_id"
+                label="label.staff_no"
+                formControlName="staff_no"
                 [maxLength]="10"
                 [required]="true"
               />
@@ -221,7 +198,7 @@
                 formControlName="id_no"
                 type="IDNO"
                 placeholder="label.placeholders.id_no"
-                [required]="true"
+                [disabled]="true"
               />
 
               <!-- Email -->
@@ -284,7 +261,7 @@
               <!-- Address 1 -->
               <lib-textbox
                 label="label.address_1"
-                formControlName="address_line_1"
+                formControlName="address_line1"
                 placeholder="label.placeholders.address"
                 [maxLength]="255"
               />
@@ -292,7 +269,7 @@
               <!-- Address 2 -->
               <lib-textbox
                 label="label.address_2"
-                formControlName="address_line_2"
+                formControlName="address_line2"
                 placeholder="label.placeholders.address"
                 [maxLength]="255"
               />

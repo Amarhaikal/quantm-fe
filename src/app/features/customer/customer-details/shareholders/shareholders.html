@@ -1,0 +1,38 @@
+<div class="flex flex-col gap-4">
+  <div class="flex justify-end">
+    <lib-button type="ADD" (click)="onAdd()" />
+  </div>
+
+  <lib-table
+    [columns]="columns"
+    [data]="shareholders()"
+    [loading]="loading()"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="handlePageChange($event)"
+    (onSort)="handleSort($event)"
+    actionType="DETAILS_DELETE"
+    (onView)="onDetails($event)"
+    (onDelete)="onDelete($event)"
+  />
+</div>
+
+<p-dialog
+  [(visible)]="displayForm"
+  [modal]="true"
+  [header]="
+    selectedShareholder()?.id
+      ? ('label.edit_shareholder' | transloco)
+      : ('label.add_shareholder' | transloco)
+  "
+  [style]="{ width: '500px' }"
+  styleClass="lib-dialog p-fluid"
+>
+  @if (displayForm()) {
+    <app-shareholder-form
+      [customerId]="customerId()!"
+      [data]="selectedShareholder()"
+      (saved)="onSaved()"
+      (cancelled)="hideForm()"
+    />
+  }
+</p-dialog>

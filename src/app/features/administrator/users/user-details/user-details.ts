@@ -36,7 +36,7 @@ import {
   OptionDropdown,
 } from '../../../../shared/components/form/dropdown/dropdown';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { CodeTypeService } from '../../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../../core/services/system-code.service';
 import { CustomValidators } from '../../../../core/utils/validators';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';
@@ -48,11 +48,11 @@ import { BaseFormComponent } from '../../../../core/base/base-form.component';
 import { AuditInfoComponent } from '../../../../shared/components/form/audit-info/audit-info';
 import { ImageCropDialog } from '../../../../shared/components/form/image-crop-dialog/image-crop-dialog';
 import { AvatarSelectionDialog } from '../../../../shared/components/form/avatar-selection-dialog/avatar-selection-dialog';
-import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
 import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
+import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
 import { CardComponent } from '../../../../shared/components/layout/card/card';
 
-const ADDRESS_FIELDS = ['address_line_1', 'address_line_2', 'city', 'postcode', 'state', 'country'];
+const ADDRESS_FIELDS = ['address_line1', 'address_line2', 'city', 'postcode', 'state', 'country'];
 const ADDRESS_REFERENCE_FIELDS = ['state', 'country'];
 const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
 
@@ -77,6 +77,7 @@ const REFERENCE_FIELDS = ['gender', 'role', 'status', 'department'];
     AvatarSelectionDialog,
     MenuModule,
     ScrollTopModule,
+    PageHeaderComponent,
     PageContainerComponent,
     CardComponent,
   ],
@@ -93,7 +94,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private userService = inject(UserService);
   private toastService = inject(ToastService);
   private authService = inject(AuthService);
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
   private confirmService = inject(ConfirmService);
   private dateService = inject(DateService);
   private translocoService = inject(TranslocoService);
@@ -149,31 +150,31 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   });
 
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
       value: role.code,
       label: role.description,
     }));
   });
   countriesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.COUNTRY).map((country) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.COUNTRY).map((country) => ({
       value: country.code,
       label: country.description,
     }));
   });
   statesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.STATE).map((state) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.STATE).map((state) => ({
       value: state.code,
       label: state.description,
     }));
   });
   genderOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.GENDER).map((gender) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.GENDER).map((gender) => ({
       value: gender.code,
       label: gender.description,
     }));
   });
   departmentOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.DEPARTMENT).map((department) => ({
       value: department.code,
       label: department.description,
     }));
@@ -204,8 +205,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
           Validators.pattern(/^[a-zA-Z0-9._-]+$/),
         ],
       ],
-      staff_id: ['', [Validators.required, Validators.maxLength(10)]],
-      id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
+      staff_no: ['', [Validators.required, Validators.maxLength(10)]],
+      id_no: [{ value: '', disabled: true }],
       gender: [{ value: '', disabled: true }],
       role: ['', [Validators.required]],
       status: [{ value: '', disabled: true }],
@@ -217,8 +218,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       department: [''],
       designation: ['', [Validators.maxLength(120)]],
       remarks: ['', [Validators.maxLength(255)]],
-      address_line_1: ['', [Validators.maxLength(255)]],
-      address_line_2: ['', [Validators.maxLength(255)]],
+      address_line1: ['', [Validators.maxLength(255)]],
+      address_line2: ['', [Validators.maxLength(255)]],
       city: ['', [Validators.maxLength(120)]],
       postcode: ['', [Validators.maxLength(6)]],
       state: [{ value: '' }],
@@ -281,11 +282,11 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         }
 
         this.userService.checkUsernameAvailability(username).subscribe({
-          next: (response: ApiResponse<{ available: boolean }>) => {
+          next: (response: ApiResponse<any>) => {
             if (response.status === 200) {
-              if (response.data && response.data.available === false) {
+              if (response.result === false) {
                 const control = this.userDetailsForm.get('username');
-                control?.setErrors({ notAvailable: true }, { emitEvent: true });
+                control?.setErrors({ ...(control?.errors || {}), notAvailable: true }, { emitEvent: true });
                 control?.markAsDirty();
                 control?.markAsTouched();
               } else {
@@ -320,8 +321,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userService.getUserById(parseInt(userIdOrUsername)).subscribe({
       next: (response: ApiResponse<UserDetailed>) => {
         if (response.status === 200) {
-          this.handleUserDataResponse(response.data);
-          this.fetchUserInsight(response.data.id);
+          this.handleUserDataResponse(response.result);
+          this.fetchUserInsight(response.result.id);
         }
         this.isLoading.set(false);
       },
@@ -338,7 +339,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     this.userService.getUserInsight(userId).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          this.userInsight.set(response.data.insight);
+          this.userInsight.set(response.result);
         }
         this.isLoadingInsight.set(false);
       },
@@ -352,7 +353,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private handleUserDataResponse(data: UserDetailed) {
     this.userId = data.id;
     this.fetchedUser.set(data);
-    this.profileImageUrl.set(this.buildImageUrl(data.profile_image_url));
+    this.profileImageUrl.set(this.buildImageUrl(data.profile_photo));
 
     const formData = this.patchForm(data);
     this.userDetailsForm.patchValue(formData);
@@ -368,9 +369,10 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   private buildImageUrl(rawPath: string | null | undefined): string | undefined {
     if (!rawPath) return undefined;
 
-    const baseUrl = environment.apiUrl.endsWith('/')
+    let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;
+    baseUrl = `${baseUrl}/api`;
 
     if (rawPath.startsWith('http')) {
       return `${rawPath}${rawPath.includes('?') ? '&' : '?'}t=${Date.now()}`;
@@ -385,7 +387,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
-      staff_id,
+      staff_no,
       role,
       id_no,
       address,
@@ -407,7 +409,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       fullname,
       shortname,
       username,
-      staff_id,
+      staff_no,
       id_no,
       email,
       phone_no: phone_no || '',
@@ -418,8 +420,8 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       role: role.code,
       status: userStatus.description,
       joined_dt,
-      address_line_1: address?.address_line_1 || '',
-      address_line_2: address?.address_line_2 || '',
+      address_line1: address?.address_line1 || '',
+      address_line2: address?.address_line2 || '',
       city: address?.city || '',
       postcode: address?.postcode || '',
       state: address?.state?.code || '',
@@ -441,15 +443,21 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['admin/users']);
+    this.router.navigate(['system-admin/users']);
   }
 
   onSave() {
     if (this.userDetailsForm.invalid) {
       // Mark all controls as touched and trigger validation updates to notify child components
       Object.values(this.userDetailsForm.controls).forEach((control) => {
+        const hasNotAvailable = control.hasError('notAvailable');
+        
         control.markAllAsTouched();
         control.updateValueAndValidity({ emitEvent: true });
+
+        if (hasNotAvailable) {
+          control.setErrors({ ...(control.errors || {}), notAvailable: true });
+        }
       });
       this.toastService.invalidForm();
       this.cdr.detectChanges();
@@ -479,7 +487,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
     });
 
     if (Object.keys(updateData).length === 0) {
-      this.toastService.info('No changes', 'No modifications were detected.');
+      this.toastService.noChanges();
       return;
     }
 
@@ -489,7 +497,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
         next: (response: ApiResponse<UserDetailed>) => {
           if (response.status === 200) {
             this.toastService.success('Success', 'User updated successfully');
-            this.handleUserDataResponse(response.data);
+            this.handleUserDataResponse(response.result);
           }
           this.isSaving.set(false);
         },
@@ -533,43 +541,21 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       next: (response: ApiResponse<any>) => {
         if (response.status === 201 || response.status === 200) {
           this.toastService.success('Success', this.getTranslation('profile.photo_upload_success'));
-          const d = response.data || {};
-          const path = d.FilePath || d.filePath || d.FileUrl || d.fileUrl || d.Path || d.path;
+          const newProfilePath = response.result;
 
-          if (path) {
+          if (newProfilePath) {
             // Path returned directly — update local signal immediately
-            this.profileImageUrl.set(this.buildImageUrl(path));
-            this.fetchedUser.update((user) => (user ? { ...user, profile_image_url: path } : null));
+            this.profileImageUrl.set(this.buildImageUrl(newProfilePath));
+            this.fetchedUser.update((user) =>
+              user ? { ...user, profile_photo: newProfilePath } : null,
+            );
 
             // Always sync AuthService if editing self so header + sidemenu refresh
             const currentUser = this.authService.currentUser();
             if (currentUser && currentUser.id === this.userId) {
-              this.authService.updateProfileImage(path);
+              this.authService.updateProfileImage(newProfilePath);
             }
             this.cdr.markForCheck();
-          } else {
-            // Path not returned by API — re-fetch the user to get the latest image URL
-            setTimeout(() => {
-              this.userService.getUserById(this.userId!).subscribe({
-                next: (refetchResponse: ApiResponse<UserDetailed>) => {
-                  if (refetchResponse.status === 200) {
-                    const newPath = refetchResponse.data.profile_image_url;
-                    // Use NgZone.run() to ensure OnPush components (header, sidemenu) are notified
-                    this.ngZone.run(() => {
-                      this.profileImageUrl.set(this.buildImageUrl(newPath));
-                      this.fetchedUser.update((user) =>
-                        user ? { ...user, profile_image_url: newPath } : null,
-                      );
-                      // Sync with AuthService if editing self
-                      const currentUser = this.authService.currentUser();
-                      if (currentUser && currentUser.id === this.userId) {
-                        this.authService.updateProfileImage(newPath);
-                      }
-                    });
-                  }
-                },
-              });
-            }, 500);
           }
         }
         this.isUploadingPhoto.set(false);
@@ -616,9 +602,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
               );
               // Directly set the writable signal — guaranteed to trigger OnPush re-render
               this.profileImageUrl.set(undefined);
-              this.fetchedUser.update((user) =>
-                user ? { ...user, profile_image_url: null } : null,
-              );
+              this.fetchedUser.update((user) => (user ? { ...user, profile_photo: null } : null));
 
               // Sync with AuthService if it's the current user
               const currentUser = this.authService.currentUser();

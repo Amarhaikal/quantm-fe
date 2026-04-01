@@ -4,62 +4,17 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'quantm-frontend'
         DOCKER_TAG = "${BUILD_NUMBER}"
-        COMPOSE_PROJECT_NAME = 'quantm'
-        DEPLOY_DIR = '/var/www/quantm/quantm-fe'
+        FE_PORT = "4200"
+        NGINX_CONFIG = '/etc/nginx/sites-available/quantm-fe'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
                     echo "Building Docker image ${DOCKER_IMAGE}:${DOCKER_TAG}..."
-                    sh """
-                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
-                        docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
-                    """
-                }
-            }
-        }
-
-        stage('Stop Old Containers') {
-            steps {
-                script {
-                    echo 'Stopping old containers...'
-                    sh """
-                        if [ -d "${DEPLOY_DIR}" ]; then
-                            cd ${DEPLOY_DIR}
-                            docker stop ${DOCKER_IMAGE} || true
-                            docker rm ${DOCKER_IMAGE} || true
-                            docker compose down || true
-                        fi
-                    """
-                }
-            }
-        }
-
-        stage('Sync Code to Deployment Directory') {
-            steps {
-                script {
-                    echo "Syncing code from workspace to deployment directory: ${DEPLOY_DIR}..."
-                    sh """
-                        # Create deployment directory if it doesn't exist
-                        mkdir -p ${DEPLOY_DIR}
-                        
-                        # Sync all needed files
-                        rsync -av --delete \
-                            --exclude='.git' \
-                            --exclude='node_modules' \
-                            --exclude='dist' \
-                            ${WORKSPACE}/ ${DEPLOY_DIR}/
-                        
-                        echo 'Code sync completed!'
-                    """
+                    sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
             }
         }
@@ -67,22 +22,39 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo 'Deploying new containers...'
-                    sh """
-                        cd ${DEPLOY_DIR}
-                        docker compose up -d
-                    """
+                    echo "Deploying Quantm-FE..."
+                    sh "docker compose up -d --force-recreate quantm-fe"
                 }
             }
         }
 
-        stage('Cleanup') {
+        stage('Health Check') {
             steps {
                 script {
-                    echo 'Cleaning up old images...'
-                    sh """
-                        docker image prune -f
-                    """
+                    echo "Waiting for health check on port ${FE_PORT}..."
+                    timeout(time: 2, unit: 'MINUTES') {
+                        sh """
+                        until \$(curl --output /dev/null --silent --head --fail http://127.0.0.1:${FE_PORT}); do
+                            printf '.'
+                            sleep 5
+                        done
+                        """
+                    }
+                    echo "Health check PASSED!"
+                }
+            }
+        }
+
+        stage('Ensure Nginx Config') {
+            steps {
+                script {
+                    echo "Ensuring Nginx config is pointing to 127.0.0.1:${env.FE_PORT}..."
+                    
+                    // Update only the frontend proxy_pass line (marked with # FE_PORT)
+                    sh "sudo sed -i -E '/# FE_PORT/s|proxy_pass http://[^;]+;|proxy_pass http://127.0.0.1:${env.FE_PORT};|' ${NGINX_CONFIG}"
+                    
+                    sh "sudo nginx -t"
+                    sh "sudo systemctl reload nginx"
                 }
             }
         }
@@ -90,11 +62,12 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment successful!'
+            echo "Successfully deployed Quantm-FE 🏆"
+            sh "docker image prune -f"
         }
         failure {
-            echo 'Deployment failed!'
-            sh "docker compose logs ${DOCKER_IMAGE} || true"
+            echo "Deployment failed. Check docker logs for more info."
+            sh "docker logs quantm-fe --tail 50 || true"
         }
     }
 }

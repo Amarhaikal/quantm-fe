@@ -89,14 +89,23 @@
           </div>
         }
 
-        <p-button
-          [label]="'login.submit' | transloco"
-          type="submit"
-          [fluid]="true"
-          size="large"
-          [loading]="loading()"
-          styleClass="py-3 font-bold text-white bg-blue-600! rounded-xl border-blue-600! hover:bg-blue-700! hover:border-blue-700!"
-        ></p-button>
+        <div class="relative w-full">
+          @if (lastUsedMethod() === 'password') {
+            <lib-badge
+              [label]="'login.last_used' | transloco"
+              severity="dark"
+              class="absolute -top-3 -right-2 z-20 pointer-events-none"
+            ></lib-badge>
+          }
+          <p-button
+            [label]="'login.submit' | transloco"
+            type="submit"
+            [fluid]="true"
+            size="large"
+            [loading]="loading()"
+            styleClass="py-3 font-bold text-white bg-blue-600! rounded-xl border-blue-600! hover:bg-blue-700! hover:border-blue-700!"
+          ></p-button>
+        </div>
 
         <div class="flex items-center gap-4 my-2">
           <div class="h-px bg-gray-200 flex-1"></div>
@@ -106,17 +115,26 @@
           <div class="h-px bg-gray-200 flex-1"></div>
         </div>
 
-        <p-button
-          label="Microsoft"
-          type="button"
-          icon="pi pi-microsoft"
-          [fluid]="true"
-          size="large"
-          [loading]="loading()"
-          severity="secondary"
-          (onClick)="loginWithMicrosoft()"
-          styleClass="py-3 font-bold text-gray-700! bg-gray-50! border border-solid border-gray-200! rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:bg-gray-100!"
-        ></p-button>
+        <div class="relative w-full">
+          @if (lastUsedMethod() === 'microsoft') {
+            <lib-badge
+              [label]="'login.last_used' | transloco"
+              severity="dark"
+              class="absolute -top-3 -right-2 z-20 pointer-events-none"
+            ></lib-badge>
+          }
+          <p-button
+            label="Microsoft"
+            type="button"
+            icon="pi pi-microsoft"
+            [fluid]="true"
+            size="large"
+            [loading]="loading()"
+            severity="secondary"
+            (onClick)="loginWithMicrosoft()"
+            styleClass="py-3 font-bold text-gray-700! bg-gray-50! border border-solid border-gray-200! rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:bg-gray-100!"
+          ></p-button>
+        </div>
       </form>
 
       <div class="mt-12 text-center">

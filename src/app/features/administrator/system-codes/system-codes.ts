@@ -11,7 +11,7 @@ import { PageHeaderComponent } from '../../../shared/components/layout/page-head
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
 import { SearchComponent } from '../../../shared/components/layout/search/search';
 import { BaseBulkCrudDirective, BulkCrudApi } from '../../../core/base/base-bulk-crud.directive';
-import { CodeTypeService } from '../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../core/services/system-code.service';
 import { SystemCode } from '../../../core/models/code-type.model';
 import { TableColumn } from '../../../shared/components/data/table/table.model';
 import { CrudUtils } from '../../../core/utils/crud.utils';
@@ -35,29 +35,31 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   styleUrl: './system-codes.css',
 })
 export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
 
   // ─── Data ─────────────────────────────────────────────────────────────
   systemCodes = signal<SystemCode[]>([]);
 
   // ─── Bulk CRUD Config ─────────────────────────────────────────────────
-  editableFields = ['code_type', 'code', 'description'];
+  editableFields = ['system_code_type', 'code', 'description'];
 
   override bulkCrudApi: BulkCrudApi = {
-    bulkCreate: (payload) => this.codeTypeService.createSystemCodes(payload),
-    bulkUpdate: (payload) => this.codeTypeService.updateSystemCodes(payload),
-    bulkDelete: (ids) => this.codeTypeService.deleteSystemCodes(ids),
+    bulkCreate: (payload) =>
+      this.systemCodeService.createSystemCodes(payload.map((r) => this.toApiPayload(r))),
+    bulkUpdate: (payload) =>
+      this.systemCodeService.updateSystemCodes(payload.map((r) => this.toApiPayload(r))),
+    bulkDelete: (ids) => this.systemCodeService.deleteSystemCodes(ids),
   };
 
   // ─── Search ───────────────────────────────────────────────────────────
   searchForm = this.fb.group({
-    code_type: [''],
+    system_code_type: [''],
     code: ['', [Validators.maxLength(10)]],
     description: ['', [Validators.minLength(3), Validators.maxLength(60)]],
   });
 
   codeTypesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.codeTypes().map((ct) => ({
+    return this.systemCodeService.systemCodes().map((ct) => ({
       value: ct.code,
       label: ct.code + ' - ' + ct.description,
     }));
@@ -66,8 +68,8 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   // ─── Columns ──────────────────────────────────────────────────────────
   columns = computed<TableColumn[]>(() => [
     {
-      field: 'code_type',
-      header: 'label.code_type',
+      field: 'system_code_type',
+      header: 'label.system_code_type',
       width: '300px',
       editable: true,
       required: true,
@@ -138,16 +140,17 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
       apiParams.sort_order = this.sortOrder() === 1 ? 'asc' : 'desc';
     }
 
-    this.codeTypeService.getSystemCodesList(apiParams).subscribe({
+    this.systemCodeService.getSystemCodesList(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const data = response.data.list.map((item: any) => {
+        const data = response.result.data.map((item: any) => {
           return {
             ...item,
-            code_type: item.code_type.code + ' - ' + item.code_type.description,
+            system_code_type:
+              item.system_code_type.code + ' - ' + item.system_code_type.description,
           };
         });
         this.systemCodes.set(data);
-        this.totalRecords.set(response.data.total_count);
+        this.totalRecords.set(response.result.total_count);
         this.loading.set(false);
       },
       error: (error: unknown) => {
@@ -158,9 +161,9 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
 
   // ─── Add Row ──────────────────────────────────────────────────────────
   addSystemCode() {
-    const defaultCodeType = this.searchForm.get('code_type')?.value || '';
+    const defaultCodeType = this.searchForm.get('system_code_type')?.value || '';
     this.addNewRow(this.systemCodes, {
-      code_type: defaultCodeType,
+      system_code_type: defaultCodeType,
       code: '',
       description: '',
       created_by: null,
@@ -173,8 +176,8 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   // ─── Overrides ────────────────────────────────────────────────────────
   /** Override onEdit to parse the formatted "CODE - DESCRIPTION" back to the code value. */
   override onEdit(rowData: any) {
-    if (rowData.code_type && rowData.code_type.includes(' - ')) {
-      rowData.code_type = rowData.code_type.split(' - ')[0];
+    if (rowData.system_code_type && rowData.system_code_type.includes(' - ')) {
+      rowData.system_code_type = rowData.system_code_type.split(' - ')[0];
     }
     super.onEdit(rowData);
   }
@@ -182,6 +185,17 @@ export class SystemCodes extends BaseBulkCrudDirective implements OnInit {
   /** Override onCancel to pass the systemCodes signal. */
   override onCancel(rowData: any) {
     super.onCancel(rowData, this.systemCodes);
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────
+  /** Transforms the flat payload into the API-expected shape. */
+  private toApiPayload(row: Record<string, any>): Record<string, any> {
+    const { system_code_type, ...rest } = row;
+    const payload: Record<string, any> = { ...rest };
+    if (system_code_type !== undefined) {
+      payload['system_code_type'] = { code: system_code_type };
+    }
+    return payload;
   }
 
   // ─── Search ───────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { SessionActivityService } from '../../../core/services/session-activity.service';
 import { FormBuilder } from '@angular/forms';
-import { CodeTypeService } from '../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../core/services/system-code.service';
 import {
   DropdownComponent,
   OptionDropdown,
@@ -38,7 +38,7 @@ import { environment } from '../../../../environments/environment';
 export class SessionActivities implements OnInit {
   private sessionActivityService = inject(SessionActivityService);
   protected fb = inject(FormBuilder);
-  protected codeTypeService = inject(CodeTypeService);
+  protected systemCodeService = inject(SystemCodeService);
   private confirmService = inject(ConfirmService);
 
   loading = signal<boolean>(false);
@@ -76,8 +76,8 @@ export class SessionActivities implements OnInit {
     {
       field: 'username',
       header: 'label.username',
-      type: 'avatarText',
-      imageField: 'profile_image_url',
+      // type: 'avatarText',
+      // imageField: 'profile_photo',
     },
     {
       field: 'created_at',
@@ -149,8 +149,8 @@ export class SessionActivities implements OnInit {
     this.sessionActivityService.getSessionActivities(apiParams).subscribe({
       next: (response) => {
         this.loading.set(false);
-        this.data.set(this.refactorData(response.data.list));
-        this.totalRecords.set(response.data.total_count);
+        this.data.set(this.refactorData(response.result.data));
+        this.totalRecords.set(response.result.total_count);
       },
       error: (error) => {
         this.loading.set(false);
@@ -159,17 +159,23 @@ export class SessionActivities implements OnInit {
   }
 
   refactorData(data: any[]) {
+    const baseUrl = environment.apiUrl.endsWith('/')
+      ? environment.apiUrl.slice(0, -1)
+      : environment.apiUrl;
     return data.map((item: any) => ({
       ...item,
-      username: item.user?.username,
-      profile_image_url: item.user?.profile_image_url
-        ? `${environment.apiUrl}${item.user.profile_image_url}`
-        : null,
+      username: item.username,
+      // profile_photo: item.user?.profile_photo
+      //   ? `${baseUrl}/api${item.user.profile_photo.startsWith('/') ? item.user.profile_photo : '/' + item.user.profile_photo}`
+      //   : null,
       // role: item.user?.role?.description,
+      is_active_raw: item.is_active,
       is_active_severity: CrudUtils.getStatusSeverity(item.is_active ? 'A' : 'I'),
       is_active: item.is_active ? 'Active' : 'Inactive',
     }));
   }
+
+  showDeleteFn = (row: any) => row.is_active_raw === true;
 
   handleSort(event: any) {
     this.sortField.set(event.field);

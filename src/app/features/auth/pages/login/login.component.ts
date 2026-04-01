@@ -18,6 +18,9 @@ import { TranslocoPipe } from '@ngneat/transloco';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
+import { BadgeComponent } from '../../../../shared/components/data/badge/badge';
+
+const LAST_LOGIN_METHOD_KEY = 'last_login_method';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +33,7 @@ import { MsalService } from '@azure/msal-angular';
     FloatLabel,
     NgOptimizedImage,
     TranslocoPipe,
+    BadgeComponent,
   ],
   providers: [],
   templateUrl: './login.component.html',
@@ -50,6 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loading = signal(false);
   errorMessage = signal<string | null>(null);
+  lastUsedMethod = signal<'password' | 'microsoft' | null>(null);
 
   slides = [
     {
@@ -80,8 +85,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   private intervalId: any;
 
   ngOnInit() {
+    console.log('deployed 12:59 pm');
+
     if (isPlatformBrowser(this.platformId)) {
       this.startSlider();
+
+      // Check for last used login method
+      const lastMethod = localStorage.getItem(LAST_LOGIN_METHOD_KEY) as
+        | 'password'
+        | 'microsoft'
+        | null;
+      if (lastMethod) {
+        this.lastUsedMethod.set(lastMethod);
+      }
 
       // If we're returning from a Microsoft redirect, show loading immediately
       // before MSAL even gets a chance to process the token, because that
@@ -98,6 +114,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.loading.set(true);
             this.authService.loginWithMicrosoft(result.idToken).subscribe({
               next: () => {
+                localStorage.setItem(LAST_LOGIN_METHOD_KEY, 'microsoft');
                 this.loading.set(false);
                 this.router.navigate(['/']);
               },
@@ -166,6 +183,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.authService.login({ username, password }).subscribe({
         next: (res) => {
+          localStorage.setItem(LAST_LOGIN_METHOD_KEY, 'password');
           this.loading.set(false);
           this.router.navigate(['/']);
         },

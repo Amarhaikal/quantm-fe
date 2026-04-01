@@ -1,0 +1,154 @@
+<lib-page-container>
+  <lib-page-header title="customers.title" />
+
+  <div class="flex flex-col gap-6">
+    <div class="w-full" [formGroup]="searchForm">
+      <lib-search (reset)="resetSearch()">
+        <lib-textbox label="label.full_name" formControlName="fullname" [isSearching]="true" />
+        <lib-textbox label="label.reg_no" formControlName="reg_no" [isSearching]="true" />
+        <lib-dropdown
+          label="label.customer_type"
+          formControlName="customer_type"
+          [options]="customerTypeOptions()"
+          [isSearching]="true"
+        />
+      </lib-search>
+    </div>
+
+    <!-- Action Button (Between Search and Table) -->
+    <div class="flex justify-between items-center">
+      <div class="flex gap-2">
+        <button
+          type="button"
+          class="p-2 rounded-md transition-colors flex items-center justify-center border-none"
+          [class.bg-white]="viewMode() === 'table'"
+          [class.shadow-sm]="viewMode() === 'table'"
+          (click)="toggleView('table')"
+          title="Table View"
+        >
+          <i class="pi pi-list text-xl"></i>
+        </button>
+        <button
+          type="button"
+          class="p-2 rounded-md transition-colors flex items-center justify-center border-none"
+          [class.bg-white]="viewMode() === 'card'"
+          [class.shadow-sm]="viewMode() === 'card'"
+          (click)="toggleView('card')"
+          title="Card View"
+        >
+          <i class="pi pi-th-large text-xl"></i>
+        </button>
+      </div>
+      <lib-button type="ADD" (click)="addCustomer()" />
+    </div>
+
+    <!-- Table/Card Section -->
+    <div class="w-full">
+      @if (viewMode() === 'table') {
+        <lib-table
+          [columns]="columns"
+          [data]="customers()"
+          [loading]="loading()"
+          actionType="DETAILS_DELETE"
+          [totalRecords]="totalRecords()"
+          [rows]="pageSize()"
+          [first]="(pageNo() - 1) * pageSize()"
+          (onPageChange)="handlePageChange($event)"
+          (onSort)="handleSort($event)"
+          (onView)="onView($event)"
+          (onDelete)="handleDelete($event)"
+        />
+      } @else {
+        <lib-card-list
+          [data]="customers()"
+          [totalRecords]="totalRecords()"
+          [rows]="pageSize()"
+          [first]="(pageNo() - 1) * pageSize()"
+          [loading]="loading()"
+          (onPageChange)="handlePageChange($event)"
+        >
+          <ng-template #cardTemplate let-customer>
+            <div
+              class="h-full border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex flex-col"
+            >
+              <!-- Card Content -->
+              <div class="p-5 flex flex-col gap-4 flex-1">
+                <div class="flex items-start gap-4">
+                  <!-- Avatar -->
+                  <div class="shrink-0">
+                    <p-avatar
+                      [image]="customer.profile_photo"
+                      [icon]="!customer.profile_photo ? 'pi pi-user' : ''"
+                      size="xlarge"
+                      shape="circle"
+                      [styleClass]="
+                        !customer.profile_photo
+                          ? 'bg-gray-100 text-gray-600 !w-16 !h-16 text-2xl'
+                          : '!w-16 !h-16 text-2xl'
+                      "
+                    />
+                  </div>
+
+                  <!-- Info Container -->
+                  <div class="flex flex-col flex-1 min-w-0">
+                    <!-- Name & Reg No -->
+                    <div class="flex justify-between items-start gap-2">
+                      <div class="flex flex-col min-w-0">
+                        <h3
+                          class="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors truncate"
+                        >
+                          {{ customer.fullname }}
+                        </h3>
+                        <p class="text-sm text-gray-500 truncate">{{ customer.reg_no }}</p>
+                      </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="space-y-2 mt-3 text-sm text-gray-600">
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-tag text-gray-400 shrink-0"></i>
+                        <span class="truncate">{{ customer.customer_type }}</span>
+                      </div>
+                      @if (customer.email) {
+                        <div class="flex items-center gap-2">
+                          <i class="pi pi-envelope text-gray-400 shrink-0"></i>
+                          <span class="truncate">{{ customer.email }}</span>
+                        </div>
+                      }
+                      @if (customer.phone_no) {
+                        <div class="flex items-center gap-2">
+                          <i class="pi pi-phone text-gray-400 shrink-0"></i>
+                          <span class="truncate">{{ customer.phone_no }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer: Actions -->
+                <div class="mt-auto pt-3 border-t border-gray-100 flex justify-end gap-2">
+                  <lib-button
+                    size="sm"
+                    variant="ghost"
+                    icon="pi pi-eye"
+                    (click)="onView(customer)"
+                    class="text-indigo-600 hover:bg-indigo-50"
+                    title="Details"
+                  />
+                  <lib-button
+                    size="sm"
+                    variant="ghost"
+                    icon="pi pi-trash"
+                    (click)="handleDelete(customer)"
+                    class="text-rose-600 hover:bg-rose-50"
+                    title="Delete"
+                  />
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </lib-card-list>
+      }
+    </div>
+  </div>
+</lib-page-container>

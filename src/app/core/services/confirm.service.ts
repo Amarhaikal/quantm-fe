@@ -82,8 +82,39 @@ export class ConfirmService {
     });
   }
 
+  confirmIdleWarning(onStayLoggedIn: () => void, onLogoutNow: () => void) {
+    this.confirmationService.confirm({
+      message: this.translocoService.translate('confirm.idle_warning.message'),
+      header: this.translocoService.translate('confirm.idle_warning.header'),
+      icon: 'pi pi-clock',
+      rejectLabel: this.translocoService.translate('confirm.idle_warning.reject'),
+      acceptLabel: this.translocoService.translate('confirm.idle_warning.accept'),
+      rejectButtonProps: {
+        label: this.translocoService.translate('confirm.idle_warning.reject'),
+        severity: 'primary',
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: this.translocoService.translate('confirm.idle_warning.accept'),
+        severity: 'danger',
+        outlined: true,
+        size: 'small',
+      },
+      accept: () => {
+        onLogoutNow();
+      },
+      reject: () => {
+        onStayLoggedIn();
+      },
+    });
+  }
+
   confirm(options: any) {
     this.confirmationService.confirm(options);
+  }
+
+  close() {
+    this.confirmationService.close();
   }
 
   confirmDiscardChanges(): Observable<boolean> {

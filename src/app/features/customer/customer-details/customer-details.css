@@ -1,0 +1,306 @@
+/* =====================
+   Profile Card
+   ===================== */
+.profile-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(120deg, #3730a3 0%, #4338ca 50%, #4f46e5 100%);
+  padding: 2rem 2.3rem;
+  box-shadow:
+    0 20px 40px -8px rgba(55, 48, 163, 0.4),
+    0 4px 12px -2px rgba(55, 48, 163, 0.15);
+}
+
+/* Subtle diagonal stripe texture */
+.profile-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  pointer-events: none;
+}
+
+/* Inner layout */
+.profile-card__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 1024px) {
+  .profile-card__content {
+    align-items: flex-start;
+  }
+}
+
+
+/* Avatar wrapper */
+.profile-card__avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Avatar circle */
+.profile-card__avatar-ring {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    0 0 0 6px rgba(255, 255, 255, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card__avatar-wrapper:hover .profile-card__avatar-ring {
+  transform: scale(1.05);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* Hover edit overlay on avatar */
+.profile-card__avatar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.profile-card__avatar-wrapper:hover .profile-card__avatar-overlay {
+  opacity: 1;
+}
+
+/* Text block */
+.profile-card__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .profile-card__info {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+}
+
+.profile-card__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 250px;
+}
+
+@media (min-width: 1024px) {
+  .profile-card__identity {
+    padding-top: 0.5rem;
+  }
+}
+
+.profile-card__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.profile-card__username {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.01em;
+}
+
+.profile-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .profile-card__badges {
+    margin-top: 1.25rem;
+  }
+}
+
+.profile-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.01em;
+  transition: background 0.2s ease;
+}
+
+.profile-card__badge:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.profile-card__badge--status {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Skeleton variant */
+.profile-card--skeleton {
+  background: linear-gradient(120deg, #3730a3 0%, #4338ca 100%);
+  opacity: 0.65;
+}
+
+/* =====================
+   AI Insight Section
+   ===================== */
+.profile-card__insight-container {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .profile-card__insight-container {
+    margin-top: 0;
+  }
+}
+
+.insight-box {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.insight-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #818cf8, #c084fc);
+}
+
+.insight-box:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(4px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.insight-box__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.insight-box__icon {
+  color: #c084fc;
+  font-size: 1rem;
+  animation: sparkle-rotate 3s linear infinite;
+}
+
+.insight-box__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.insight-box__text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Insight Skeleton */
+.insight-skeleton {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.insight-skeleton__sparkle {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 100%
+  );
+  animation: skeleton-sparkle 2.5s infinite linear;
+}
+
+.insight-sparkle-icon {
+  animation: pulse-opacity 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-sparkle {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(50%); }
+}
+
+@keyframes sparkle-rotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+::ng-deep .insight-skeleton .p-skeleton {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .insight-skeleton .p-skeleton::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent) !important;
+}

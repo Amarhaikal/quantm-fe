@@ -16,14 +16,9 @@ export interface SystemCodeReference {
 }
 
 export interface CodeType {
-  id: number;
   code: string;
   description: string;
-  system_codes: SystemCode[];
-  created_by: string | null;
-  created_at: string;
-  updated_by: string | null;
-  updated_at: string | null;
+  codes: SystemCodeReference[];
 }
 
 export type CodeTypeResponse = ApiResponse<CodeType[]>;

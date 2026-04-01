@@ -16,7 +16,7 @@ import { PageContainerComponent } from '../../../shared/components/layout/page-c
 import { SearchComponent } from '../../../shared/components/layout/search/search';
 import { UserService } from '../../../core/services/user.service';
 import { ApiResponse } from '../../../core/models/api.model';
-import { CodeTypeService } from '../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../core/services/system-code.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { BaseListDirective } from '../../../core/base/base-list.directive';
@@ -46,7 +46,7 @@ export class Users extends BaseListDirective implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private userService = inject(UserService);
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
   private confirmService = inject(ConfirmService);
 
   users = signal<any[]>([]);
@@ -68,14 +68,14 @@ export class Users extends BaseListDirective implements OnInit {
   });
 
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role) => ({
       value: role.code,
       label: role.description,
     }));
   });
 
   statusOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_STATUS).map((role) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.USER_STATUS).map((role) => ({
       value: role.code,
       label: role.description,
     }));
@@ -86,10 +86,10 @@ export class Users extends BaseListDirective implements OnInit {
       field: 'username',
       header: 'label.username',
       type: 'avatarText',
-      imageField: 'profile_image_url',
+      imageField: 'profile_photo',
     },
     { field: 'fullname', header: 'label.full_name' },
-    { field: 'staff_id', header: 'label.staff_id' },
+    { field: 'staff_no', header: 'label.staff_no' },
     { field: 'role', header: 'label.role' },
     { field: 'status', header: 'label.status', type: 'badge', textAlign: 'center' },
   ];
@@ -122,17 +122,18 @@ export class Users extends BaseListDirective implements OnInit {
 
     this.userService.getUsers(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        const mappedData = response.data.list.map((user: any) => ({
+        const baseUrl = environment.apiUrl.endsWith('/')
+          ? environment.apiUrl.slice(0, -1)
+          : environment.apiUrl;
+        const mappedData = response.result.data.map((user: any) => ({
           ...user,
           role: user.role?.description,
           status: user.status?.description,
           status_severity: CrudUtils.getStatusSeverity(user.status?.code),
-          profile_image_url: user.profile_image_url
-            ? `${environment.apiUrl}${user.profile_image_url}`
-            : null,
+          profile_photo: user.profile_photo ? `${baseUrl}/api${user.profile_photo}` : null,
         }));
         this.users.set(mappedData);
-        this.totalRecords.set(response.data.total_count);
+        this.totalRecords.set(response.result.total_count);
         this.loading.set(false);
       },
       error: (error: unknown) => {

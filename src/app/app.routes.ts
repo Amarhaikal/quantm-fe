@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
+import { menuGuard } from './core/guards/menu.guard';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
@@ -7,6 +8,7 @@ export const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],
+    canActivateChild: [menuGuard],
     children: [
       {
         path: '',
@@ -19,11 +21,16 @@ export const routes: Routes = [
           import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
       },
       {
-        path: 'admin',
+        path: 'system-admin',
         loadChildren: () =>
           import('./features/administrator/administrator.routes').then(
             (m) => m.ADMINISTRATOR_ROUTES,
           ),
+      },
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/customer/customer.routes').then((m) => m.CUSTOMER_ROUTES),
       },
     ],
   },

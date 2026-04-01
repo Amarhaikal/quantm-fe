@@ -62,6 +62,7 @@ export class TableComponent {
   totalRecords = input<number>(0);
   rows = input<number>(10);
   first = input<number>(0);
+  showDeleteFn = input<((row: any) => boolean) | null>(null);
 
   onRowSelect = output<any>();
   onPageChange = output<any>();
@@ -84,9 +85,6 @@ export class TableComponent {
 
   handleView(rowData: any, event: Event) {
     event.stopPropagation();
-    // For now, assuming the user list and generic ID usage
-    // The user specifically asked to route to admin/users/:id
-    this.router.navigate(['admin/users', rowData.id || rowData.username]);
     this.onView.emit(rowData);
   }
 

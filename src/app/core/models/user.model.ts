@@ -5,16 +5,16 @@ export interface UserMiniProfile {
   fullname: string;
   username: string;
   shortname: string;
-  profile_image_url: string | null;
+  profile_photo: string | null;
 }
 
 export interface UserDetailed {
   id: number;
   fullname: string;
   username: string;
-  staff_id: string;
+  staff_no: string;
   shortname: string;
-  profile_image_url: string | null;
+  profile_photo: string | null;
   email: string;
   phone_no: string;
   gender: SystemCodeReference;
@@ -26,8 +26,8 @@ export interface UserDetailed {
   designation: string;
   remarks: string;
   address: {
-    address_line_1: string;
-    address_line_2: string;
+    address_line1: string;
+    address_line2: string;
     city: string;
     postcode: string;
     state: SystemCodeReference;
@@ -42,16 +42,12 @@ export interface UserDetailed {
 export type UserMiniProfileResponse = ApiResponse<UserMiniProfile>;
 export type UserResponse = ApiResponse<UserDetailed>;
 
-export interface UserInsight {
-  insight: string;
-}
-
-export type UserInsightResponse = ApiResponse<UserInsight>;
+export type UserInsightResponse = ApiResponse<string>;
 
 export interface UserUpdateDto {
   fullname?: string;
   shortname?: string;
-  staff_id?: string;
+  staff_no?: string;
   gender?: { code: string };
   role?: { code: string };
   status?: { code: string };
@@ -63,8 +59,8 @@ export interface UserUpdateDto {
   designation?: string;
   s?: string;
   address?: {
-    address_line_1?: string;
-    address_line_2?: string;
+    address_line1?: string;
+    address_line2?: string;
     city?: string;
     postcode?: string;
     state?: { code: string };

@@ -1,5 +1,6 @@
 {
     "login": {
+        "last_used": "Terakhir Digunakan",
         "title": "Log Masuk ke",
         "welcome": "Selamat Kembali! Masukkan kredibiliti anda untuk mengakses papan pemuka anda",
         "username": "Nama Pengguna atau Emel",
@@ -29,7 +30,7 @@
         "dashboard": "Papan Pemuka",
         "settings": "Tetapan",
         "profile": "Profil",
-        "administrator": "Pentadbir",
+        "system administrator": "Pentadbir Sistem",
         "users": "Pengguna",
         "roles": "Peranan",
         "system codes": "Kod Sistem",
@@ -39,7 +40,12 @@
         "search": "Cari menu...",
         "no_results": "Menu tidak dijumpai",
         "session activities": "Aktiviti Sesi",
-        "rates": "Kadar"
+        "rates": "Kadar",
+        "customers": "Pelanggan",
+        "add_customer": "Tambah Pelanggan",
+        "customer_details": "Butiran Pelanggan",
+        "facilities": "Kemudahan",
+        "products": "Produk"
     },
     "profile": {
         "title": "Profil Saya",
@@ -67,7 +73,7 @@
         "full_name": "Nama Penuh",
         "short_name": "Nama Pendek",
         "username": "Nama Pengguna",
-        "staff_id": "No. Staf",
+        "staff_no": "No. Staf",
         "id_no": "No. ID",
         "email": "Emel",
         "gender": "Jantina",
@@ -93,7 +99,7 @@
         "password": "Kata Laluan",
         "actions": "Tindakan",
         "code_types": "Jenis Kod",
-        "code_type": "Jenis Kod",
+        "system_code_type": "Jenis Sistem Kod",
         "code": "Kod",
         "description": "Penerangan",
         "logged_in_at": "Log Masuk Pada",
@@ -107,12 +113,26 @@
         "last_activity_date": "Tarikh Aktiviti Terakhir",
         "rate_type": "Jenis Kadar",
         "rate": "Kadar",
+        "reg_no": "No. Pendaftaran",
+        "customer_type": "Jenis Pelanggan",
+        "no_data": "Tiada Data",
+        "nationality": "Warganegara",
+        "share_type": "Jenis Saham",
+        "num_shares": "Bilangan Saham",
+        "percentage": "Peratusan",
+        "percentage_shares": "Peratusan Saham",
+        "add_shareholder": "Tambah Pemegang Saham",
+        "edit_shareholder": "Kemaskini Pemegang Saham",
+        "add_director": "Tambah Pengarah",
+        "edit_director": "Kemaskini Pengarah",
+        "asset_type": "Jenis Aset",
+        "facility": "Kemudahan",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
             "full_name": "Masukkan Nama Penuh",
             "short_name": "Masukkan Nama Pendek",
-            "staff_id": "Masukkan No. Staf",
+            "staff_no": "Masukkan No. Staf",
             "id_no": "000000-00-0000",
             "email": "Masukkan Emel",
             "phone_no": "Masukkan Nombor Telefon",
@@ -127,7 +147,8 @@
             "remarks": "Masukkan Catatan",
             "username": "Masukkan Nama Pengguna",
             "role": "Pilih Peranan",
-            "password": "Masukkan Kata Laluan"
+            "password": "Masukkan Kata Laluan",
+            "customer_no": "No. Pelanggan"
         }
     },
     "option": {
@@ -181,6 +202,12 @@
             "message": "Adakah anda pasti mahu menamatkan sesi ini?",
             "accept": "Tamatkan",
             "reject": "Batal"
+        },
+        "idle_warning": {
+            "header": "Sesi Hampir Tamat",
+            "message": "Anda telah tidak aktif selama 28 minit. Sesi anda akan tamat dalam 2 minit. Adakah anda mahu kekal log masuk?",
+            "accept": "Log Keluar Sekarang",
+            "reject": "Kekal Log Masuk"
         }
     },
     "validation": {

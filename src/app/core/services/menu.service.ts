@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap, of } from 'rxjs';
 import { ApiService } from './api.service';
 import { UserResponse } from '../models/user.model';
 
@@ -11,6 +11,7 @@ export class MenuService {
 
   isSidebarVisible = signal<boolean>(true);
   isDesktop = signal<boolean>(true);
+  cachedMenu = signal<any[] | null>(null);
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -32,7 +33,22 @@ export class MenuService {
     this.isSidebarVisible.update((v) => !v);
   }
 
-  getMenu(): Observable<UserResponse> {
-    return this.api.get<UserResponse>('menu');
+  getMenu(forceRefresh = false): Observable<any> {
+    const cached = this.cachedMenu();
+    if (!forceRefresh && cached) {
+      return of({ status: 200, result: cached, message: 'Menus retrieved from cache' });
+    }
+    
+    return this.api.get<any>('menus').pipe(
+      tap((res) => {
+        if (res.status === 200) {
+          this.cachedMenu.set(res.result);
+        }
+      })
+    );
+  }
+  
+  clearMenuCache() {
+    this.cachedMenu.set(null);
   }
 }

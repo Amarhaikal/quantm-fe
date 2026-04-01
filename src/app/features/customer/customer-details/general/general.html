@@ -1,0 +1,75 @@
+@if (loading()) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+    @for (i of [1, 2, 3]; track i) {
+      <div>
+        <p-skeleton width="40%" class="mb-2" />
+        <p-skeleton height="2rem" borderRadius="6px" />
+      </div>
+    }
+  </div>
+} @else {
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSave()"
+    class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4"
+  >
+    <lib-textbox label="label.full_name" formControlName="fullname" />
+
+    <lib-textbox label="label.reg_no" formControlName="reg_no" />
+
+    <lib-textbox label="label.customer_no" formControlName="customer_no" />
+
+    <lib-textbox label="label.customer_type" formControlName="customer_type" />
+
+    <lib-textbox label="label.email" formControlName="email" type="email" />
+
+    <lib-textbox label="label.phone_no" formControlName="phone_no" />
+
+    @if (isCompany()) {
+      <lib-dropdown
+        label="label.company_type"
+        formControlName="company_type"
+        [options]="companyTypeOptions()"
+      />
+
+      <lib-dropdown
+        label="label.department"
+        formControlName="department"
+        [options]="departmentOptions()"
+      />
+
+      <lib-datepicker label="label.start_operation_date" formControlName="start_operation_date" />
+
+      <lib-numeric
+        label="label.no_of_employees"
+        formControlName="no_of_employees"
+        numericType="integer"
+      />
+
+      <lib-numeric
+        label="label.last_revenue_reported"
+        formControlName="last_revenue_reported"
+        numericType="currency"
+      />
+    }
+
+    <lib-audit-info [data]="originalData" class="md:col-span-2 mt-2" />
+
+    <!-- Action Buttons -->
+    <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-4 md:col-span-2">
+      <lib-button type="SAVE" htmlType="submit" [loading]="saving()" />
+    </div>
+  </form>
+
+  <p-scrollTop threshold="200" icon="pi pi-chevron-up" />
+  @if (showScrollDown()) {
+    <button
+      type="button"
+      class="scroll-down-btn shadow-lg"
+      (click)="scrollToBottom()"
+      aria-label="Scroll to bottom"
+    >
+      <i class="pi pi-chevron-down"></i>
+    </button>
+  }
+}

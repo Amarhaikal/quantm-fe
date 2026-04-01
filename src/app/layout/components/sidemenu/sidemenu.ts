@@ -76,7 +76,7 @@ export class Sidemenu implements OnInit {
     fullname: string;
     shortname: string;
     username: string;
-    profile_image_url: string | null;
+    profile_photo: string | null;
   } | null>(null);
   menuData = signal<any[]>([]);
   isLoading = signal<boolean>(true);
@@ -136,11 +136,11 @@ export class Sidemenu implements OnInit {
     this.menuService.getMenu().subscribe({
       next: (response: any) => {
         if (response.status === 200) {
-          this.menuData.set(response.data);
+          this.menuData.set(response.result);
 
           // Expand all items that have children by default
           const idsToExpand = new Set<number>();
-          response.data.forEach((item: any) => {
+          response.result.forEach((item: any) => {
             if (item.childs && item.childs.length > 0) {
               idsToExpand.add(item.id);
             }

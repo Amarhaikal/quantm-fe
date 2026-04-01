@@ -25,6 +25,9 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy the built Angular app from the build stage
 COPY --from=build /app/dist/quantm-fe/browser /usr/share/nginx/html
 
+# Ensure Nginx has permissions to read the files
+RUN chmod -R 755 /usr/share/nginx/html
+
 # Expose port 80
 EXPOSE 80
 

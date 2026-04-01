@@ -25,7 +25,7 @@ export class ApiService {
     return this.http.put<T>(`${this.baseUrl}/${endpoint}`, body, { withCredentials: true });
   }
 
-  delete<T>(endpoint: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, { withCredentials: true });
+  delete<T>(endpoint: string, params?: any): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}/${endpoint}`, { params, withCredentials: true });
   }
 }

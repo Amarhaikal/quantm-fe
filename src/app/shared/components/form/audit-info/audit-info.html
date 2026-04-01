@@ -9,24 +9,28 @@
         label="label.created_by"
         [value]="data()?.created_by"
         [disabled]="true"
+        [placeholder]="data()?.created_by ?? 'label.no_data'"
         [labelPosition]="effectiveLabelPosition()"
       />
       <lib-textbox
         label="label.created_date"
         [value]="data()?.created_at"
         [disabled]="true"
+        [placeholder]="data()?.created_at ?? 'label.no_data'"
         [labelPosition]="effectiveLabelPosition()"
       />
       <lib-textbox
         label="label.updated_by"
-        [value]="data()?.updated_by || ''"
+        [value]="data()?.updated_by"
         [disabled]="true"
+        [placeholder]="data()?.updated_by ?? 'label.no_data'"
         [labelPosition]="effectiveLabelPosition()"
       />
       <lib-textbox
         label="label.updated_date"
-        [value]="data()?.updated_at || ''"
+        [value]="data()?.updated_at"
         [disabled]="true"
+        [placeholder]="data()?.updated_at ?? 'label.no_data'"
         [labelPosition]="effectiveLabelPosition()"
       />
     </div>

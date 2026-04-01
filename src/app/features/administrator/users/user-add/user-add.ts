@@ -19,7 +19,7 @@ import {
 import { PageHeaderComponent } from '../../../../shared/components/layout/page-header/page-header';
 import { PageContainerComponent } from '../../../../shared/components/layout/page-container/page-container';
 import { AuthService } from '../../../../core/auth/auth.service';
-import { CodeTypeService } from '../../../../core/services/code-type.service';
+import { SystemCodeService } from '../../../../core/services/system-code.service';
 import { CODE_TYPES } from '../../../../core/constants/code-types.constants';
 import { CustomValidators } from '../../../../core/utils/validators';
 import { ConfirmService } from '../../../../core/services/confirm.service';
@@ -45,7 +45,7 @@ export class UserAdd extends BaseFormComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private codeTypeService = inject(CodeTypeService);
+  private systemCodeService = inject(SystemCodeService);
   private confirmService = inject(ConfirmService);
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
@@ -61,7 +61,7 @@ export class UserAdd extends BaseFormComponent {
   loading = signal<boolean>(false);
 
   rolesOptions = computed<OptionDropdown[]>(() => {
-    return this.codeTypeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role: any) => ({
+    return this.systemCodeService.getSystemCodes(CODE_TYPES.USER_ROLE).map((role: any) => ({
       value: role.code,
       label: role.description,
     }));
@@ -86,7 +86,7 @@ export class UserAdd extends BaseFormComponent {
         Validators.pattern(/^[a-zA-Z0-9_.]+$/),
       ],
     ],
-    staff_id: ['', [Validators.required, Validators.maxLength(10)]],
+    staff_no: ['', [Validators.required, Validators.maxLength(10)]],
     id_no: ['', [Validators.required, CustomValidators.idNoValidator()]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, this.passwordValidator()]],
@@ -125,7 +125,7 @@ export class UserAdd extends BaseFormComponent {
   }
 
   goBack() {
-    this.router.navigate(['admin/users']);
+    this.router.navigate(['system-admin/users']);
   }
 
   onSubmit() {
@@ -140,9 +140,17 @@ export class UserAdd extends BaseFormComponent {
       return;
     }
 
+    let payload: any = {
+      ...this.registerForm.value,
+      role: {
+        code: this.registerForm.value.role_code,
+      },
+    };
+    delete payload.role_code;
+
     this.confirmService.confirmSave(() => {
       this.loading.set(true);
-      this.authService.register(this.registerForm.value).subscribe({
+      this.authService.register(payload).subscribe({
         next: (response: any) => {
           if (response.status === 201 || response.status === 200) {
             this.toastService.success('Success', 'User registration successful');

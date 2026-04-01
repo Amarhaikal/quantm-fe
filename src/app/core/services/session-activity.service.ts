@@ -11,10 +11,10 @@ export class SessionActivityService {
   private api = inject(ApiService);
 
   getSessionActivities(params: any): Observable<ApiResponse<any>> {
-    return this.api.get<ApiResponse<any>>('auth/sessions', params);
+    return this.api.get<ApiResponse<any>>('sessions', params);
   }
 
   endSession(id: string): Observable<ApiResponse<any>> {
-    return this.api.delete<ApiResponse<any>>(`auth/logout-session/${id}`);
+    return this.api.delete<ApiResponse<any>>(`sessions/${id}`);
   }
 }

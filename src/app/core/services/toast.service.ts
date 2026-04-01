@@ -161,10 +161,9 @@ export class ToastService {
   }
 
   deleteFailed(err: any) {
+    console.log('error', err);
     this.translateService
-      .selectTranslate(['toast.delete_failed', 'toast.delete_failed_detail'], {
-        message: err.error?.message || 'Unknown error',
-      })
+      .selectTranslate(['toast.delete_failed', err.error?.message || 'Unknown error'])
       .pipe(take(1))
       .subscribe((translations) => {
         this.messageService.add({
