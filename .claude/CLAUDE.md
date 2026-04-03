@@ -60,11 +60,11 @@ Every feature "main screen" (list/grid view) MUST follow these conventions:
 
 ### Screen Structure
 
-A main listing screen consists of three logical sections rendered inside `<app-page-container>`:
+A main listing screen consists of three logical sections rendered inside `<lib-page-container>`:
 
-1. **`<app-page-header>`** — page title only.
-2. **`<app-search>`** — search/filter bar. Always includes `(reset)` event binding calling `resetSearch()`.
-3. **`<app-table>`** — the data table.
+1. **`<lib-page-header>`** — page title only.
+2. **`<lib-search>`** — search/filter bar. Always includes `(reset)` event binding calling `resetSearch()`.
+3. **`<lib-table>`** — the data table.
 
 ### Two Screen Variants
 
@@ -123,8 +123,8 @@ export class Foos extends BaseListDirective implements OnInit {
 
     this.fooService.getFoos(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        this.foos.set(response.data.list);
-        this.totalRecords.set(response.data.total_count);
+        this.foos.set(response.result.data);
+        this.totalRecords.set(response.result.total_count);
         this.loading.set(false);
       },
       error: (error: unknown) => this.handleError(error, 'Failed to fetch foos'),
@@ -247,8 +247,8 @@ export class FooBars extends BaseBulkCrudDirective implements OnInit {
 
     this.fooBarService.getFooBars(apiParams).subscribe({
       next: (response: ApiResponse<any>) => {
-        this.fooBars.set(response.data.list);
-        this.totalRecords.set(response.data.total_count);
+        this.fooBars.set(response.result.data);
+        this.totalRecords.set(response.result.total_count);
         this.loading.set(false);
       },
       error: (error: unknown) => this.handleError(error, 'Failed to fetch foo bars'),
