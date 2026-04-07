@@ -164,6 +164,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.initChartOptions();
+    console.log('oppaGo deployed');
   }
 
   loadData() {
