@@ -1,0 +1,41 @@
+<lib-page-container>
+  <lib-page-header title="sidemenu.applications" />
+
+  <div class="flex flex-col gap-6">
+    <!-- Search Form Section -->
+    <div class="w-full" [formGroup]="searchForm">
+      <lib-search (reset)="resetSearch()">
+        <lib-textbox [label]="'label.loan_number'" formControlName="loan_number" />
+        <lib-textbox [label]="'label.customer'" formControlName="customer_name" />
+        <lib-dropdown
+          [label]="'label.product'"
+          formControlName="product_code"
+          [options]="productsOptions()"
+        />
+        <lib-dropdown
+          [label]="'label.loan_status'"
+          formControlName="loan_status"
+          [options]="statusOptions()"
+        />
+      </lib-search>
+    </div>
+
+    <div class="flex justify-end items-center">
+      <div class="flex gap-2">
+        <lib-button type="ADD" (click)="addApplication()" />
+      </div>
+    </div>
+
+    <lib-table
+      [data]="loans()"
+      [columns]="columns"
+      [loading]="loading()"
+      [totalRecords]="totalRecords()"
+      [rows]="pageSize()"
+      [actionType]="'DETAILS'"
+      (onPageChange)="handlePageChange($event)"
+      (onSort)="handleSort($event)"
+      (onView)="onView($event)"
+    />
+  </div>
+</lib-page-container>

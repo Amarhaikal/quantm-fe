@@ -1,10 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { MenuService } from '../services/menu.service';
+import { AuthService } from '../auth/auth.service';
 import { map, catchError, of } from 'rxjs';
 
 export const menuGuard: CanActivateFn = (route, state) => {
   const menuService = inject(MenuService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
   return menuService.getMenu().pipe(
@@ -50,12 +52,53 @@ export const menuGuard: CanActivateFn = (route, state) => {
         }
       }
       
-      router.navigate(['/']);
+      // Handle unsuccessful responses (e.g. 404, 401)
+      const isAuthError =
+        response &&
+        (response.status === 401 ||
+          response.status === 403 ||
+          (response.status === 404 && response.message === 'Authenticated user not found'));
+
+      if (isAuthError) {
+        authService.setUser(null);
+        authService.triggerRefresh();
+        router.navigate(['/auth/login']);
+        return false;
+      }
+      
+      const targetUrl = state.url.split('?')[0];
+      if (targetUrl === '/' || targetUrl === '/dashboard') {
+        // Prevent infinite loop by sending user to login
+        authService.setUser(null);
+        router.navigate(['/auth/login']);
+      } else {
+        router.navigate(['/']);
+      }
       return false;
     }),
-    catchError(() => {
-      router.navigate(['/']);
+    catchError((error) => {
+      const isAuthError =
+        error &&
+        (error.status === 401 ||
+          error.status === 403 ||
+          (error.status === 404 && error.error?.message === 'Authenticated user not found'));
+
+      if (isAuthError) {
+        authService.setUser(null);
+        authService.triggerRefresh();
+        router.navigate(['/auth/login']);
+        return of(false);
+      }
+
+      const targetUrl = state.url.split('?')[0];
+      if (targetUrl === '/' || targetUrl === '/dashboard') {
+        authService.setUser(null);
+        router.navigate(['/auth/login']);
+      } else {
+        router.navigate(['/']);
+      }
       return of(false);
     })
   );
 };
+

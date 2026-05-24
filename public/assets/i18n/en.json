@@ -45,7 +45,8 @@
         "add_customer": "Add Customer",
         "customer_details": "Customer Details",
         "facilities": "Facilities",
-        "products": "Products"
+        "products": "Products",
+        "applications": "Applications"
     },
     "profile": {
         "title": "My Profile",
@@ -72,6 +73,11 @@
         "title": "Customers",
         "new_customer_title": "New Customer Creation",
         "details_title": "Customer Details"
+    },
+    "applications": {
+        "title": "Applications",
+        "new_application_title": "New Application Creation",
+        "details_title": "Application Details"
     },
     "label": {
         "full_name": "Full Name",
@@ -136,6 +142,8 @@
         "edit_director": "Edit Director",
         "asset_type": "Asset Type",
         "facility": "Facility",
+        "customer": "Customer",
+        "product": "Product",
         "placeholders": {
             "enter": "Enter",
             "select": "Select",
@@ -154,10 +162,35 @@
             "department": "Select Department",
             "designation": "Enter Designation",
             "remarks": "Enter Remarks",
-            "username": "Enter Username",
             "role": "Select Role",
-            "password": "Enter Password"
-        }
+            "password": "Enter Password",
+            "search_loan_number": "Search by Loan Number...",
+            "search_customer_name": "Search by Customer Name...",
+            "search_product_code": "Search by Product Code...",
+            "search_loan_status": "Search by Loan Status...",
+            "select_customer": "Select Customer",
+            "select_product": "Select Product",
+            "select_rate": "Select Rate",
+            "enter_principal_amount": "Enter Principal Amount",
+            "enter_tenure": "Enter Tenure (Months)",
+            "select_frequency": "Select Frequency",
+            "select_start_date": "Select Start Date",
+            "select_end_date": "Select End Date",
+            "select_status": "Select Status"
+        },
+        "loan_number": "Loan Number",
+        "loan_status": "Loan Status",
+        "principal_amount": "Principal Amount",
+        "outstanding_balance": "Outstanding Balance",
+        "tenure": "Tenure",
+        "frequency": "Frequency",
+        "start_date": "Start Date",
+        "end_date": "End Date",
+        "assigned_to": "Assigned To",
+        "applications": "Applications",
+        "application_details": "Application Details",
+        "add_application": "Add Application",
+        "application_info": "Application Information"
     },
     "option": {
         "male": "Male",

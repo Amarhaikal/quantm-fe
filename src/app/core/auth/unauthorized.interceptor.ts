@@ -12,7 +12,11 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+      const isAuthError =
+        error.status === 401 ||
+        (error.status === 404 && error.error?.message === 'Authenticated user not found');
+
+      if (isAuthError) {
         // Clear in-memory user data and redirect to login
         authService.setUser(null);
         toast.sessionExpired();

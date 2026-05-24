@@ -132,6 +132,8 @@ export class Users extends BaseListDirective implements OnInit {
           status_severity: CrudUtils.getStatusSeverity(user.status?.code),
           profile_photo: user.profile_photo ? `${baseUrl}/api${user.profile_photo}` : null,
         }));
+
+        console.log('mappeData', mappedData);
         this.users.set(mappedData);
         this.totalRecords.set(response.result.total_count);
         this.loading.set(false);

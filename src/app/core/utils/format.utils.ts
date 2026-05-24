@@ -1,4 +1,7 @@
-export function formatCurrency(amount: number | string | null | undefined, currency: string = 'RM'): string {
+export function formatCurrency(
+  amount: number | string | null | undefined,
+  currency: string = 'RM',
+): string {
   if (amount === null || amount === undefined || amount === '') {
     return '';
   }

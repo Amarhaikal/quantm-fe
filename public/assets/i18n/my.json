@@ -127,6 +127,8 @@
         "edit_director": "Kemaskini Pengarah",
         "asset_type": "Jenis Aset",
         "facility": "Kemudahan",
+        "customer": "Pelanggan",
+        "product": "Produk",
         "placeholders": {
             "enter": "Masukkan",
             "select": "Pilih",
@@ -148,8 +150,30 @@
             "username": "Masukkan Nama Pengguna",
             "role": "Pilih Peranan",
             "password": "Masukkan Kata Laluan",
-            "customer_no": "No. Pelanggan"
-        }
+            "customer_no": "No. Pelanggan",
+            "select_customer": "Pilih Pelanggan",
+            "select_product": "Pilih Produk",
+            "select_rate": "Pilih Kadar",
+            "enter_principal_amount": "Masukkan Jumlah Pokok",
+            "enter_tenure": "Masukkan Tempoh (Bulan)",
+            "select_frequency": "Pilih Frekuensi",
+            "select_start_date": "Pilih Tarikh Mula",
+            "select_end_date": "Pilih Tarikh Tamat",
+            "select_status": "Pilih Status"
+        },
+        "loan_number": "Nombor Pinjaman",
+        "loan_status": "Status Pinjaman",
+        "principal_amount": "Jumlah Pokok",
+        "outstanding_balance": "Baki Tergantung",
+        "tenure": "Tempoh",
+        "frequency": "Frekuensi",
+        "start_date": "Tarikh Mula",
+        "end_date": "Tarikh Tamat",
+        "assigned_to": "Ditugaskan Kepada",
+        "applications": "Aplikasi",
+        "application_details": "Butiran Aplikasi",
+        "add_application": "Tambah Aplikasi",
+        "application_info": "Maklumat Aplikasi"
     },
     "option": {
         "male": "Lelaki",

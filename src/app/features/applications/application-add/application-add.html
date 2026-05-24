@@ -1,0 +1,86 @@
+<lib-page-container>
+  <lib-page-header [title]="'label.add_application'" [showBack]="true" />
+
+  <div class="w-full bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm mt-4">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <lib-dropdown
+          formControlName="customer_id"
+          [label]="'label.customer'"
+          [options]="customerOptions()"
+          [placeholder]="'label.placeholders.select_customer'"
+          [required]="true"
+          [loading]="loadingCustomers()"
+        />
+
+        <lib-dropdown
+          formControlName="product_code"
+          [label]="'label.product'"
+          [options]="productOptions()"
+          [placeholder]="'label.placeholders.select_product'"
+          [required]="true"
+          [loading]="loadingProducts()"
+        />
+
+        <lib-dropdown
+          formControlName="rate_code"
+          [label]="'label.rate'"
+          [options]="rateOptions()"
+          [placeholder]="'label.placeholders.select_rate'"
+          [required]="true"
+          [loading]="loadingRates()"
+        />
+
+        <lib-numeric
+          formControlName="principal_amount"
+          [label]="'label.principal_amount'"
+          [placeholder]="'label.placeholders.enter_principal_amount'"
+          [required]="true"
+          numericType="currency"
+        />
+
+        <lib-numeric
+          formControlName="tenure"
+          [label]="'label.tenure'"
+          [placeholder]="'label.placeholders.enter_tenure'"
+          [required]="true"
+          numericType="integer"
+        />
+
+        <lib-dropdown
+          formControlName="frequency_code"
+          [label]="'label.frequency'"
+          [options]="frequencyOptions()"
+          [placeholder]="'label.placeholders.select_frequency'"
+          [required]="true"
+        />
+
+        <lib-datepicker
+          formControlName="start_date"
+          [label]="'label.start_date'"
+          [placeholder]="'label.placeholders.select_start_date'"
+          [required]="true"
+        />
+
+        <lib-datepicker
+          formControlName="end_date"
+          [label]="'label.end_date'"
+          [placeholder]="'label.placeholders.select_end_date'"
+        />
+
+        <lib-dropdown
+          formControlName="loan_status_code"
+          [label]="'label.loan_status'"
+          [options]="statusOptions()"
+          [placeholder]="'label.placeholders.select_status'"
+          [required]="true"
+        />
+      </div>
+
+      <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
+        <lib-button type="CANCEL" [disabled]="submitting()" (click)="onCancel()" />
+        <lib-button type="SAVE" [loading]="submitting()" (click)="onSubmit()" />
+      </div>
+    </form>
+  </div>
+</lib-page-container>

@@ -11,6 +11,7 @@ export const CODE_TYPES = {
   COMPANY_TYPE: 'S010',
   COMPANY_DEPARTMENT: 'S011',
   ASSET_TYPE: 'S012',
+  LOAN_STATUS: 'S013',
 } as const;
 
 export type CodeTypeValue = (typeof CODE_TYPES)[keyof typeof CODE_TYPES];

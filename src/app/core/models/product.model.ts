@@ -1,5 +1,4 @@
 import { ApiResponse } from './api.model';
-import { Facility } from './facility.model';
 
 export interface Product {
   id: number;

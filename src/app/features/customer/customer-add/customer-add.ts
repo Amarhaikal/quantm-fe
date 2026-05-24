@@ -7,12 +7,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { PageHeaderComponent } from '../../../shared/components/layout/page-header/page-header';
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
 import { TextboxComponent, TextboxType } from '../../../shared/components/form/textbox/textbox';
-import { DropdownComponent, OptionDropdown } from '../../../shared/components/form/dropdown/dropdown';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../shared/components/form/dropdown/dropdown';
 import { ButtonComponent } from '../../../shared/components/button/button';
 import { CustomerService } from '../../../core/services/customer.service';
 import { SystemCodeService } from '../../../core/services/system-code.service';
@@ -33,7 +43,6 @@ import { CustomValidators } from '../../../core/utils/validators';
     ButtonComponent,
   ],
   templateUrl: './customer-add.html',
-  styleUrl: './customer-add.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerAdd extends BaseFormComponent implements OnInit {
