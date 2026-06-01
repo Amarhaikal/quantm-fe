@@ -168,9 +168,9 @@ export class ApplicationDetail implements OnInit {
     this.loadingRates.set(true);
     this.rateService.getRates({ page_no: 1, page_size: 100 }).subscribe({
       next: (res) => {
-        if (res.result?.list) {
+        if (res.result?.data) {
           this.rateOptions.set(
-            res.result.list.map((r: any) => ({ value: r.code, label: r.description })),
+            res.result.data.map((r: any) => ({ value: r.code, label: `${r.description} (${r.rate}%)` })),
           );
         }
         this.loadingRates.set(false);

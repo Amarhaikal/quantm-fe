@@ -31,8 +31,9 @@ export interface RateUpdateDto {
 
 export type RateResponse = ApiResponse<Rate>;
 export type RateListResponse = ApiResponse<{
-  list: Rate[];
-  totalCount: number;
+  data: Rate[];
+  total_count: number;
   page_no: number;
   page_size: number;
+  total_pages: number;
 }>;
