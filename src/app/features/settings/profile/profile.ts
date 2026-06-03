@@ -34,6 +34,7 @@ import { SystemCodeService } from '../../../core/services/system-code.service';
 import { CustomValidators } from '../../../core/utils/validators';
 import { ConfirmService } from '../../../core/services/confirm.service';
 import { CODE_TYPES } from '../../../core/constants/code-types.constants';
+import { getAvatarInitials, getAvatarGenderClass } from '../../../core/utils/format.utils';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
 import { RadioButtonComponent } from '../../../shared/components/form/radiobutton/radiobutton';
@@ -106,6 +107,14 @@ export class Profile extends BaseFormComponent implements OnInit {
   cropDialog = viewChild<ImageCropDialog>('cropDialog');
   avatarDialog = viewChild<AvatarSelectionDialog>('avatarDialog');
   showScrollDown = signal<boolean>(true);
+
+  avatarInitials = computed(() => {
+    return getAvatarInitials(this.originalData?.shortname, this.originalData?.fullname);
+  });
+
+  avatarGenderClass = computed(() => {
+    return getAvatarGenderClass(this.originalData?.gender);
+  });
 
   // This signal updates only when the translation dictionary is actually loaded
   private translationLoaded = toSignal(this.translocoService.selectTranslation());

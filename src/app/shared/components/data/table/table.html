@@ -115,16 +115,19 @@
                       class="flex items-center gap-3"
                       [class.justify-center]="col.textAlign === 'center'"
                     >
-                      <p-avatar
-                        [image]="col.imageField ? rowData[col.imageField] || null : null"
-                        [icon]="!col.imageField || !rowData[col.imageField] ? 'pi pi-user' : ''"
-                        shape="circle"
-                        [styleClass]="
-                          !col.imageField || !rowData[col.imageField]
-                            ? 'bg-gray-100 text-gray-600'
-                            : ''
-                        "
-                      />
+                      @if (col.imageField && rowData[col.imageField]) {
+                        <p-avatar
+                          [image]="rowData[col.imageField]"
+                          shape="circle"
+                        />
+                      } @else {
+                        <p-avatar
+                          [label]="rowData['avatar_initials'] || ''"
+                          [icon]="!rowData['avatar_initials'] ? 'pi pi-user' : ''"
+                          shape="circle"
+                          [styleClass]="rowData['avatar_gender_class'] || 'bg-gray-100 text-gray-600'"
+                        />
+                      }
                       <span>{{ rowData[col.field + '_display'] ?? rowData[col.field] }}</span>
                     </div>
                   }

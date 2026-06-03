@@ -2,7 +2,6 @@ import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TranslocoPipe } from '@ngneat/transloco';
 
 import { LoanService } from '../../../core/services/loan.service';
 import { CustomerService } from '../../../core/services/customer.service';
@@ -25,7 +24,6 @@ import { ButtonComponent } from '../../../shared/components/button/button';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    TranslocoPipe,
     PageContainerComponent,
     PageHeaderComponent,
     DropdownComponent,

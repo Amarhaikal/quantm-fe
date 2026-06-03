@@ -38,9 +38,9 @@
                 />
               } @else {
                 <div
-                  class="profile-card__avatar-ring flex items-center justify-center bg-indigo-700"
+                  [class]="'profile-card__avatar-ring flex items-center justify-center text-4xl font-bold ' + avatarGenderClass()"
                 >
-                  <i class="pi pi-user text-4xl text-white/80"></i>
+                  {{ avatarInitials() }}
                 </div>
               }
               <!-- Hover overlay -->

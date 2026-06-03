@@ -83,17 +83,22 @@
                 <div class="flex items-start gap-4">
                   <!-- Avatar -->
                   <div class="shrink-0">
-                    <p-avatar
-                      [image]="user.profile_photo"
-                      [icon]="!user.profile_photo ? 'pi pi-user' : ''"
-                      size="xlarge"
-                      shape="circle"
-                      [styleClass]="
-                        !user.profile_photo
-                          ? 'bg-gray-100 text-gray-600 !w-16 !h-16 text-2xl'
-                          : '!w-16 !h-16 text-2xl'
-                      "
-                    />
+                    @if (user.profile_photo) {
+                      <p-avatar
+                        [image]="user.profile_photo"
+                        size="xlarge"
+                        shape="circle"
+                        styleClass="!w-16 !h-16 text-2xl"
+                      />
+                    } @else {
+                      <p-avatar
+                        [label]="user.avatar_initials"
+                        [icon]="!user.avatar_initials ? 'pi pi-user' : ''"
+                        size="xlarge"
+                        shape="circle"
+                        [styleClass]="'!w-16 !h-16 text-2xl ' + (user.avatar_gender_class || 'bg-gray-100 text-gray-600')"
+                      />
+                    }
                   </div>
 
                   <!-- Info Container -->

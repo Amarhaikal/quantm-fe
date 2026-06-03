@@ -23,6 +23,7 @@ import { MenuService } from '../../../core/services/menu.service';
 import { STORAGE_KEYS } from '../../../core/constants/storage.constants';
 import { AuthService } from '../../../core/auth/auth.service';
 import { environment } from '../../../../environments/environment';
+import { getAvatarInitials, getAvatarGenderClass } from '../../../core/utils/format.utils';
 
 @Component({
   selector: 'app-sidemenu',
@@ -77,6 +78,7 @@ export class Sidemenu implements OnInit {
     shortname: string;
     username: string;
     profile_photo: string | null;
+    gender?: { code: string; description: string } | null;
   } | null>(null);
   menuData = signal<any[]>([]);
   isLoading = signal<boolean>(true);
@@ -86,6 +88,16 @@ export class Sidemenu implements OnInit {
   expandedItems = signal<Set<number>>(new Set());
 
   profileImageUrl = this.authService.profileImageUrl;
+
+  avatarInitials = computed(() => {
+    const user = this.userData();
+    return getAvatarInitials(user?.shortname, user?.fullname);
+  });
+
+  avatarGenderClass = computed(() => {
+    const user = this.userData();
+    return getAvatarGenderClass(user?.gender?.code);
+  });
 
   isSidebarExpanded = computed(() => this.menuService.isSidebarVisible());
   isMini = computed(() => this.menuService.isDesktop() && !this.menuService.isSidebarVisible());

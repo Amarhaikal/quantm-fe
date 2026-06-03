@@ -22,6 +22,7 @@ import { ConfirmService } from '../../../core/services/confirm.service';
 import { BaseListDirective } from '../../../core/base/base-list.directive';
 import { CrudUtils } from '../../../core/utils/crud.utils';
 import { environment } from '../../../../environments/environment';
+import { getAvatarInitials, getAvatarGenderClass } from '../../../core/utils/format.utils';
 import { CardListComponent } from '../../../shared/components/data/card-list/card-list';
 
 @Component({
@@ -130,7 +131,11 @@ export class Users extends BaseListDirective implements OnInit {
           role: user.role?.description,
           status: user.status?.description,
           status_severity: CrudUtils.getStatusSeverity(user.status?.code),
-          profile_photo: user.profile_photo ? `${baseUrl}/api${user.profile_photo}` : null,
+          profile_photo: user.profile_photo && user.profile_photo !== 'null' && user.profile_photo !== 'undefined' && user.profile_photo.trim() !== ''
+            ? `${baseUrl}/api${user.profile_photo}`
+            : null,
+          avatar_initials: getAvatarInitials(user.shortname, user.fullname),
+          avatar_gender_class: getAvatarGenderClass(user.gender?.code),
         }));
 
         console.log('mappeData', mappedData);

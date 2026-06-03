@@ -185,7 +185,7 @@ export class CustomerDetails implements OnInit {
   }
 
   private buildImageUrl(rawPath: string | null | undefined): string | undefined {
-    if (!rawPath) return undefined;
+    if (!rawPath || rawPath === 'null' || rawPath === 'undefined' || rawPath.trim() === '') return undefined;
     let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;

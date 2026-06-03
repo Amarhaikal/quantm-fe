@@ -29,6 +29,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { ApiResponse } from '../../../../core/models/api.model';
 import { UserDetailed } from '../../../../core/models/user.model';
 import { environment } from '../../../../../environments/environment';
+import { getAvatarInitials, getAvatarGenderClass } from '../../../../core/utils/format.utils';
 import { TextboxComponent } from '../../../../shared/components/form/textbox/textbox';
 import { ButtonComponent } from '../../../../shared/components/button/button';
 import {
@@ -119,6 +120,14 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   cropDialog = viewChild<ImageCropDialog>('cropDialog');
   avatarDialog = viewChild<AvatarSelectionDialog>('avatarDialog');
   showScrollDown = signal<boolean>(true);
+
+  avatarInitials = computed(() => {
+    return getAvatarInitials(this.originalData?.shortname, this.originalData?.fullname);
+  });
+
+  avatarGenderClass = computed(() => {
+    return getAvatarGenderClass(this.originalData?.gender);
+  });
 
   private translationLoaded = toSignal(this.translocoService.selectTranslation());
 
@@ -367,7 +376,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
   }
 
   private buildImageUrl(rawPath: string | null | undefined): string | undefined {
-    if (!rawPath) return undefined;
+    if (!rawPath || rawPath === 'null' || rawPath === 'undefined' || rawPath.trim() === '') return undefined;
 
     let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)

@@ -52,10 +52,10 @@
                       />
                     } @else {
                       <p-avatar
-                        icon="pi pi-user"
+                        [label]="avatarInitials()"
                         size="xlarge"
                         shape="circle"
-                        styleClass="w-32! h-32! text-5xl! border-4 border-white shadow-xl bg-indigo-100! text-indigo-600!"
+                        [styleClass]="'w-32! h-32! text-5xl! border-4 border-white shadow-xl ' + avatarGenderClass()"
                       ></p-avatar>
                     }
                     <div

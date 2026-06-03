@@ -58,13 +58,14 @@ export class AuthService {
   profileImageUrl = computed(() => {
     const counter = this.refreshCounter();
     const user = this.currentUser();
-    if (!user?.profile_photo) return undefined;
+    const photo = user?.profile_photo;
+    if (!photo || photo === 'null' || photo === 'undefined' || photo.trim() === '') return undefined;
 
     let baseUrl = environment.apiUrl.endsWith('/')
       ? environment.apiUrl.slice(0, -1)
       : environment.apiUrl;
     baseUrl = `${baseUrl}/api`;
-    const path = user.profile_photo.startsWith('/') ? user.profile_photo : `/${user.profile_photo}`;
+    const path = photo.startsWith('/') ? photo : `/${photo}`;
 
     // Add timestamp to force browser to reload image if path is same
     // Using counter to ensure uniqueness on every refresh

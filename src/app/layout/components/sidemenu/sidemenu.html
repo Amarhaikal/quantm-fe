@@ -225,12 +225,19 @@
             </div>
           } @else {
             <div class="m-4 flex items-center p-2 gap-2 rounded-border bg-white/10 min-h-[72px]">
-              <p-avatar
-                [image]="profileImageUrl()"
-                [icon]="!profileImageUrl() ? 'pi pi-user' : ''"
-                shape="circle"
-                styleClass="!w-10 !h-10 border-2 border-white/20 shrink-0"
-              />
+              @if (profileImageUrl()) {
+                <p-avatar
+                  [image]="profileImageUrl()"
+                  shape="circle"
+                  styleClass="!w-10 !h-10 border-2 border-white/20 shrink-0"
+                />
+              } @else {
+                <p-avatar
+                  [label]="avatarInitials()"
+                  shape="circle"
+                  [styleClass]="'!w-10 !h-10 border-2 border-white/20 shrink-0 ' + avatarGenderClass()"
+                />
+              }
               <div class="flex flex-col overflow-hidden">
                 <span class="font-bold text-white whitespace-nowrap overflow-hidden text-ellipsis">
                   {{ userData()?.shortname || userData()?.fullname }}

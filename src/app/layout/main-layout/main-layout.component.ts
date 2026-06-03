@@ -29,6 +29,7 @@ export class MainLayoutComponent implements OnInit {
       shortname: user.shortname,
       username: user.username,
       profile_photo: user.profile_photo ?? '',
+      gender: user.gender,
     };
   });
 
