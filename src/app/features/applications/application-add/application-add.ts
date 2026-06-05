@@ -164,7 +164,7 @@ export class ApplicationAdd implements OnInit {
     });
   }
 
-  onSubmit(type: 'SAVE' | 'DRAFT') {
+  onSubmit(type: 'DRAFT' | 'SUBMIT') {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -181,7 +181,7 @@ export class ApplicationAdd implements OnInit {
       frequency: { code: val.frequency_code },
       start_date: val.start_date,
       end_date: val.end_date,
-      loan_status: { code: type === 'SAVE' ? 'PND' : 'DRF' },
+      loan_status: { code: type === 'SUBMIT' ? 'PND' : 'DRF' },
     };
 
     this.loanService.createLoan(payload).subscribe({
