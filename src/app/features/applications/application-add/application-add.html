@@ -2,7 +2,7 @@
   <lib-page-header [title]="'label.add_application'" [showBack]="true" />
 
   <div class="w-full bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm mt-4">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+    <form [formGroup]="form" (ngSubmit)="onSubmit('SAVE')" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <lib-dropdown
           formControlName="customer_id"
@@ -68,18 +68,19 @@
           [placeholder]="'label.placeholders.select_end_date'"
         />
 
-        <lib-dropdown
+        <!-- <lib-dropdown
           formControlName="loan_status_code"
           [label]="'label.loan_status'"
           [options]="statusOptions()"
           [placeholder]="'label.placeholders.select_status'"
           [required]="true"
-        />
+        /> -->
       </div>
 
       <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
         <lib-button type="CANCEL" [disabled]="submitting()" (click)="onCancel()" />
-        <lib-button type="SAVE" [loading]="submitting()" (click)="onSubmit()" />
+        <lib-button type="DRAFT" [loading]="submitting()" (click)="onSubmit('DRAFT')" />
+        <lib-button type="SAVE" [loading]="submitting()" (click)="onSubmit('SAVE')" />
       </div>
     </form>
   </div>

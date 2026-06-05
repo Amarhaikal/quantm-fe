@@ -13,7 +13,10 @@ import { ToastService } from '../../../core/services/toast.service';
 
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
 import { PageHeaderComponent } from '../../../shared/components/layout/page-header/page-header';
-import { DropdownComponent, OptionDropdown } from '../../../shared/components/form/dropdown/dropdown';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../shared/components/form/dropdown/dropdown';
 import { NumericComponent } from '../../../shared/components/form/numeric/numeric';
 import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -150,7 +153,10 @@ export class ApplicationAdd implements OnInit {
       next: (res) => {
         if (res.result?.data) {
           this.rateOptions.set(
-            res.result.data.map((r: any) => ({ value: r.code, label: `${r.description} (${r.rate}%)` })),
+            res.result.data.map((r: any) => ({
+              value: r.code,
+              label: `${r.description} (${r.rate}%)`,
+            })),
           );
         }
         this.loadingRates.set(false);
@@ -159,7 +165,7 @@ export class ApplicationAdd implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(type: 'SAVE' | 'DRAFT') {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -176,7 +182,7 @@ export class ApplicationAdd implements OnInit {
       frequency: { code: val.frequency_code },
       start_date: val.start_date,
       end_date: val.end_date,
-      loan_status: { code: val.loan_status_code },
+      loan_status: { code: type === 'SAVE' ? 'APRV' : 'RJTD' },
     };
 
     this.loanService.createLoan(payload).subscribe({
