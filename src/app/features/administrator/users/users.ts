@@ -135,7 +135,7 @@ export class Users extends BaseListDirective implements OnInit {
             ? `${baseUrl}/api${user.profile_photo}`
             : null,
           avatar_initials: getAvatarInitials(user.shortname, user.fullname),
-          avatar_gender_class: getAvatarGenderClass(user.gender?.code),
+          avatar_gender_class: getAvatarGenderClass(typeof user.gender === 'string' ? user.gender : user.gender?.code),
         }));
 
         console.log('mappeData', mappedData);

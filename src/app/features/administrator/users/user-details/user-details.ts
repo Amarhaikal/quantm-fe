@@ -422,7 +422,7 @@ export class UserDetails extends BaseFormComponent implements OnInit {
       id_no,
       email,
       phone_no: phone_no || '',
-      gender: gender?.code || '',
+      gender: typeof gender === 'string' ? gender : gender?.code || '',
       department: department?.code || '',
       designation,
       remarks,

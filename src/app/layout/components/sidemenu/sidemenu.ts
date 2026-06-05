@@ -96,7 +96,7 @@ export class Sidemenu implements OnInit {
 
   avatarGenderClass = computed(() => {
     const user = this.userData();
-    return getAvatarGenderClass(user?.gender?.code);
+    return getAvatarGenderClass(typeof user?.gender === 'string' ? user.gender : user?.gender?.code);
   });
 
   isSidebarExpanded = computed(() => this.menuService.isSidebarVisible());

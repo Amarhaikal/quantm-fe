@@ -58,10 +58,14 @@ export function getAvatarInitials(
 }
 
 export function getAvatarGenderClass(genderCode: string | null | undefined): string {
-  if (genderCode === 'M') {
+  if (!genderCode) {
+    return 'bg-indigo-100! text-indigo-600!';
+  }
+  const cleanGender = genderCode.trim().toUpperCase();
+  if (cleanGender === 'M') {
     return 'bg-blue-100! text-blue-600!';
   }
-  if (genderCode === 'F') {
+  if (cleanGender === 'F') {
     return 'bg-pink-100! text-pink-600!';
   }
   return 'bg-indigo-100! text-indigo-600!';
