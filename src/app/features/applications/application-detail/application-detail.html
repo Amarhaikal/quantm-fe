@@ -8,17 +8,16 @@
     </div>
   } @else if (loan(); as data) {
     <div class="w-full bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm mt-4">
-      <form
-        [formGroup]="form"
-        (ngSubmit)="onSubmit()"
-        class="space-y-6"
-      >
+      <form [formGroup]="form" (ngSubmit)="onSubmit('SUBMIT')" class="space-y-6">
         <div class="flex justify-between items-start">
           <div>
             <h2 class="text-2xl font-bold text-gray-900">{{ data.loan_number }}</h2>
             <p class="text-gray-500">{{ data.customer.fullname }}</p>
           </div>
-          <lib-badge [label]="data.loan_status.description" [severity]="getStatusSeverity(data.loan_status.code)" />
+          <lib-badge
+            [label]="data.loan_status.description"
+            [severity]="getStatusSeverity(data.loan_status.code)"
+          />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -91,14 +90,17 @@
             [label]="'label.loan_status'"
             [options]="statusOptions()"
             [placeholder]="'label.placeholders.select_status'"
-            [required]="true"
+            [disabled]="true"
           />
         </div>
 
-        <div class="pt-6 border-t border-gray-100 flex justify-end gap-3">
-          <lib-button type="CANCEL" [disabled]="submitting()" (click)="onCancel()" />
-          <lib-button type="SAVE" [loading]="submitting()" (click)="onSubmit()" />
-        </div>
+        @if (!isPending()) {
+          <div class="pt-6 border-t border-gray-100 flex justify-end gap-3">
+            <lib-button type="CANCEL" [disabled]="submitting()" (click)="onCancel()" />
+            <lib-button type="DRAFT" [loading]="submitting()" (click)="onSubmit('DRAFT')" />
+            <lib-button type="SUBMIT" [loading]="submitting()" (click)="onSubmit('SUBMIT')" />
+          </div>
+        }
       </form>
     </div>
   }

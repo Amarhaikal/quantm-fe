@@ -1,4 +1,11 @@
-import { Component, OnInit, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  inject,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,7 +23,10 @@ import { CrudUtils } from '../../../core/utils/crud.utils';
 
 import { PageContainerComponent } from '../../../shared/components/layout/page-container/page-container';
 import { PageHeaderComponent } from '../../../shared/components/layout/page-header/page-header';
-import { DropdownComponent, OptionDropdown } from '../../../shared/components/form/dropdown/dropdown';
+import {
+  DropdownComponent,
+  OptionDropdown,
+} from '../../../shared/components/form/dropdown/dropdown';
 import { NumericComponent } from '../../../shared/components/form/numeric/numeric';
 import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -60,6 +70,8 @@ export class ApplicationDetail implements OnInit {
   loading = signal(true);
   submitting = signal(false);
 
+  isPending = computed(() => this.loan()?.loan_status?.code === 'PND');
+
   customersList = signal<any[]>([]);
   customerOptions = signal<OptionDropdown[]>([]);
   productOptions = signal<OptionDropdown[]>([]);
@@ -93,7 +105,7 @@ export class ApplicationDetail implements OnInit {
       frequency_code: ['', Validators.required],
       start_date: [null, Validators.required],
       end_date: [{ value: null, disabled: true }],
-      loan_status_code: ['', Validators.required],
+      loan_status_code: [{ value: null, disabled: true }],
     });
   }
 
@@ -170,7 +182,10 @@ export class ApplicationDetail implements OnInit {
       next: (res) => {
         if (res.result?.data) {
           this.rateOptions.set(
-            res.result.data.map((r: any) => ({ value: r.code, label: `${r.description} (${r.rate}%)` })),
+            res.result.data.map((r: any) => ({
+              value: r.code,
+              label: `${r.description} (${r.rate}%)`,
+            })),
           );
         }
         this.loadingRates.set(false);
@@ -188,7 +203,7 @@ export class ApplicationDetail implements OnInit {
       (c) =>
         (c.customer_no && c.customer_no === loan.customer.customer_no) ||
         (c.fullname && c.fullname === loan.customer.fullname) ||
-        (c.reg_no && c.reg_no === loan.customer.reg_no)
+        (c.reg_no && c.reg_no === loan.customer.reg_no),
     );
 
     if (matchedCustomer) {
@@ -218,7 +233,8 @@ export class ApplicationDetail implements OnInit {
 
           this.patchCustomerFromLoan();
 
-          if (!loan.can_edit) {
+          const isPending = loan.loan_status?.code === 'PND';
+          if (!loan.can_edit || isPending) {
             this.form.disable();
           } else {
             this.form.enable();
@@ -235,7 +251,7 @@ export class ApplicationDetail implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(type: 'DRAFT' | 'SUBMIT') {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
