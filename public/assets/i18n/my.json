@@ -193,7 +193,8 @@
             "save_changes": "Simpan Perubahan",
             "reset": "Set Semula",
             "delete": "Padam",
-            "search": "Cari"
+            "search": "Cari",
+            "draft": "Draf"
         }
     },
     "confirm": {

@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common';
 import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { apm } from '../../../core/apm.config';
 
-export type ButtonType = 'ADD' | 'CANCEL' | 'SAVE' | 'UPDATE' | 'SAVE_CHANGES' | 'RESET' | 'SEARCH';
+export type ButtonType =
+  | 'ADD'
+  | 'CANCEL'
+  | 'SAVE'
+  | 'UPDATE'
+  | 'SAVE_CHANGES'
+  | 'RESET'
+  | 'SEARCH'
+  | 'DRAFT';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
@@ -58,6 +66,8 @@ export class ButtonComponent {
         return 'common.buttons.reset';
       case 'SEARCH':
         return 'common.buttons.search';
+      case 'DRAFT':
+        return 'common.buttons.draft';
       default:
         return '';
     }
@@ -82,6 +92,8 @@ export class ButtonComponent {
         return 'pi pi-undo';
       case 'SEARCH':
         return 'pi pi-search';
+      case 'DRAFT':
+        return 'pi pi-check';
       default:
         return '';
     }

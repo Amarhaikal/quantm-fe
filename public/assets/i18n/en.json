@@ -210,7 +210,8 @@
             "save_changes": "Save Changes",
             "reset": "Reset",
             "delete": "Delete",
-            "search": "Search"
+            "search": "Search",
+            "draft": "Draft"
         }
     },
     "confirm": {
