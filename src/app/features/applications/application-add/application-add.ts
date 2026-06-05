@@ -83,7 +83,6 @@ export class ApplicationAdd implements OnInit {
       frequency_code: ['', Validators.required],
       start_date: [null, Validators.required],
       end_date: [{ value: null, disabled: true }],
-      loan_status_code: ['', Validators.required],
     });
   }
 
@@ -182,7 +181,7 @@ export class ApplicationAdd implements OnInit {
       frequency: { code: val.frequency_code },
       start_date: val.start_date,
       end_date: val.end_date,
-      loan_status: { code: type === 'SAVE' ? 'APRV' : 'RJTD' },
+      loan_status: { code: type === 'SAVE' ? 'PND' : 'DRF' },
     };
 
     this.loanService.createLoan(payload).subscribe({
