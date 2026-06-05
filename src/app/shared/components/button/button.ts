@@ -11,7 +11,8 @@ export type ButtonType =
   | 'SAVE_CHANGES'
   | 'RESET'
   | 'SEARCH'
-  | 'DRAFT';
+  | 'DRAFT'
+  | 'SUBMIT';
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
@@ -68,6 +69,8 @@ export class ButtonComponent {
         return 'common.buttons.search';
       case 'DRAFT':
         return 'common.buttons.draft';
+      case 'SUBMIT':
+        return 'common.buttons.submit';
       default:
         return '';
     }
@@ -94,6 +97,8 @@ export class ButtonComponent {
         return 'pi pi-search';
       case 'DRAFT':
         return 'pi pi-check';
+      case 'SUBMIT':
+        return 'pi pi-send';
       default:
         return '';
     }

@@ -194,7 +194,9 @@
             "reset": "Set Semula",
             "delete": "Padam",
             "search": "Cari",
-            "draft": "Draf"
+            "draft": "Draf",
+            "submit": "Hantar"
+
         }
     },
     "confirm": {

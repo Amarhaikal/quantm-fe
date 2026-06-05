@@ -211,7 +211,8 @@
             "reset": "Reset",
             "delete": "Delete",
             "search": "Search",
-            "draft": "Draft"
+            "draft": "Draft",
+            "submit": "Submit"
         }
     },
     "confirm": {
