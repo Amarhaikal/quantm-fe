@@ -37,7 +37,11 @@
           ></p-radioButton>
           <label
             [for]="id() + '-' + option.value"
-            class="text-sm text-gray-700 cursor-pointer select-none"
+            class="text-sm select-none"
+            [class.text-gray-700]="!effectiveDisabled()"
+            [class.text-gray-500]="effectiveDisabled()"
+            [class.cursor-pointer]="!effectiveDisabled()"
+            [class.cursor-not-allowed]="effectiveDisabled()"
           >
             {{ 'option.' + option.label.toLowerCase() | transloco }}
           </label>

@@ -17,6 +17,10 @@
   @apply text-sm px-3 flex items-center h-full text-gray-700;
 }
 
+:host ::ng-deep .p-select.p-disabled .p-select-label {
+  @apply text-gray-500!;
+}
+
 :host(.table-mode) ::ng-deep .p-select .p-select-label {
   padding: 8px;
 }
