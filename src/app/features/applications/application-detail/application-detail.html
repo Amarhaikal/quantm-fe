@@ -21,38 +21,62 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <lib-dropdown
-            formControlName="customer_id"
-            [label]="'label.customer'"
-            [options]="customerOptions()"
-            [placeholder]="'label.placeholders.select_customer'"
-            [required]="true"
-            [loading]="loadingCustomers()"
-          />
+          @if (isPending()) {
+            <lib-textbox
+              [label]="'label.customer'"
+              [value]="data.customer.fullname"
+              [disabled]="true"
+            />
+          } @else {
+            <lib-dropdown
+              formControlName="customer_id"
+              [label]="'label.customer'"
+              [options]="customerOptions()"
+              [placeholder]="'label.placeholders.select_customer'"
+              [required]="true"
+              [loading]="loadingCustomers()"
+            />
+          }
 
-          <lib-dropdown
-            formControlName="product_code"
-            [label]="'label.product'"
-            [options]="productOptions()"
-            [placeholder]="'label.placeholders.select_product'"
-            [required]="true"
-            [loading]="loadingProducts()"
-          />
+          @if (isPending()) {
+            <lib-textbox
+              [label]="'label.product'"
+              [value]="data.product.description"
+              [disabled]="true"
+            />
+          } @else {
+            <lib-dropdown
+              formControlName="product_code"
+              [label]="'label.product'"
+              [options]="productOptions()"
+              [placeholder]="'label.placeholders.select_product'"
+              [required]="true"
+              [loading]="loadingProducts()"
+            />
+          }
 
-          <lib-dropdown
-            formControlName="rate_code"
-            [label]="'label.rate'"
-            [options]="rateOptions()"
-            [placeholder]="'label.placeholders.select_rate'"
-            [required]="true"
-            [loading]="loadingRates()"
-          />
+          @if (isPending()) {
+            <lib-textbox
+              [label]="'label.rate'"
+              [value]="data.rate.description + ' (' + data.rate.rate + '%)'"
+              [disabled]="true"
+            />
+          } @else {
+            <lib-dropdown
+              formControlName="rate_code"
+              [label]="'label.rate'"
+              [options]="rateOptions()"
+              [placeholder]="'label.placeholders.select_rate'"
+              [required]="true"
+              [loading]="loadingRates()"
+            />
+          }
 
           <lib-numeric
             formControlName="principal_amount"
             [label]="'label.principal_amount'"
             [placeholder]="'label.placeholders.enter_principal_amount'"
-            [required]="true"
+            [required]="!isPending()"
             numericType="currency"
           />
 
@@ -60,23 +84,31 @@
             formControlName="tenure"
             [label]="'label.tenure'"
             [placeholder]="'label.placeholders.enter_tenure'"
-            [required]="true"
+            [required]="!isPending()"
             numericType="integer"
           />
 
-          <lib-dropdown
-            formControlName="frequency_code"
-            [label]="'label.frequency'"
-            [options]="frequencyOptions()"
-            [placeholder]="'label.placeholders.select_frequency'"
-            [required]="true"
-          />
+          @if (isPending()) {
+            <lib-textbox
+              [label]="'label.frequency'"
+              [value]="data.frequency.description"
+              [disabled]="true"
+            />
+          } @else {
+            <lib-dropdown
+              formControlName="frequency_code"
+              [label]="'label.frequency'"
+              [options]="frequencyOptions()"
+              [placeholder]="'label.placeholders.select_frequency'"
+              [required]="true"
+            />
+          }
 
           <lib-datepicker
             formControlName="start_date"
             [label]="'label.start_date'"
             [placeholder]="'label.placeholders.select_start_date'"
-            [required]="true"
+            [required]="!isPending()"
           />
 
           <lib-datepicker
@@ -85,13 +117,21 @@
             [placeholder]="'label.placeholders.select_end_date'"
           />
 
-          <lib-dropdown
-            formControlName="loan_status_code"
-            [label]="'label.loan_status'"
-            [options]="statusOptions()"
-            [placeholder]="'label.placeholders.select_status'"
-            [disabled]="true"
-          />
+          @if (isPending()) {
+            <lib-textbox
+              [label]="'label.loan_status'"
+              [value]="data.loan_status.description"
+              [disabled]="true"
+            />
+          } @else {
+            <lib-dropdown
+              formControlName="loan_status_code"
+              [label]="'label.loan_status'"
+              [options]="statusOptions()"
+              [placeholder]="'label.placeholders.select_status'"
+              [disabled]="true"
+            />
+          }
         </div>
 
         @if (!isPending()) {

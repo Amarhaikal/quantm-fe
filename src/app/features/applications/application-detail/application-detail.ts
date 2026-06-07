@@ -27,6 +27,7 @@ import {
   DropdownComponent,
   OptionDropdown,
 } from '../../../shared/components/form/dropdown/dropdown';
+import { TextboxComponent } from '../../../shared/components/form/textbox/textbox';
 import { NumericComponent } from '../../../shared/components/form/numeric/numeric';
 import { DatePickerComponent } from '../../../shared/components/form/datepicker/datepicker';
 import { ButtonComponent } from '../../../shared/components/button/button';
@@ -43,6 +44,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     PageContainerComponent,
     PageHeaderComponent,
     DropdownComponent,
+    TextboxComponent,
     NumericComponent,
     DatePickerComponent,
     ButtonComponent,
